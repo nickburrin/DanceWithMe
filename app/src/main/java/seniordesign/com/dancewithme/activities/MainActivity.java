@@ -1,9 +1,10 @@
-package seniordesign.com.dancewithme;
+package seniordesign.com.dancewithme.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -13,6 +14,8 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
+import seniordesign.com.dancewithme.R;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -21,9 +24,9 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ((TextView) findViewById(R.id.text_box)).setText(ParseUser.getCurrentUser().getEmail());
         //this.createUser();
         //this.putPrivateData();
-        //ParseUser.getCurrentUser().;
     }
 
     private void putPrivateData() {

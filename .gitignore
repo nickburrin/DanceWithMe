@@ -43,4 +43,5 @@ build/
 *.iws
 *.ipr
 *.swp
-*.nick
+rsa_id
+*.pub

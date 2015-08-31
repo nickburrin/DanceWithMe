@@ -1,5 +1,62 @@
 package seniordesign.com.dancewithme.activities;
 
+//import android.app.Activity;
+//import android.content.Intent;
+//import android.os.Bundle;
+//
+//import com.parse.ParseAnalytics;
+//import com.parse.ParseObject;
+//import android.view.View;
+//import android.widget.TextView;
+//import android.widget.Toast;
+//
+//import seniordesign.com.dancewithme.R;
+//
+//public class LoginActivity extends Activity {
+//    /**
+//     * Called when the activity is first created.
+//     */
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        //setContentView(R.layout.activity_invalid_login);
+//        setContentView(R.layout.activity_login);
+//
+//
+//        //ParseObject testObject = new ParseObject("TestObject");
+//        //testObject.put("foo", "bar");
+//        //testObject.saveInBackground();
+//
+//        //testObject.
+//
+//      //  ParseAnalytics.trackAppOpenedInBackground(getIntent());
+//    }
+//
+//    public void validateLogin(View view) {
+//        Toast.makeText(getApplicationContext(), "You have logged in successfully. We will direct you to the Select a Venue page.",
+//                Toast.LENGTH_SHORT).show();
+//        displaySelectAVenue(view);
+//    }
+//
+//    public void displayForgotYourPassword(View view)
+//    {
+//        Intent intent = new Intent(this, ForgotYourPassword.class);
+//        startActivity(intent);
+//    }
+//
+//    public void displayCreateAnAccount(View view) {
+//        Intent intent = new Intent(this, Create_an_account.class);
+//        startActivity(intent);
+//        //setContentView(R.layout.activity_create_an_account);
+//    }
+//
+//    public void displaySelectAVenue(View view)
+//    {
+//        Intent intent = new Intent(this, SelectAVenue.class);
+//        startActivity(intent);
+//    }
+//
+//}
+
 import android.app.Activity;
 import android.content.Intent;
 
@@ -22,6 +79,7 @@ import seniordesign.com.dancewithme.R;
 /**
  * A login screen that offers login via email/password and via Google+ sign in.
  */
+
 public class LoginActivity extends Activity{
 
     /**
@@ -100,7 +158,7 @@ public class LoginActivity extends Activity{
             ParseUser.logInInBackground(email, password, new LogInCallback() {
                 public void done(ParseUser user, com.parse.ParseException e) {
                     if (user != null) {
-                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
                         startActivity(i);
                     } else {
                         Toast.makeText(getApplicationContext(),

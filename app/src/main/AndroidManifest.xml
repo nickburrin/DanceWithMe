@@ -68,6 +68,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -75,6 +76,23 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".activities.Create_an_account"
+            android:label="@string/title_activity_create_an_account" >
+        </activity>
+        <activity
+            android:name=".activities.SelectAVenue"
+            android:label="@string/title_activity_select_avenue" >
+        </activity>
+        <activity
+            android:name=".activities.ProfileManagement"
+            android:label="@string/title_activity_profile_management" >
+        </activity>
+        <activity
+            android:name=".activities.ForgotYourPassword"
+            android:label="@string/title_activity_forgot_your_password" >
+        </activity>
     </application>
 
 </manifest>

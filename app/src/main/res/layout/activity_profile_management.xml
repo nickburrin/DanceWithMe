@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="left"
+    android:orientation="vertical"
+    android:background="@color/wallet_holo_blue_light"
+    >
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_management_title"
+        android:textSize="30dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile_question"
+        android:textStyle="bold"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxBeginner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/beginner_skill"
+        android:checked="false"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxIntermediate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/intermediate_skill"
+        android:checked="false"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxExpert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/expert_skill"
+        android:checked="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/prior_to_dance_partner_searching_statement"
+        android:textSize="15dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/submit"
+        android:onClick="displayMatchingInterface"
+        />
+
+
+</LinearLayout>
+

@@ -66,5 +66,9 @@
     <string name="forgot_your_password_instruct">Please enter your email. Your password will be emailed to you.</string>
     <string name="title_activity_view_single_profile">ViewSingleProfile</string>
 
+    <string name="login_activity_label">Sinch Messaging Tutorial</string>
+    <string name="title_activity_list_users">ListUsersActivity</string>
+    <string name="message_elipses">Message...</string>
+    <string name="logout">Logout</string>
 </resources>
 

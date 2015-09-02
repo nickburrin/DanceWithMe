@@ -28,11 +28,14 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        android:name="seniordesign.com.dancewithme.activities.MyApplication">
+        <!--
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name" >
         </activity>
+        -->
 
         <service android:name="com.parse.PushService" />
 
@@ -71,6 +74,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!-- added in stuff -->
+        <activity
+            android:name=".activities.ListUsersActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <service android:name=".activities.MessageService"></service>
+        <activity android:name=".activities.MessagingActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <meta-data

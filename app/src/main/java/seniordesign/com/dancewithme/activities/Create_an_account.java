@@ -1,46 +1,32 @@
 package seniordesign.com.dancewithme.activities;
 
-import android.app.Activity;
 import android.content.Intent;
-
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
-import com.parse.ParseUser;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseAnalytics;
+
 
 import seniordesign.com.dancewithme.R;
 
-public class ProfileManagement extends Activity {
 
-    private EditText mUsernameView;
-    private ImageButton mProfPic;
+public class Create_an_account extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_management);
-        ((TextView) findViewById(R.id.username)).setText(ParseUser.getCurrentUser().get("first_name")
-                + " " + ParseUser.getCurrentUser().get("last_name"));
-
-        mProfPic = (ImageButton) findViewById(R.id.profPic);
-        mProfPic.setImageDrawable(null); //fill with an image
-    }
-
-    public void changeProfPic(View v) {
-        //do stuff
+        setContentView(R.layout.activity_create_an_account);
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile_management, menu);
+        getMenuInflater().inflate(R.menu.menu_create_an_account, menu);
         return true;
     }
 
@@ -59,13 +45,12 @@ public class ProfileManagement extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void displayMatchingInterface(View view)
+    public void displaySelectAVenue(View view)
     {
-        Toast.makeText(getApplicationContext(), "Please wait. We are searching for your dance partner",
+        Toast.makeText(getApplicationContext(), "Your account has been created successfully. We will direct you to the Select a Venue page.",
                 Toast.LENGTH_SHORT).show();
-        //Intent intent = new Intent(this, InvalidLoginActivity.class);
-        //startActivity(intent);
-    }
 
+        Intent intent = new Intent(this, SelectAVenue.class);
+        startActivity(intent);
+    }
 }

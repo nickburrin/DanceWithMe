@@ -2,45 +2,35 @@ package seniordesign.com.dancewithme.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-
-import com.parse.ParseUser;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import seniordesign.com.dancewithme.R;
 
-public class ProfileManagement extends Activity {
+public class SelectAVenue extends Activity implements OnItemClickListener {
 
-    private EditText mUsernameView;
-    private ImageButton mProfPic;
+    private ListView listViewVenues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_management);
-        ((TextView) findViewById(R.id.username)).setText(ParseUser.getCurrentUser().get("first_name")
-                + " " + ParseUser.getCurrentUser().get("last_name"));
+        setContentView(R.layout.activity_select_avenue);
 
-        mProfPic = (ImageButton) findViewById(R.id.profPic);
-        mProfPic.setImageDrawable(null); //fill with an image
-    }
-
-    public void changeProfPic(View v) {
-        //do stuff
+        listViewVenues = (ListView) findViewById(R.id.danceHallsList);
+        listViewVenues.setOnItemClickListener(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile_management, menu);
+        getMenuInflater().inflate(R.menu.menu_select_avenue, menu);
         return true;
     }
 
@@ -59,13 +49,16 @@ public class ProfileManagement extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    public void displayMatchingInterface(View view)
-    {
-        Toast.makeText(getApplicationContext(), "Please wait. We are searching for your dance partner",
+    public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+        Toast.makeText(getApplicationContext(), ((TextView) view).getText(),
                 Toast.LENGTH_SHORT).show();
-        //Intent intent = new Intent(this, InvalidLoginActivity.class);
-        //startActivity(intent);
+        this.displayProfileManagement(view);
+
     }
 
+    public void displayProfileManagement(View view) {
+        Intent intent = new Intent(this, ProfileManagement.class);
+        startActivity(intent);
+        //setContentView(R.layout.activity_create_an_account);
+    }
 }

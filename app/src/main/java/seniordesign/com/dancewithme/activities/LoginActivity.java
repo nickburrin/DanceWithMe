@@ -61,8 +61,10 @@ public class LoginActivity extends Activity {
                 ParseUser.logInInBackground(username, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
-                            startActivity(intent);
-                            startService(serviceIntent);
+                            Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
+                            startActivity(i);
+                            //startActivity(intent);
+                            //startService(serviceIntent);
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "Wrong username/password combo",

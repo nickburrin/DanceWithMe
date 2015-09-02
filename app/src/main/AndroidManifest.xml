@@ -78,7 +78,6 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-
             android:name=".activities.Create_an_account"
             android:label="@string/title_activity_create_an_account" >
         </activity>

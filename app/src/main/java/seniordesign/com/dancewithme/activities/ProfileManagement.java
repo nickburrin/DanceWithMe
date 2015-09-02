@@ -7,13 +7,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.ParseUser;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 
@@ -21,6 +26,7 @@ public class ProfileManagement extends Activity {
 
     private EditText mUsernameView;
     private ImageButton mProfPic;
+    private ListView danceStyles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +36,29 @@ public class ProfileManagement extends Activity {
                 + " " + ParseUser.getCurrentUser().get("last_name"));
 
         mProfPic = (ImageButton) findViewById(R.id.profPic);
-        mProfPic.setImageDrawable(null); //fill with an image
+        //mProfPic.setImageDrawable(null); //fill with an image
+
+        danceStyles = (ListView) findViewById(R.id.lv_dance_styles);
+
+        // Instanciating an array list (you don't need to do this, you already have yours).
+        List<String> temp_array_list = new ArrayList<String>();
+        temp_array_list.add("one");
+        temp_array_list.add("two");
+        temp_array_list.add("three");
+
+        // This is the array adapter, it takes the context of the activity as a
+        // first parameter, the type of list view as a second parameter and your
+        // array as a third parameter.
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                temp_array_list );
+
+        danceStyles.setAdapter(arrayAdapter);
     }
 
     public void changeProfPic(View v) {
-        //do stuff
+        System.out.println("Clicked on picture");
     }
 
     @Override

@@ -10,26 +10,30 @@
     <!-- Add photo somehow and make it clickable-->
     <ImageButton
         android:id="@+id/profPic"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
         android:layout_gravity="left"
-        android:onClick="changeProfPic" />
+        android:onClick="changeProfPic"
+        android:src="@drawable/android_robot" />
 
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button android:id="@+id/edit" style="?android:textAppearanceSmall"
-        android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" android:text="@string/edit"
+    <Button
+        android:id="@+id/edit" style="?android:textAppearanceSmall"
+        android:layout_width="75dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/edit"
         android:textStyle="bold" />
 
     <ListView
         android:id="@+id/lv_dance_styles"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="85"
+        android:layout_height="wrap_content"
+        android:layout_weight="wrap_content"
         android:background="@color/white"
         android:divider="@color/grey_input_border"
         android:dividerHeight="1px" />

@@ -42,6 +42,7 @@ public class ProfileManagement extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
     public void displayMatchingInterface(View view)
     {
         Toast.makeText(getApplicationContext(), "Please wait. We are searching for your dance partner",
@@ -49,4 +50,5 @@ public class ProfileManagement extends Activity {
         //Intent intent = new Intent(this, InvalidLoginActivity.class);
         //startActivity(intent);
     }
+
 }

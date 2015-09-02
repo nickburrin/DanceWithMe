@@ -78,6 +78,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
+<<<<<<< HEAD
             android:name=".activities.Create_an_account"
             android:label="@string/title_activity_create_an_account" >
         </activity>
@@ -93,6 +94,11 @@
             android:name=".activities.ForgotYourPassword"
             android:label="@string/title_activity_forgot_your_password" >
         </activity>
+=======
+            android:name=".activities.ProfileManagement"
+            android:label="@string/title_activity_profile_management" >
+        </activity>
+>>>>>>> f668fa5bd8346f0320cade2b07544afa5a087f75
     </application>
 
 </manifest>

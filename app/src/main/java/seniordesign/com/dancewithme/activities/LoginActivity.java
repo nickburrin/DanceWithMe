@@ -23,6 +23,7 @@ public class LoginActivity extends Activity {
 
     private Button signUpButton;
     private Button loginButton;
+    private Button forgotYourPasswordButton;
     private EditText usernameField;
     private EditText passwordField;
     private String username;
@@ -49,6 +50,7 @@ public class LoginActivity extends Activity {
 
         loginButton = (Button) findViewById(R.id.loginButton);
         signUpButton = (Button) findViewById(R.id.signupButton);
+        forgotYourPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         usernameField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
 
@@ -78,7 +80,7 @@ public class LoginActivity extends Activity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                
                 username = usernameField.getText().toString();
                 password = passwordField.getText().toString();
 
@@ -98,6 +100,18 @@ public class LoginActivity extends Activity {
                         }
                     }
                 });
+
+
+
+            }
+
+        });
+
+        forgotYourPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, ForgotYourPassword.class);
+                startActivity(intent);
             }
         });
     }

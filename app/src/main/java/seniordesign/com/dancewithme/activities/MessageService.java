@@ -1,5 +1,4 @@
 package seniordesign.com.dancewithme.activities;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -26,7 +25,7 @@ public class MessageService extends Service implements SinchClientListener {
     private MessageClient messageClient = null;
     private String currentUserId;
     private LocalBroadcastManager broadcaster;
-    private Intent broadcastIntent = new Intent("seniordesign.com.dancewithme.activities.ListUsersActivity");
+    private Intent broadcastIntent = new Intent("seniordesign.com.dancewithme.activities.activities.ListUsersActivity");
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

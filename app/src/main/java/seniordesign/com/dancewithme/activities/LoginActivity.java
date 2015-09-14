@@ -1,14 +1,10 @@
 package seniordesign.com.dancewithme.activities;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.parse.LogInCallback;
 //import com.parse.ParseAnalytics;
-import com.parse.Parse;
-import com.parse.ParseInstallation;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 

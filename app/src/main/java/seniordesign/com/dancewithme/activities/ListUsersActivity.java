@@ -1,5 +1,4 @@
 package seniordesign.com.dancewithme.activities;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;

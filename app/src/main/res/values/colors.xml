@@ -4,4 +4,30 @@
     <color name="off_white">#fffafafa</color>
     <color name="dark_gray">#ffb3b3b3</color>
     <color name="very_dark_gray">#636363</color>
+
+    <!--Color Palette-->
+    <color name="transparent">#00000000</color>
+
+    <!--White-->
+    <color name="white">#FFFFFDFD</color>
+
+    <!--Red-->
+    <color name="light_red">#FFFF3159</color>
+    <color name="red">#FFFF0033</color>
+
+    <!--Blue-->
+    <color name="light_blue">#FF669FD6</color>
+    <color name="blue">#FF4384c4</color>
+    <color name="list_section_blue">#FF406680</color>
+
+    <!--Grey-->
+    <color name="bg_light_grey">#FFf1f5f7</color>
+    <color name="grey_input_border">#FFebebeb</color>
+    <color name="list_item_grey">#FF8c8c8c</color>
+    <color name="dark_grey">#FF616161</color>
+    <color name="block_grey">#FFbfbfbf</color>
+
+    <!--Green-->
+    <color name="green">#FF8ac442</color>
+    <color name="light_green">#FFADE26B</color>
 </resources>

@@ -1,5 +1,4 @@
 package seniordesign.com.dancewithme.activities;
-
 import android.app.Application;
 
 import com.parse.Parse;

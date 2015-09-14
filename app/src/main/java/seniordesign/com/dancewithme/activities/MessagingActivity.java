@@ -1,5 +1,4 @@
 package seniordesign.com.dancewithme.activities;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;

@@ -5,8 +5,11 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
+=======
         <option name="gradleHome" value="C:\Users\ktangsy93\Documents\android-studio\android-studio\gradle\gradle-2.4" />
         <option name="gradleJvm" value="1.7" />
+>>>>>>> master
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -17,3 +20,4 @@
     </option>
   </component>
 </project>
+

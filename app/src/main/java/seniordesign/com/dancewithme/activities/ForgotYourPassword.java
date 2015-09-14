@@ -6,11 +6,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
+
+import com.parse.ParseException;
 
 import seniordesign.com.dancewithme.R;
 
 public class ForgotYourPassword extends Activity {
+    private EditText mEdit = null;
+    private final int emailLength = 30;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +48,59 @@ public class ForgotYourPassword extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void emailPassword(View view)
+    private void validateInputs() throws Exception
     {
-        Toast.makeText(ForgotYourPassword.this, "Your password has been emailed to you.", Toast.LENGTH_SHORT).show();
-        this.displayLoginPage(view);
+        String email = mEdit.getText().toString();
+        if(email.length() > emailLength)
+        {
+            throw new Exception("Your email exceeds " +emailLength + "characters.");
+        }
+        if(!isEmailValid(email))
+        {
+            throw new Exception("The email is invalid. Please re-enter a valid email.");
+        }
+
     }
 
-    private void displayLoginPage(View view)
+    private boolean isEmailValid(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private void resetPassword(String email)
+    {
+        ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
+            public void done(ParseException e) {
+                if (e == null) {
+                    // An email was successfully sent with reset instructions.
+                } else {
+                    // Something went wrong. Look at the ParseException to see what's up.
+                }
+            }
+        });
+
+    }
+
+    public void emailPassword(View view)
+    {
+        mEdit = (EditText) findViewById(R.id.email_reset_password);
+
+        try
+        {
+            this.validateInputs();
+
+            this.resetPassword(mEdit.getText().toString());
+
+            Toast.makeText(ForgotYourPassword.this, "Your password has been emailed to you.", Toast.LENGTH_SHORT).show();
+            this.displayLoginPage(view);
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(ForgotYourPassword.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void displayLoginPage(View view)
     {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);

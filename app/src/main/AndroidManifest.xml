@@ -25,14 +25,18 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".activities.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <!--
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name" >
         </activity>
+        -->
 
         <service android:name="com.parse.PushService" />
 
@@ -72,6 +76,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- added in stuff -->
+        <activity
+            android:name=".activities.ListUsersActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <service android:name=".activities.MessageService" />
+
+        <activity
+            android:name=".activities.MessagingActivity"
+            android:screenOrientation="portrait" >
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -93,7 +109,12 @@
             android:name=".activities.ForgotYourPassword"
             android:label="@string/title_activity_forgot_your_password" >
         </activity>
-
+        <!--
+        <activity
+            android:name=".activities.HomeActivity"
+            android:label="@string/title_activity_home" >
+        </activity>
+        -->
     </application>
 
 </manifest>

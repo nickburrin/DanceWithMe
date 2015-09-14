@@ -1,5 +1,4 @@
 package seniordesign.com.dancewithme.activities;
-
 import android.app.Activity;
 import android.content.Intent;
 
@@ -28,6 +27,9 @@ public class ProfileManagement extends Activity {
     private ImageButton mProfPic;
     private ListView danceStyles;
 
+    private Intent intent;
+    private Intent serviceIntent;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +92,10 @@ public class ProfileManagement extends Activity {
                 Toast.LENGTH_SHORT).show();
         //Intent intent = new Intent(this, InvalidLoginActivity.class);
         //startActivity(intent);
+        intent = new Intent(getApplicationContext(), ListUsersActivity.class);
+        serviceIntent = new Intent(getApplicationContext(), MessageService.class);
+        startActivity(intent);
+        startService(serviceIntent);
     }
 
 }

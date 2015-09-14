@@ -26,6 +26,9 @@
     <string name="edit">Edit</string>
     <string name="title_activity_create_an_account">Create an Account</string>
 
+    <!--Profile Management -->
+    <string name="edit">Edit</string>
+
     <!-- Create an Account Page Strings -->
     <string name="create_account_title">Creating an Account:</string>
     <string name="create_account_instructions">Please fill out the following fields.</string>
@@ -67,5 +70,13 @@
     <string name="forgot_your_password_instruct">Please enter your email. Your password will be emailed to you.</string>
     <string name="title_activity_view_single_profile">ViewSingleProfile</string>
 
+    <string name="login_activity_label">Sinch Messaging Tutorial</string>
+    <string name="title_activity_list_users">ListUsersActivity</string>
+    <string name="message_elipses">Message...</string>
+    <string name="logout">Logout</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_home">HomeActivity</string>
 </resources>
 

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<<<<<<< HEAD
-=======
     <color name="sinch_purple">#ff63029d</color>
     <color name="off_white">#fffafafa</color>
     <color name="dark_gray">#ffb3b3b3</color>
     <color name="very_dark_gray">#636363</color>
 
->>>>>>> master
     <!--Color Palette-->
     <color name="transparent">#00000000</color>
 
@@ -33,8 +30,4 @@
     <!--Green-->
     <color name="green">#FF8ac442</color>
     <color name="light_green">#FFADE26B</color>
-<<<<<<< HEAD
-
-=======
->>>>>>> master
 </resources>

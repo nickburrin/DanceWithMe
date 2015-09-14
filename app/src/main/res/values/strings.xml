@@ -23,7 +23,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="edit">Edit</string>
     <string name="title_activity_create_an_account">Create an Account</string>
 
     <!--Profile Management -->

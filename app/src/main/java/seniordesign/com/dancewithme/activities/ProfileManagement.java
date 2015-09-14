@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.parse.ParseUser;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class ProfileManagement extends Activity {
                 + " " + ParseUser.getCurrentUser().get("last_name"));
 
         mProfPic = (ImageButton) findViewById(R.id.profPic);
-        //mProfPic.setImageDrawable(null); //fill with an image
+        mProfPic.setImageDrawable(null); //fill with an image
 
         danceStyles = (ListView) findViewById(R.id.lv_dance_styles);
 

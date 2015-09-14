@@ -59,10 +59,10 @@ public class LoginActivity extends Activity {
                 ParseUser.logInInBackground(username, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
-                            startActivity(intent);
-                            startService(serviceIntent);
-                            //startActivity(intent);
-                            //startService(serviceIntent);
+//                            startActivity(intent);
+//                            startService(serviceIntent);
+                            Intent i = new Intent(LoginActivity.this, ProfileManagement.class);
+                            startActivity(i);
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "Wrong username/password combo",
@@ -89,7 +89,6 @@ public class LoginActivity extends Activity {
                         if (e == null) {
                             Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
                             startActivity(i);
-
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "There was an error signing up."

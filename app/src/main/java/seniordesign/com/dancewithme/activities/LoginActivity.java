@@ -63,8 +63,8 @@ public class LoginActivity extends Activity {
                 ParseUser.logInInBackground(username, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
-                            Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
-                            startActivity(i);
+                            startActivity(intent);
+                            startService(serviceIntent);
                             //startActivity(intent);
                             //startService(serviceIntent);
                         } else {
@@ -91,8 +91,9 @@ public class LoginActivity extends Activity {
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(com.parse.ParseException e) {
                         if (e == null) {
-                            startActivity(intent);
-                            startService(serviceIntent);
+                            Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
+                            startActivity(i);
+
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "There was an error signing up."

@@ -52,10 +52,6 @@
 
     <!-- Select a Venue Page Strings -->
     <string name="select_a_venue">Please Select a Venue</string>
-    <string-array name="dance_hall_array">
-        <item>Name: Esquina Tango\nAddress: 209 Pedernales St, Austin, TX 78702\nPhone: (512) 524-2772\nStyle: Salsa</item>
-        <item>Name: Dallas Nightclub of Austin\nAddress: 7113 Burnet Rd, Austin, TX 78757\nPhone: (512) 452-1300\nStyle: Salsa  </item>
-    </string-array>
     <string name="title_activity_profile_management">Profile Management</string>
 
     <!-- Profile Management Page Strings -->

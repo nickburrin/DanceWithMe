@@ -1,9 +1,13 @@
 package seniordesign.com.dancewithme.adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,6 +21,12 @@ public class DancehallListAdapter extends ArrayAdapter<Object> {
     private ArrayList<Object> dancehalls;
     Activity context;
 
+    static class ViewHolder {
+        TextView dancehall;
+        TextView address;
+    }
+
+
     public DancehallListAdapter(Activity context, ArrayList items) {
         super(context, 0,  items);
         this.context = context;
@@ -24,14 +34,33 @@ public class DancehallListAdapter extends ArrayAdapter<Object> {
     }
 
     @Override
-    public long GetItemId(int position)
+    public View getView(int position, View convertView, ViewGroup parent)
     {
-        return position;
+        ViewHolder holder = null;
+
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            holder = new ViewHolder();
+
+            //Get whatever is @ position
+            Object item = getItem(position);
+            int itemPosition = getItemViewType(position);
+        }
+
+
+        return convertView;
     }
 
     @Override
-    public string this[int position] {
-        get { return items[position]; }
+    public int getViewTypeCount() {
+        // we have one view types, namely the dancehalls
+        return 1;
+    }
+
+    @Override
+    public long getItemId(int position)
+    {
+        return position;
     }
 
     @Override
@@ -40,13 +69,12 @@ public class DancehallListAdapter extends ArrayAdapter<Object> {
     }
 
     @Override
-    public View GetView(int position, View convertView, ViewGroup parent)
-    {
-        View view = convertView; // re-use an existing view, if one is available
-        if (view == null) // otherwise create a new one
-            view = context.LayoutInflater.Inflate(Android.Resource.Layout.SimpleListItem1, null);
-        view.findViewById<TextView>(Android.Resource.Id.Text1).Text = dancehalls.get(position);
-        return view;
-    }
+    public Object getItem(int position) {
+        Object item = null;
 
+        if (position < dancehalls.size()) {
+            item = dancehalls.get(position);
+        }
+        return item;
+    }
 }

@@ -63,7 +63,8 @@
     <string name="profile_question">By default, we use your profile setting for dance partner matching. Do you want to use temporary partner dance style preferences?</string>
     <string name="prior_to_dance_partner_searching_statement">Press Submit to search for your dance partner.</string>
 
-
+    <!--Register-->
+    <string name="action_register">New User? Register Here</string>
     <!-- Forgot Your Password Page Strings -->
     <string name="title_activity_forgot_your_password">Forgot Your Password</string>
     <string name="forgot_your_password_instruct">Please enter your email. Your password will be emailed to you.</string>

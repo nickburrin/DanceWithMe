@@ -8,7 +8,7 @@ import android.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 
-//import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.R;
 
 public class MyTabListener implements ActionBar.TabListener {
     // Fragment fragment;

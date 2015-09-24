@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.fragments.MessageFragment;
 
 public class ProfileManagement extends Activity {
 
@@ -91,7 +92,7 @@ public class ProfileManagement extends Activity {
                 Toast.LENGTH_SHORT).show();
         //Intent intent = new Intent(this, InvalidLoginActivity.class);
         //startActivity(intent);
-        intent = new Intent(getApplicationContext(), ListUsersActivity.class);
+        intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);
         startActivity(intent);
         startService(serviceIntent);

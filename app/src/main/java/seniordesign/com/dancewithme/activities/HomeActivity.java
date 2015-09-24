@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -19,9 +20,8 @@ import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.fragments.MatchFragment;
 import seniordesign.com.dancewithme.fragments.MessageFragment;
 import seniordesign.com.dancewithme.fragments.ProfileFragment;
-//import seniordesign.com.dancewithme.fragments.ProfileFragment;
-//import seniordesign.com.dancewithme.fragments.MessageFragment;
-//import seniordesign.com.dancewithme.fragments.MatchFragment;
+import seniordesign.com.dancewithme.fragments.HomeTabFragment;
+
 
 
 
@@ -31,18 +31,18 @@ public class HomeActivity extends FragmentActivity {
     // Private class params
     private ActionBar.Tab profileTab, matchTab, messageTab;
 
-    ParseUser user = ParseUser.getCurrentUser();
+    ParseUser user;
     HomeActivity activity;
     MyApplication application;
-    //User user;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_games);
+        setContentView(R.layout.activity_home);
         activity = this;
         application = (MyApplication) activity.getApplication();
         //user = DataStore.getInstance().getUser();
-        ParseUser user = ParseUser.getCurrentUser();
+        user = ParseUser.getCurrentUser();
 
         // Get layout params
         ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -59,9 +59,9 @@ public class HomeActivity extends FragmentActivity {
             messageTab = actionBar.newTab();
 
             //add the icons to the tabs
-            profileTab.setIcon(R.drawable.settings);
-            matchTab.setIcon(R.drawable.match);
-            messageTab.setIcon(R.drawable.message);
+            profileTab.setIcon(R.drawable.tab_account_sel);
+            matchTab.setIcon(R.drawable.tab_match);
+            messageTab.setIcon(R.drawable.tab_message);
 
             //listener for change in tabs
             MyTabListener mListener = new MyTabListener(mViewPager);
@@ -89,26 +89,27 @@ public class HomeActivity extends FragmentActivity {
                         getSupportFragmentManager());
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.setOnPageChangeListener(
+
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
                     public void onPageSelected(int position) {
                         // When swiping between pages, select the
                         // corresponding tab.
-                        if (position == 0){
-                            profileTab.setIcon(R.drawable.settings);
-                            matchTab.setIcon(R.drawable.match);
-                            messageTab.setIcon(R.drawable.message);
-                        }
-                        else if (position == 1){
-                            profileTab.setIcon(R.drawable.settings);
-                            matchTab.setIcon(R.drawable.match);
-                            messageTab.setIcon(R.drawable.message);
-                        }
-                        else if (position == 2){
-                            profileTab.setIcon(R.drawable.settings);
-                            matchTab.setIcon(R.drawable.match);
-                            messageTab.setIcon(R.drawable.message);
-                        }
+//                        if (position == 0){
+//                            profileTab.setIcon(R.drawable.settings);
+//                            matchTab.setIcon(R.drawable.match);
+//                            messageTab.setIcon(R.drawable.message);
+//                        }
+//                        else if (position == 1){
+//                            profileTab.setIcon(R.drawable.tab_account);
+//                            matchTab.setIcon(R.drawable.tab_bets);
+//                            messageTab.setIcon(R.drawable.tab_games);
+//                        }
+//                        else if (position == 2){
+//                            profileTab.setIcon(R.drawable.settings);
+//                            matchTab.setIcon(R.drawable.match);
+//                            messageTab.setIcon(R.drawable.message);
+//                        }
                         getActionBar().setSelectedNavigationItem(position);
                     }
                 });
@@ -119,10 +120,12 @@ public class HomeActivity extends FragmentActivity {
                 getActionBar().setSelectedNavigationItem(position);
             }
         };
+
         mViewPager.setCurrentItem(1); // Set default view page to games
 
 
-        // Set broadcast listener for logout (
+         //Set broadcast listener for logout (
+
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.package.ACTION_LOGOUT");
         registerReceiver(new BroadcastReceiver() {
@@ -150,9 +153,9 @@ public class HomeActivity extends FragmentActivity {
             Fragment fragment;
             switch (i){
                 case 0: fragment = new ProfileFragment();break;     // Set tab 0 --> Profile
-                case 1: fragment = new MessageFragment();break;   // Set tab 1 --> Games List
-                case 2: fragment = new MatchFragment();break;  // Set tab 2 --> Bets List
-                default: fragment = new MatchFragment();break;
+                case 1: fragment = new MatchFragment();break;   // Set tab 1 --> Games List
+                case 2: fragment = new MessageFragment();break;  // Set tab 2 --> Bets List
+                default: fragment = new MessageFragment();break;
             }
             return fragment;
         }

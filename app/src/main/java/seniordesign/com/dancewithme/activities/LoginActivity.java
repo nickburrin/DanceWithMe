@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.fragments.MessageFragment;
 
 public class LoginActivity extends Activity {
 
@@ -31,22 +32,23 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        intent = new Intent(getApplicationContext(), ListUsersActivity.class);
+        intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);
 //        Parse.enableLocalDatastore(this);
-//        Parse.initialize(this, "Q7azOG47hd1mk0cPmwhUTm3DKcKapSHQepzNdSrd", "NA1kTUjHQqc2vbLDp5ywGvCBMGtLp6EKsAc91nxT");
-        //ParseInstallation.getCurrentInstallation().saveInBackground();
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-            startActivity(intent);
-            startService(serviceIntent);
-        }
+
+
+
+//        ParseUser currentUser = ParseUser.getCurrentUser();
+//        if (currentUser != null) {
+//            startActivity(intent);
+//            startService(serviceIntent);
+//        }
 
         setContentView(R.layout.activity_login);
 
         loginButton = (Button) findViewById(R.id.loginButton);
         signUpButton = (Button) findViewById(R.id.signupButton);
-        forgotYourPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
+ //       forgotYourPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         usernameField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
 
@@ -60,9 +62,10 @@ public class LoginActivity extends Activity {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
 //                            startActivity(intent);
-//                            startService(serviceIntent);
-                            Intent i = new Intent(LoginActivity.this, ProfileManagement.class);
-                            startActivity(i);
+                            //Intent i = new Intent(LoginActivity.this, ProfileManagement.class);
+                            //Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            startService(serviceIntent);
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "Wrong username/password combo",
@@ -103,13 +106,13 @@ public class LoginActivity extends Activity {
 
         });
 
-        forgotYourPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, ForgotYourPassword.class);
-                startActivity(intent);
-            }
-        });
+//        forgotYourPasswordButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(LoginActivity.this, ForgotYourPassword.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     @Override

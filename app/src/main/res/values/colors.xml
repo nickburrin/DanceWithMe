@@ -11,6 +11,9 @@
     <!--White-->
     <color name="white">#FFFFFDFD</color>
 
+    <!--Black-->
+    <color name="black">#000000</color>
+
     <!--Red-->
     <color name="light_red">#FFFF3159</color>
     <color name="red">#FFFF0033</color>
@@ -19,6 +22,7 @@
     <color name="light_blue">#FF669FD6</color>
     <color name="blue">#FF4384c4</color>
     <color name="list_section_blue">#FF406680</color>
+    <color name="dwm_blue">#FF1185E4</color>
 
     <!--Grey-->
     <color name="bg_light_grey">#FFf1f5f7</color>

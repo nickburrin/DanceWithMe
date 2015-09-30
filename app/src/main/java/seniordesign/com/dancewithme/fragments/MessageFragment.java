@@ -1,110 +1,334 @@
-package seniordesign.com.dancewithme.activities.activities.fragments;
+package seniordesign.com.dancewithme.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.os.IBinder;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.parse.FindCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.sinch.android.rtc.PushPair;
+import com.sinch.android.rtc.messaging.Message;
+import com.sinch.android.rtc.messaging.MessageClient;
+import com.sinch.android.rtc.messaging.MessageClientListener;
+import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
+import com.sinch.android.rtc.messaging.MessageFailureInfo;
+import com.sinch.android.rtc.messaging.WritableMessage;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.activities.LoginActivity;
+import seniordesign.com.dancewithme.activities.MessageAdapter;
+import seniordesign.com.dancewithme.activities.MessageService;
+import seniordesign.com.dancewithme.activities.MessagingActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MessageFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MessageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MessageFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MessageFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MessageFragment newInstance(String param1, String param2) {
-        MessageFragment fragment = new MessageFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public MessageFragment() {
-        // Required empty public constructor
-    }
-
+public class MessageFragment extends HomeTabFragment {
+    private String currentUserId;
+    private ArrayAdapter<String> namesArrayAdapter;
+    private ArrayList<String> names;
+    private ListView usersListView;
+    private Button logoutButton;
+    private ProgressDialog progressDialog;
+    private BroadcastReceiver receiver = null;
+    private View view;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+        view = inflater.inflate(R.layout.fragment_message, container, false);
+
+
+        showSpinner();
+
+        logoutButton = (Button) view.findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
+                ParseUser.logOut();
+                Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    private void setConversationsList() {
+        currentUserId = ParseUser.getCurrentUser().getObjectId();
+        names = new ArrayList<String>();
+
+
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereNotEqualTo("objectId", currentUserId);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> userList, com.parse.ParseException e) {
+                if (e == null) {
+                    for (int i=0; i<userList.size(); i++) {
+                        names.add(userList.get(i).getUsername().toString());
+                    }
+
+                    usersListView = (ListView) view.findViewById(R.id.usersListView);
+                    namesArrayAdapter =
+                            new ArrayAdapter<String>(activity.getApplicationContext(),
+                                    R.layout.user_list_item, names);
+                    usersListView.setAdapter(namesArrayAdapter);
+
+                    usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+                            openConversation(names, i);
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(activity.getApplicationContext(),
+                            "Error loading user list",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    //open a conversation with one person
+    public void openConversation(ArrayList<String> names, int pos) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("username", names.get(pos));
+        query.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> user, com.parse.ParseException e) {
+                if (e == null) {
+                    Intent intent = new Intent(activity.getApplicationContext(), MessagingActivity.class);
+                    intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(activity.getApplicationContext(),
+                            "Error finding that user",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    //show a loading spinner while the sinch client starts
+    private void showSpinner() {
+        progressDialog = new ProgressDialog(this.activity);
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Boolean success = intent.getBooleanExtra("success", false);
+                progressDialog.dismiss();
+                if (!success) {
+                    Toast.makeText(activity.getApplicationContext(), "Messaging service failed to start", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+
+        LocalBroadcastManager.getInstance(this.activity).registerReceiver(receiver, new IntentFilter("seniordesign.com.dancewithme.activities.HomeActivity"));
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    public void onResume() {
+        setConversationsList();
+        super.onResume();
     }
 
 }
+
+
+//    private String recipientId;
+//    private EditText messageBodyField;
+//    private String messageBody;
+//    private MessageService.MessageServiceInterface messageService;
+//    private MessageAdapter messageAdapter;
+//    private ListView messagesList;
+//    private String currentUserId;
+//    private ServiceConnection serviceConnection = new MyServiceConnection();
+//    private MessageClientListener messageClientListener = new MyMessageClientListener();
+//
+//
+//
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
+//
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//        View view = inflater.inflate(R.layout.fragment_message, container, false);
+//
+//        activity.bindService(new Intent(this.activity, MessageService.class), serviceConnection, 0);
+//
+//        Intent intent = activity.getIntent();
+//        recipientId = intent.getStringExtra("RECIPIENT_ID");
+//        currentUserId = ParseUser.getCurrentUser().getObjectId();
+//
+//        messagesList = (ListView) view.findViewById(R.id.listMessages);
+//        messageAdapter = new MessageAdapter(this.activity);
+//        messagesList.setAdapter(messageAdapter);
+//        populateMessageHistory();
+//
+//        messageBodyField = (EditText) view.findViewById(R.id.messageBodyField);
+//
+//        view.findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                sendMessage();
+//            }
+//        });
+//        return view;
+//    }
+//
+//
+//    //get previous messages from parse & display
+//    private void populateMessageHistory() {
+//        String[] userIds = {currentUserId, recipientId};
+//        ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseMessage");
+//        query.whereContainedIn("senderId", Arrays.asList(userIds));
+//        query.whereContainedIn("recipientId", Arrays.asList(userIds));
+//        query.orderByAscending("createdAt");
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> messageList, com.parse.ParseException e) {
+//                if (e == null) {
+//                    for (int i = 0; i < messageList.size(); i++) {
+//                        WritableMessage message = new WritableMessage(messageList.get(i).get("recipientId").toString(), messageList.get(i).get("messageText").toString());
+//                        if (messageList.get(i).get("senderId").toString().equals(currentUserId)) {
+//                            messageAdapter.addMessage(message, MessageAdapter.DIRECTION_OUTGOING);
+//                        } else {
+//                            messageAdapter.addMessage(message, MessageAdapter.DIRECTION_INCOMING);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//    }
+//
+//    private void sendMessage() {
+//        messageBody = messageBodyField.getText().toString();
+//        if (messageBody.isEmpty()) {
+//            Toast.makeText(this.activity, "Please enter a message", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//
+//        messageService.sendMessage(recipientId, messageBody);
+//        messageBodyField.setText("");
+//    }
+//
+//    @Override
+//    public void onDestroy() {
+//        messageService.removeMessageClientListener(messageClientListener);
+//        activity.unbindService(serviceConnection);
+//        super.onDestroy();
+//    }
+//
+//    private class MyServiceConnection implements ServiceConnection {
+//        @Override
+//        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+//            messageService = (MessageService.MessageServiceInterface) iBinder;
+//            messageService.addMessageClientListener(messageClientListener);
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName componentName) {
+//            messageService = null;
+//        }
+//    }
+//
+//    private class MyMessageClientListener implements MessageClientListener {
+//        @Override
+//        public void onMessageFailed(MessageClient client, Message message,
+//                                    MessageFailureInfo failureInfo) {
+//           // Toast.makeText(MessagingActivity.this, "Message failed to send.", Toast.LENGTH_LONG).show();
+//        }
+//
+//        @Override
+//        public void onIncomingMessage(MessageClient client, Message message) {
+//            if (message.getSenderId().equals(recipientId)) {
+//                WritableMessage writableMessage = new WritableMessage(message.getRecipientIds().get(0), message.getTextBody());
+//                messageAdapter.addMessage(writableMessage, MessageAdapter.DIRECTION_INCOMING);
+//            }
+//        }
+//
+//        @Override
+//        public void onMessageSent(MessageClient client, Message message, String recipientId) {
+//
+//            final WritableMessage writableMessage = new WritableMessage(message.getRecipientIds().get(0), message.getTextBody());
+//
+//            //only add message to parse database if it doesn't already exist there
+//            ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseMessage");
+//            query.whereEqualTo("sinchId", message.getMessageId());
+//            query.findInBackground(new FindCallback<ParseObject>() {
+//                @Override
+//                public void done(List<ParseObject> messageList, com.parse.ParseException e) {
+//                    if (e == null) {
+//                        if (messageList.size() == 0) {
+//                            ParseObject parseMessage = new ParseObject("ParseMessage");
+//                            parseMessage.put("senderId", currentUserId);
+//                            parseMessage.put("recipientId", writableMessage.getRecipientIds().get(0));
+//                            parseMessage.put("messageText", writableMessage.getTextBody());
+//                            parseMessage.put("sinchId", writableMessage.getMessageId());
+//                            parseMessage.saveInBackground();
+//
+//                            messageAdapter.addMessage(writableMessage, MessageAdapter.DIRECTION_OUTGOING);
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//
+//        @Override
+//        public void onMessageDelivered(MessageClient client, MessageDeliveryInfo deliveryInfo) {}
+//
+//        @Override
+//        public void onShouldSendPushData(MessageClient client, Message message, List<PushPair> pushPairs) {}
+//    }
+//
+//    public MessageFragment() {
+//        // Required empty public constructor
+//    }
+//
+//
+//
+//
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//    }
+//
+//
+//
+//

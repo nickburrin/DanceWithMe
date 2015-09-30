@@ -77,10 +77,12 @@
             </intent-filter>
         </activity>
         <!-- added in stuff -->
+        <!--
         <activity
             android:name=".activities.ListUsersActivity"
             android:screenOrientation="portrait" >
         </activity>
+        -->
 
         <service android:name=".activities.MessageService" />
 
@@ -109,12 +111,12 @@
             android:name=".activities.ForgotYourPassword"
             android:label="@string/title_activity_forgot_your_password" >
         </activity>
-        <!--
+
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
-        -->
+
     </application>
 
 </manifest>

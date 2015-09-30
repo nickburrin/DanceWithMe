@@ -1,8 +1,93 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="@style/Theme.AppCompat">
+        <!-- Customize your theme here.-->
+        <item name="android:actionBarTabStyle">@style/MyActionBarTabs</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarTabStyle">@style/MyActionBarTabs</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Myapp</item>
     </style>
+
+    <!--
+    <style name="ActionBar.Solid.Myapp" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_solid_myapp</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_myapp</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_myapp</item>
+    </style>
+    -->
+
+    <style name="ActionBar.Solid.Myapp" parent="@android:style/Widget.Holo.Light.ActionBar.Solid">
+        <item name="android:background">@color/dwm_blue</item>
+        <item name="android:backgroundStacked">@color/dwm_blue</item>
+        <item name="android:backgroundSplit">@color/dwm_blue</item>
+    </style>
+
+
+    <!--Login/Registration Themes-->
+    <style name="LoginTextLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:background">@drawable/login_text_field</item>
+        <item name="android:weightSum">100</item>
+    </style>
+
+    <style name="LoginGlyph">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">13</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingTop">10dp</item>
+    </style>
+
+    <!-- ActionBar tabs styles -->
+    <style name="MyActionBarTabs"
+        parent="@style/Widget.AppCompat.ActionBar.TabView">
+        <!-- tab indicator -->
+        <item name="android:textColor">@color/white</item>
+        <!--<item name="android:background">@drawable/actionbar_tab_indicator</item>-->
+        <item name="android:background">@android:color/transparent</item>
+        <!-- Support library compatibility -->
+        <item name="background">@drawable/actionbar_tab_indicator</item>
+    </style>
+
+    <style name="LoginEditText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">87</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">7.5dp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/dark_grey</item>
+        <item name="android:textColorHint">@color/dark_grey</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_grey</item>
+        <item name="android:paddingRight">7.5dp</item>
+        <item name="android:fontFamily">Open Sans</item>
+    </style>
+
+    <!--Button-->
+    <style name="ButtonTransparent">
+        <item name="android:background">#00000000</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/list_item_grey</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="button_confirm">
+        <item name="android:background">@drawable/button_confirm</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 
 </resources>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.parse.LogInCallback;
 //import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import seniordesign.com.dancewithme.R;
-import seniordesign.com.dancewithme.fragments.MessageFragment;
 
 public class LoginActivity extends Activity {
 
@@ -76,32 +74,17 @@ public class LoginActivity extends Activity {
             }
         });
 
+        Button signUpButton = (Button) findViewById(R.id.signupButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
                 username = usernameField.getText().toString();
                 password = passwordField.getText().toString();
 
-                ParseUser user = new ParseUser();
-                user.setUsername(username);
-                user.setPassword(password);
-
-                user.signUpInBackground(new SignUpCallback() {
-                    public void done(com.parse.ParseException e) {
-                        if (e == null) {
-                            Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
-                            startActivity(i);
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "There was an error signing up."
-                                    , Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-
-
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                registerIntent.putExtra("username", username);
+                startActivity(registerIntent);
             }
 
         });
@@ -167,9 +150,9 @@ public class LoginActivity extends Activity {
 //    }
 //
 //    public void displayCreateAnAccount(View view) {
-//        Intent intent = new Intent(this, Create_an_account.class);
+//        Intent intent = new Intent(this, RegisterActivity.class);
 //        startActivity(intent);
-//        //setContentView(R.layout.activity_create_an_account);
+//        //setContentView(R.layout.activity_register);
 //    }
 //
 //    public void displaySelectAVenue(View view)

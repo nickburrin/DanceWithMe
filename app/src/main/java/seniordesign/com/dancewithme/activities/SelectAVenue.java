@@ -59,6 +59,6 @@ public class SelectAVenue extends Activity implements OnItemClickListener {
     public void displayProfileManagement(View view) {
         Intent intent = new Intent(this, ProfileManagement.class);
         startActivity(intent);
-        //setContentView(R.layout.activity_create_an_account);
+        //setContentView(R.layout.activity_register);
     }
 }

@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.parse.ParseAnalytics;
 
@@ -14,13 +18,40 @@ import com.parse.ParseAnalytics;
 import seniordesign.com.dancewithme.R;
 
 
-public class Create_an_account extends ActionBarActivity {
+public class RegisterActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_an_account);
+        setContentView(R.layout.activity_register);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
+
+        String username = getIntent().getExtras().getString("username");
+        if(username != null){
+            // TODO: fill in username box
+        }
+
+        Spinner spinner = (Spinner) findViewById(R.id.gender_spinner);
+        spinner.setOnItemSelectedListener(this);
+
+        /*
+                ParseUser user = new ParseUser();
+                user.setUsername(username);
+                user.setPassword(password);
+
+                user.signUpInBackground(new SignUpCallback() {
+                    public void done(com.parse.ParseException e) {
+                        if (e == null) {
+                            Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
+                            startActivity(i);
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "There was an error signing up."
+                                    , Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        */
     }
 
     @Override

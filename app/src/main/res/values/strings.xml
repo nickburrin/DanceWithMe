@@ -61,6 +61,7 @@
 
     <!--Register-->
     <string name="action_register">New User? Register Here</string>
+    <string name="gender_prompt">Select your Gender</string>
     <!-- Forgot Your Password Page Strings -->
     <string name="title_activity_forgot_your_password">Forgot Your Password</string>
     <string name="forgot_your_password_instruct">Please enter your email. Your password will be emailed to you.</string>

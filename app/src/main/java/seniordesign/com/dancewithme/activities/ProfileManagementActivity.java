@@ -21,7 +21,7 @@ import java.util.List;
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.fragments.MessageFragment;
 
-public class ProfileManagement extends Activity {
+public class ProfileManagementActivity extends Activity {
 
     private EditText mUsernameView;
     private ImageButton mProfPic;

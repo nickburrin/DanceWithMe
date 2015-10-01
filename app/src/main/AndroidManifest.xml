@@ -104,7 +104,7 @@
             android:label="@string/title_activity_select_avenue" >
         </activity>
         <activity
-            android:name=".activities.ProfileManagement"
+            android:name=".activities.ProfileManagementActivity"
             android:label="@string/title_activity_profile_management" >
         </activity>
         <activity

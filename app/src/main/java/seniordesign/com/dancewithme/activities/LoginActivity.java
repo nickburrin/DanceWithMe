@@ -18,11 +18,9 @@ public class LoginActivity extends Activity {
 
     private Button signUpButton;
     private Button loginButton;
-    private Button forgotYourPasswordButton;
-    private EditText usernameField;
+    private Button forgotPasswordButton;
+    private EditText emailField;
     private EditText passwordField;
-    private String username;
-    private String password;
     private Intent intent;
     private Intent serviceIntent;
 
@@ -46,21 +44,21 @@ public class LoginActivity extends Activity {
 
         loginButton = (Button) findViewById(R.id.loginButton);
         signUpButton = (Button) findViewById(R.id.signupButton);
- //       forgotYourPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
-        usernameField = (EditText) findViewById(R.id.loginUsername);
+ //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
+        emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                username = usernameField.getText().toString();
-                password = passwordField.getText().toString();
+                String email = emailField.getText().toString();
+                String password = passwordField.getText().toString();
 
-                ParseUser.logInInBackground(username, password, new LogInCallback() {
+                ParseUser.logInInBackground(email, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
 //                            startActivity(intent);
-                            //Intent i = new Intent(LoginActivity.this, ProfileManagement.class);
+                            //Intent i = new Intent(LoginActivity.this, ProfileManagementActivity.class);
                             //Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                             startService(serviceIntent);
@@ -78,18 +76,16 @@ public class LoginActivity extends Activity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                username = usernameField.getText().toString();
-                password = passwordField.getText().toString();
+                String email = emailField.getText().toString();
 
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                registerIntent.putExtra("username", username);
+                registerIntent.putExtra("email", email);
                 startActivity(registerIntent);
             }
 
         });
 
-//        forgotYourPasswordButton.setOnClickListener(new View.OnClickListener() {
+//        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //                Intent intent = new Intent(LoginActivity.this, ForgotYourPassword.class);

@@ -16,6 +16,7 @@ import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 
 import java.text.ParseException;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
+import seniordesign.com.dancewithme.fragments.ProfileFragment;
 
 
 public class RegisterActivity extends ActionBarActivity {
@@ -43,9 +45,10 @@ public class RegisterActivity extends ActionBarActivity {
         setContentView(R.layout.activity_register);
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
-        String username = getIntent().getExtras().getString("username");
-        if(username != null){
-            // TODO: fill in username box
+        // Autofill the email field if it was filled out in the LoginActivity
+        String email = getIntent().getExtras().getString("email");
+        if(email != null){
+            ((EditText) findViewById(R.id.et_email)).setText(email);
         }
 
         mEmailView = ((EditText) findViewById(R.id.et_email));
@@ -103,26 +106,21 @@ public class RegisterActivity extends ActionBarActivity {
             // extract all UI fields, create ParseUser
             ParseUser user = extractParseUser();
 
-            // push to Parse
-
-/*
-            ParseUser user = new ParseUser();
-            user.setUsername(username);
-            user.setPassword(password);
-
-            user.signUpInBackground(new SignUpCallback() {
-                public void done(com.parse.ParseException e) {
-                    if (e == null) {
-                        Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
-                        startActivity(i);
-                    } else {
-                        Toast.makeText(getApplicationContext(),
-                                "There was an error signing up."
-                                , Toast.LENGTH_LONG).show();
+            if(user != null){
+                // push to Parse
+                user.signUpInBackground(new SignUpCallback() {
+                    public void done(com.parse.ParseException e) {
+                        if (e == null) {
+                            Intent i = new Intent(RegisterActivity.this, HomeActivity.class);
+                            i.putExtra("first_time", true);
+                            startActivity(i);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "There was an error signing up.",
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
-            });
-*/
+                });
+            }
         }
     }
 
@@ -136,36 +134,42 @@ public class RegisterActivity extends ActionBarActivity {
             focusView = mFirstName;
             fieldsOK = true;
         }
+
         if(mLastName.getText().toString().isEmpty()){
             // Check for last name
             mLastName.setError(getString(R.string.error_field_required));
             focusView = mLastName;
             fieldsOK = true;
         }
+
         if (TextUtils.isEmpty(mPasswordView.getText().toString())) {
             // Check if the user entered password
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             fieldsOK = true;
         }
+
         if (TextUtils.isEmpty(mConfirmPasswordView.getText().toString())) {
             // Check if the user entered confirm password
             mConfirmPasswordView.setError(getString(R.string.error_field_required));
             focusView = mConfirmPasswordView;
             fieldsOK = true;
         }
+
         if (TextUtils.isEmpty(mEmailView.getText().toString())) {
             // Check if user entered email
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             fieldsOK = true;
         }
+
         if (!isEmailValid(mEmailView.getText().toString())) {
             // Check for a valid email address.
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             fieldsOK = true;
         }
+
         if(!doPasswordsMatch(mPasswordView.getText().toString(), mConfirmPasswordView.getText().toString())){
             // Check if confirm password matches the original, if the user entered one.
             mConfirmPasswordView.setError(getString(R.string.error_password_no_match));
@@ -197,28 +201,45 @@ public class RegisterActivity extends ActionBarActivity {
     }
 
     private ParseUser extractParseUser() {
+        ParseUser newUser = null;
+
         String email = ((EditText) findViewById(R.id.et_email)).getText().toString();
         String password = ((EditText) findViewById(R.id.et_password)).getText().toString();
-        String confirmPassword = ((EditText) findViewById(R.id.et_confirm_password)).getText().toString();
         String firstName = ((EditText) findViewById(R.id.et_first_name)).getText().toString();
         String lastName = ((EditText) findViewById(R.id.et_last_name)).getText().toString();
         String gender = ((Spinner) findViewById(R.id.spinner_gender)).getSelectedItem().toString();
 
+        // See if there exists an existing user with the same email
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("gender", "female");
+        query.whereEqualTo("email", email);
         query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> objects, ParseException e) {
+            @Override
+            public void done(List<ParseUser> list, com.parse.ParseException e) {
                 if (e == null) {
                     // The query was successful.
+                    System.out.println("No existing users with email.");
                 } else {
                     // Something went wrong.
+                    e.printStackTrace();
                 }
             }
         });
 
-        if(query.)
-        ParseUser newUser = new ParseUser();
+        if(query.hasCachedResult()){
+            //There is already an account with this email
+            Toast.makeText(getApplicationContext(), "An account with this email already exists", Toast.LENGTH_SHORT).show();
+        } else {
+            //Create the new account
+            newUser = new ParseUser();
+            newUser.setEmail(email);
+            newUser.setUsername(email);
+            newUser.setPassword(password);
+            newUser.put("first_name", firstName);
+            newUser.put("last_name", lastName);
+            newUser.put("gender", gender);
+        }
 
+        return newUser;
     }
 
 

@@ -152,10 +152,10 @@ public class HomeActivity extends FragmentActivity {
         public Fragment getItem(int i) {
             Fragment fragment;
             switch (i){
-                case 0: fragment = new ProfileFragment();break;     // Set tab 0 --> Profile
-                case 1: fragment = new MatchFragment();break;   // Set tab 1 --> Games List
-                case 2: fragment = new MessageFragment();break;  // Set tab 2 --> Bets List
-                default: fragment = new MessageFragment();break;
+                case 0: fragment = new ProfileFragment(); break;    // Set tab 0 --> Profile
+                case 1: fragment = new MatchFragment(); break;      // Set tab 1 --> Games List
+                case 2: fragment = new MessageFragment(); break;    // Set tab 2 --> Bets List
+                default: fragment = new ProfileFragment(); break;
             }
             return fragment;
         }

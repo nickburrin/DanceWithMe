@@ -10,21 +10,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 
-import java.text.ParseException;
-import java.util.List;
-
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
-import seniordesign.com.dancewithme.fragments.ProfileFragment;
 
 
 public class RegisterActivity extends ActionBarActivity {
@@ -102,7 +98,7 @@ public class RegisterActivity extends ActionBarActivity {
 
     public void createAccount(){
         // Only create an account if all fields check out
-        if(verifyUIFields() == true) {
+        if(UIFieldsOK() == true) {
             // extract all UI fields, create ParseUser
             ParseUser user = extractParseUser();
 
@@ -124,66 +120,73 @@ public class RegisterActivity extends ActionBarActivity {
         }
     }
 
-    private boolean verifyUIFields() {
-        boolean fieldsOK = false;
+    private boolean UIFieldsOK() {
+        boolean incompleteFields = false;
         View focusView = null;
 
         if(mFirstName.getText().toString().isEmpty()){
             // Check for first name
             mFirstName.setError(getString(R.string.error_field_required));
             focusView = mFirstName;
-            fieldsOK = true;
+            incompleteFields = true;
         }
 
         if(mLastName.getText().toString().isEmpty()){
             // Check for last name
             mLastName.setError(getString(R.string.error_field_required));
             focusView = mLastName;
-            fieldsOK = true;
+            incompleteFields = true;
         }
 
         if (TextUtils.isEmpty(mPasswordView.getText().toString())) {
             // Check if the user entered password
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
-            fieldsOK = true;
+            incompleteFields = true;
         }
 
         if (TextUtils.isEmpty(mConfirmPasswordView.getText().toString())) {
             // Check if the user entered confirm password
             mConfirmPasswordView.setError(getString(R.string.error_field_required));
             focusView = mConfirmPasswordView;
-            fieldsOK = true;
+            incompleteFields = true;
         }
 
         if (TextUtils.isEmpty(mEmailView.getText().toString())) {
             // Check if user entered email
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
-            fieldsOK = true;
+            incompleteFields = true;
+        }
+
+        if (TextUtils.isEmpty(mGenderSpinner.getSelectedItem().toString())) {
+            // Check if user entered email
+            ((TextView)findViewById(R.id.tv_invisible_error)).setError(getString(R.string.error_field_required));
+            focusView = mGenderSpinner;
+            incompleteFields = true;
         }
 
         if (!isEmailValid(mEmailView.getText().toString())) {
             // Check for a valid email address.
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
-            fieldsOK = true;
+            incompleteFields = true;
         }
 
         if(!doPasswordsMatch(mPasswordView.getText().toString(), mConfirmPasswordView.getText().toString())){
             // Check if confirm password matches the original, if the user entered one.
             mConfirmPasswordView.setError(getString(R.string.error_password_no_match));
             focusView = mConfirmPasswordView;
-            fieldsOK = true;
+            incompleteFields = true;
         }
 
-        if (fieldsOK) {
+        if (incompleteFields) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
         }
 
-        return fieldsOK;
+        return !incompleteFields;
     }
 
     private boolean isEmailValid(String email) {
@@ -212,31 +215,23 @@ public class RegisterActivity extends ActionBarActivity {
         // See if there exists an existing user with the same email
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("email", email);
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> list, com.parse.ParseException e) {
-                if (e == null) {
-                    // The query was successful.
-                    System.out.println("No existing users with email.");
-                } else {
-                    // Something went wrong.
-                    e.printStackTrace();
-                }
-            }
-        });
 
-        if(query.hasCachedResult()){
-            //There is already an account with this email
-            Toast.makeText(getApplicationContext(), "An account with this email already exists", Toast.LENGTH_SHORT).show();
-        } else {
-            //Create the new account
-            newUser = new ParseUser();
-            newUser.setEmail(email);
-            newUser.setUsername(email);
-            newUser.setPassword(password);
-            newUser.put("first_name", firstName);
-            newUser.put("last_name", lastName);
-            newUser.put("gender", gender);
+        try {
+            if(query.count() > 0){
+                //There is already an account with this email
+                Toast.makeText(getApplicationContext(), "An account with this email already exists", Toast.LENGTH_SHORT).show();
+            } else {
+                //Create the new account
+                newUser = new ParseUser();
+                newUser.setEmail(email);
+                newUser.setUsername(email);
+                newUser.setPassword(password);
+                newUser.put("first_name", firstName);
+                newUser.put("last_name", lastName);
+                newUser.put("gender", gender);
+            }
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
         }
 
         return newUser;

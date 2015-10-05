@@ -10,8 +10,8 @@
     <string name="app_name">Welcome to the DanceWithMe App!</string>
     <string name="hello">Please login or sign up.</string>
 
-    <string name="username">Email: </string>
-    <string name="password">Password: </string>
+    <string name="username">Email </string>
+    <string name="password">Password </string>
 
     <string name="sign_in_button_text">Sign in</string>
     <string name="sign_up_button_text">Sign Up!</string>
@@ -31,10 +31,10 @@
     <!-- Create an Account Page Strings -->
     <string name="create_account_title">Creating an Account:</string>
     <string name="create_account_instructions">Please fill out the following fields.</string>
-    <string name="email">Email: </string>
-    <string name="confirm_password">Confirm Password: </string>
-    <string name="first_name">First Name: </string>
-    <string name="last_name">Last Name: </string>
+    <string name="email">Email </string>
+    <string name="confirm_password">Confirm Password </string>
+    <string name="first_name">First Name </string>
+    <string name="last_name">Last Name </string>
     <string name="dance_style_preferences_title">Dance Style Preferences: </string>
     <string name="dance_style_1">Dance Style 1: </string>
     <string name="dance_style_2">Dance Style 2: </string>

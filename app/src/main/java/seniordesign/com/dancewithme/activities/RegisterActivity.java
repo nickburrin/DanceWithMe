@@ -159,9 +159,9 @@ public class RegisterActivity extends ActionBarActivity {
             incompleteFields = true;
         }
 
-        if (TextUtils.isEmpty(mGenderSpinner.getSelectedItem().toString())) {
+        if (!mGenderSpinner.getSelectedItem().toString().equals("Gender")) {
             // Check if user entered email
-            ((TextView)findViewById(R.id.tv_invisible_error)).setError(getString(R.string.error_field_required));
+            ((TextView)findViewById(R.id.tv_invisible_error)).setError(getString(R.string.error_select_gender));
             focusView = mGenderSpinner;
             incompleteFields = true;
         }

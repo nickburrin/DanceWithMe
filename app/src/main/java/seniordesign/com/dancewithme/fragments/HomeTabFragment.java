@@ -23,8 +23,6 @@ public class HomeTabFragment extends Fragment {
         activity = (HomeActivity) getActivity();
         application = (MyApplication) activity.getApplication();
         //user = DataStore.getInstance().getUser();
-
-
     }
 
 }

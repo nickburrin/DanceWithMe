@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -84,9 +86,7 @@ public class HomeActivity extends FragmentActivity {
 
         // Initialize the view pager & pager adapter
         DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
-        mDemoCollectionPagerAdapter =
-                new DemoCollectionPagerAdapter(
-                        getSupportFragmentManager());
+        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.setOnPageChangeListener(
 
@@ -116,15 +116,21 @@ public class HomeActivity extends FragmentActivity {
         new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                // When swiping between pages, select the                        // corresponding tab.
+                // When swiping between pages, select the corresponding tab.
                 getActionBar().setSelectedNavigationItem(position);
             }
         };
 
-        mViewPager.setCurrentItem(1); // Set default view page to games
+        boolean newUser = getIntent().getExtras().getBoolean("first_time");
+        if(newUser){
+            mViewPager.setCurrentItem(0); // Set default view page to Profile
+            Toast.makeText(HomeActivity.this, "Welcome! Specify your dance styles and start matching!",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            mViewPager.setCurrentItem(1); // Set default view page to Matching
+        }
 
-
-         //Set broadcast listener for logout (
+        //Set broadcast listener for logout (
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.package.ACTION_LOGOUT");
@@ -138,8 +144,6 @@ public class HomeActivity extends FragmentActivity {
         }, intentFilter);
 
     }
-
-
 
     // Pager adapter that contains the different fragments necessary for navigating through the tabs
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
@@ -166,10 +170,6 @@ public class HomeActivity extends FragmentActivity {
         }
 
     }
-
-
-
-
 }
 
 

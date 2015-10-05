@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.parse.LogInCallback;
 //import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import android.view.View;
 import android.widget.Button;
@@ -14,17 +13,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import seniordesign.com.dancewithme.R;
-import seniordesign.com.dancewithme.fragments.MessageFragment;
 
 public class LoginActivity extends Activity {
 
     private Button signUpButton;
     private Button loginButton;
-    private Button forgotYourPasswordButton;
-    private EditText usernameField;
+    private Button forgotPasswordButton;
+    private EditText emailField;
     private EditText passwordField;
-    private String username;
-    private String password;
     private Intent intent;
     private Intent serviceIntent;
 
@@ -48,21 +44,21 @@ public class LoginActivity extends Activity {
 
         loginButton = (Button) findViewById(R.id.loginButton);
         signUpButton = (Button) findViewById(R.id.signupButton);
- //       forgotYourPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
-        usernameField = (EditText) findViewById(R.id.loginUsername);
+ //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
+        emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                username = usernameField.getText().toString();
-                password = passwordField.getText().toString();
+                String email = emailField.getText().toString();
+                String password = passwordField.getText().toString();
 
-                ParseUser.logInInBackground(username, password, new LogInCallback() {
+                ParseUser.logInInBackground(email, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
 //                            startActivity(intent);
-                            //Intent i = new Intent(LoginActivity.this, ProfileManagement.class);
+                            //Intent i = new Intent(LoginActivity.this, ProfileManagementActivity.class);
                             //Intent i = new Intent(LoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                             startService(serviceIntent);
@@ -76,37 +72,20 @@ public class LoginActivity extends Activity {
             }
         });
 
+        Button signUpButton = (Button) findViewById(R.id.signupButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
-                username = usernameField.getText().toString();
-                password = passwordField.getText().toString();
+                String email = emailField.getText().toString();
 
-                ParseUser user = new ParseUser();
-                user.setUsername(username);
-                user.setPassword(password);
-
-                user.signUpInBackground(new SignUpCallback() {
-                    public void done(com.parse.ParseException e) {
-                        if (e == null) {
-                            Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
-                            startActivity(i);
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "There was an error signing up."
-                                    , Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-
-
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                registerIntent.putExtra("email", email);
+                startActivity(registerIntent);
             }
 
         });
 
-//        forgotYourPasswordButton.setOnClickListener(new View.OnClickListener() {
+//        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
 //                Intent intent = new Intent(LoginActivity.this, ForgotYourPassword.class);
@@ -167,9 +146,9 @@ public class LoginActivity extends Activity {
 //    }
 //
 //    public void displayCreateAnAccount(View view) {
-//        Intent intent = new Intent(this, Create_an_account.class);
+//        Intent intent = new Intent(this, RegisterActivity.class);
 //        startActivity(intent);
-//        //setContentView(R.layout.activity_create_an_account);
+//        //setContentView(R.layout.activity_register);
 //    }
 //
 //    public void displaySelectAVenue(View view)

@@ -10,8 +10,8 @@
     <string name="app_name">Welcome to the DanceWithMe App!</string>
     <string name="hello">Please login or sign up.</string>
 
-    <string name="username">Email: </string>
-    <string name="password">Password: </string>
+    <string name="username">Email </string>
+    <string name="password">Password </string>
 
     <string name="sign_in_button_text">Sign in</string>
     <string name="sign_up_button_text">Sign Up!</string>
@@ -31,10 +31,10 @@
     <!-- Create an Account Page Strings -->
     <string name="create_account_title">Creating an Account:</string>
     <string name="create_account_instructions">Please fill out the following fields.</string>
-    <string name="email">Email: </string>
-    <string name="confirm_password">Confirm Password: </string>
-    <string name="first_name">First Name: </string>
-    <string name="last_name">Last Name: </string>
+    <string name="email">Email </string>
+    <string name="confirm_password">Confirm Password </string>
+    <string name="first_name">First Name </string>
+    <string name="last_name">Last Name </string>
     <string name="dance_style_preferences_title">Dance Style Preferences: </string>
     <string name="dance_style_1">Dance Style 1: </string>
     <string name="dance_style_2">Dance Style 2: </string>
@@ -52,10 +52,6 @@
 
     <!-- Select a Venue Page Strings -->
     <string name="select_a_venue">Please Select a Venue</string>
-    <string-array name="dance_hall_array">
-        <item>Name: Esquina Tango\nAddress: 209 Pedernales St, Austin, TX 78702\nPhone: (512) 524-2772\nStyle: Salsa</item>
-        <item>Name: Dallas Nightclub of Austin\nAddress: 7113 Burnet Rd, Austin, TX 78757\nPhone: (512) 452-1300\nStyle: Salsa  </item>
-    </string-array>
     <string name="title_activity_profile_management">Profile Management</string>
 
     <!-- Profile Management Page Strings -->
@@ -65,6 +61,10 @@
 
     <!--Register-->
     <string name="action_register">New User? Register Here</string>
+    <string name="gender_prompt">Select your Gender</string>
+    <string name="action_existing_user">Already have an account? Sign in</string>
+    <string name="error_password_no_match">Passwords do not match</string>
+
     <!-- Forgot Your Password Page Strings -->
     <string name="title_activity_forgot_your_password">Forgot Your Password</string>
     <string name="forgot_your_password_instruct">Please enter your email. Your password will be emailed to you.</string>

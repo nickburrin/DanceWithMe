@@ -27,7 +27,7 @@
 
     <!--Profile Management -->
     <string name="edit_profile">Edit Profile</string>
-    <string name="add_styles">Add Dance Style</string>
+    <string name="add_styles">+</string>
 
     <!-- Create an Account Page Strings -->
     <string name="create_account_title">Creating an Account:</string>
@@ -38,12 +38,6 @@
     <string name="last_name">Last Name </string>
     <string name="error_select_gender">Please select a gender</string>
     <string name="dance_style_preferences_title">Dance Style Preferences: </string>
-    <string name="dance_style_1">Dance Style 1: </string>
-    <string name="dance_style_2">Dance Style 2: </string>
-    <string name="dance_style_3">Dance Style 3: </string>
-    <string name="skill_level_1">Skill Level: </string>
-    <string name="skill_level_2">Skill Level: </string>
-    <string name="skill_level_3">Skill Level: </string>
     <string name="beginner_skill">Beginner</string>
     <string name="intermediate_skill">Intermediate</string>
     <string name="expert_skill">Expert</string>
@@ -80,5 +74,6 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="my_skill">My Skill Level</string>
+    <string name="dancestyle_prompt">Select your dance style</string>
 </resources>
-

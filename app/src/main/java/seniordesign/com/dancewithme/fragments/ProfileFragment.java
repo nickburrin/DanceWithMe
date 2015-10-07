@@ -8,15 +8,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,20 +24,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+
 import java.io.ByteArrayOutputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.activities.DanceStyleActivity;
 import seniordesign.com.dancewithme.activities.HomeActivity;
 import seniordesign.com.dancewithme.activities.MessageService;
+import seniordesign.com.dancewithme.activities.MyApplication;
+import seniordesign.com.dancewithme.adapters.DanceStyleListAdapter;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
 
 
 public class ProfileFragment extends HomeTabFragment {
+    private static final String TAG = ProfileFragment.class.getSimpleName();
+
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
 
@@ -45,7 +50,8 @@ public class ProfileFragment extends HomeTabFragment {
     private TextView usernameView;
     private Button editProf;
     private Button addDanceStyles;
-    private ListView danceStyles;
+    private ListView stylesList;
+    private DanceStyleListAdapter styleListAdapter;
 
     ParseUser User;
     private Bitmap bm = null;
@@ -78,6 +84,7 @@ public class ProfileFragment extends HomeTabFragment {
                 }
             }
         }else{
+            // TODO: should exit to the login screen, this shouldnt really happen
             Toast.makeText(this.activity.getApplicationContext(), "No user", Toast.LENGTH_LONG).show();
         }
     }
@@ -115,11 +122,12 @@ public class ProfileFragment extends HomeTabFragment {
         addDanceStyles.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //enable the user to add dance styles
+                //enable the user to add DanceStyles
+                Intent i = new Intent(activity, DanceStyleActivity.class);
+                startActivity(i);
             }
         });
-
-        danceStyles = (ListView) view.findViewById(R.id.lv_dance_styles);
+        stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
         return view;
     }
@@ -127,22 +135,49 @@ public class ProfileFragment extends HomeTabFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initFragment();
+        System.out.println(User.getList("DanceStyles"));
+        //initFragment();
     }
 
     private void initFragment() {
         // Instaniating an array list (you don't need to do this, you already have yours).
-        List<DanceStyle> temp_array_list = User.get("DanceStyles");
+        ArrayList<Object> userStyles = (ArrayList<Object>) User.get("DanceStyles");
+        if(userStyles == null || userStyles.isEmpty()){
+            userStyles = new ArrayList<Object>();
+        }
 
+        styleListAdapter = new DanceStyleListAdapter(activity.getApplicationContext(),
+                userStyles, (MyApplication)activity.getApplication());
         // This is the array adapter, it takes the context of the activity as a
         // first parameter, the type of list view as a second parameter and your
         // array as a third parameter.
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this.activity,
-                android.R.layout.simple_list_item_1,
-                temp_array_list );
+//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+//                this.activity,
+//                android.R.layout.simple_list_item_1,
+//                userStyles );
+//
+        stylesList.setAdapter(styleListAdapter);
+        stylesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object item = styleListAdapter.getItem(position);
+                if (item instanceof DanceStyle) {
+                    // If clicked on style, go to dance activity
+                    Log.d(TAG, "Clicked on dancestyle:" + item);
 
-        danceStyles.setAdapter(arrayAdapter);
+                    // Get dance obj
+                    DanceStyle style = (DanceStyle) item;
+
+                    Intent i = new Intent(getActivity(), DanceStyleActivity.class);
+
+                    // Send game id to the bet activity
+                    i.putExtra("style", style.getStyle());
+
+                    // Start the activity
+                    startActivity(i);
+                }
+            }
+        });
     }
 
     public void loadImagefromGallery(View view) {
@@ -152,8 +187,8 @@ public class ProfileFragment extends HomeTabFragment {
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
     }
 
-    public void changeProfPic(View v) {
-        System.out.println("Clicked on picture");
+    public void addDanceStyle(){
+
     }
 
     //@Override
@@ -184,7 +219,7 @@ public class ProfileFragment extends HomeTabFragment {
         User = ParseUser.getCurrentUser();
         try {
             // When an Image is picked
-            if (requestCode == RESULT_LOAD_IMG && resultCode == RESULT_OK && null != data) {
+            if (requestCode == RESULT_LOAD_IMG && resultCode == this.activity.RESULT_OK && null != data) {
                 // Get the Image from data
 
                 Uri selectedImage = data.getData();

@@ -121,14 +121,17 @@ public class HomeActivity extends FragmentActivity {
             }
         };
 
-        boolean newUser = getIntent().getExtras().getBoolean("first_time");
-        if(newUser){
-            mViewPager.setCurrentItem(0); // Set default view page to Profile
-            Toast.makeText(HomeActivity.this, "Welcome! Specify your dance styles and start matching!",
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            mViewPager.setCurrentItem(1); // Set default view page to Matching
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            if(extras.getBoolean("first_time")){
+                mViewPager.setCurrentItem(0); // Set default view page to Profile
+                Toast.makeText(HomeActivity.this, "Welcome! Specify your dance styles and start matching!",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                mViewPager.setCurrentItem(1); // Set default view page to Matching
+            }
         }
+
 
         //Set broadcast listener for logout (
 

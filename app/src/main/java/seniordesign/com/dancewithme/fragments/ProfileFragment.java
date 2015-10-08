@@ -30,6 +30,7 @@ import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.DanceStyleActivity;
@@ -67,6 +68,11 @@ public class ProfileFragment extends HomeTabFragment {
         this.activity = (HomeActivity)this.getActivity();
 
         getUser();
+
+        if(User.get("DanceStyles").equals(null)){
+            Toast.makeText(activity.getApplicationContext(), "Welcome! Specify your dance styles and start matching!",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void getUser() {
@@ -114,6 +120,7 @@ public class ProfileFragment extends HomeTabFragment {
         editProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                System.out.println(ParseUser.getCurrentUser().get("danceStyles"));
                 //enable the user to modify the name, gender, etc.
             }
         });
@@ -135,27 +142,27 @@ public class ProfileFragment extends HomeTabFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        System.out.println(User.getList("DanceStyles"));
-        //initFragment();
+        initFragment();
     }
 
     private void initFragment() {
         // Instaniating an array list (you don't need to do this, you already have yours).
-        ArrayList<Object> userStyles = (ArrayList<Object>) User.get("DanceStyles");
+        ArrayList<Object> userStyles;
+        List<Object> temp = ParseUser.getCurrentUser().getList("danceStyles");
+
+        if(temp == null){
+            userStyles = new ArrayList<Object>();
+        } else{
+            userStyles = new ArrayList<Object>(temp);
+        }
+
         if(userStyles == null || userStyles.isEmpty()){
             userStyles = new ArrayList<Object>();
         }
 
         styleListAdapter = new DanceStyleListAdapter(activity.getApplicationContext(),
                 userStyles, (MyApplication)activity.getApplication());
-        // This is the array adapter, it takes the context of the activity as a
-        // first parameter, the type of list view as a second parameter and your
-        // array as a third parameter.
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-//                this.activity,
-//                android.R.layout.simple_list_item_1,
-//                userStyles );
-//
+
         stylesList.setAdapter(styleListAdapter);
         stylesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -163,17 +170,12 @@ public class ProfileFragment extends HomeTabFragment {
                 Object item = styleListAdapter.getItem(position);
                 if (item instanceof DanceStyle) {
                     // If clicked on style, go to dance activity
-                    Log.d(TAG, "Clicked on dancestyle:" + item);
-
                     // Get dance obj
                     DanceStyle style = (DanceStyle) item;
+                    Log.d(TAG, "Clicked on dancestyle:" + style.getStyle());
 
                     Intent i = new Intent(getActivity(), DanceStyleActivity.class);
-
-                    // Send game id to the bet activity
-                    i.putExtra("style", style.getStyle());
-
-                    // Start the activity
+                    i.putExtra("style_id", style.getObjectId());  // Send objectId to the DanceStyleActivity
                     startActivity(i);
                 }
             }
@@ -185,10 +187,6 @@ public class ProfileFragment extends HomeTabFragment {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-    }
-
-    public void addDanceStyle(){
-
     }
 
     //@Override
@@ -213,6 +211,7 @@ public class ProfileFragment extends HomeTabFragment {
 
         return super.onOptionsItemSelected(item);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -235,14 +234,16 @@ public class ProfileFragment extends HomeTabFragment {
                 imgDecodableString = cursor.getString(columnIndex);
                 cursor.close();
 
-                ImageView imgView = (ImageView) this.activity.findViewById(R.id.profPic);
-                if(bm!=null){ bm.recycle(); }
+                ImageView imgView = (ImageView) this.activity.findViewById(R.id.ib_profPic);
+                if(bm!=null){
+                    bm.recycle();
+                }
                 bm = BitmapFactory.decodeFile(imgDecodableString);
                 ((BitmapDrawable)imgView.getDrawable()).getBitmap().recycle();
                 imgView.setImageBitmap(bm);
 
 
-                Bitmap out = Bitmap.createScaledBitmap(bm,(int)(bm.getWidth()*0.25),(int)(bm.getHeight()*0.25),true);
+                Bitmap out = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()*0.25), (int)(bm.getHeight()*0.25), true);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 out.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
@@ -260,6 +261,7 @@ public class ProfileFragment extends HomeTabFragment {
         } catch (Exception e) {
             Toast.makeText(this.activity, "Something went wrong", Toast.LENGTH_LONG)
                     .show();
+            e.printStackTrace();
         }
 
     }

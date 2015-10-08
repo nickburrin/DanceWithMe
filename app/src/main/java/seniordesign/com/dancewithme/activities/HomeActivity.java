@@ -124,11 +124,7 @@ public class HomeActivity extends FragmentActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             if(extras.getBoolean("first_time")){
-                mViewPager.setCurrentItem(0); // Set default view page to Profile
-                Toast.makeText(HomeActivity.this, "Welcome! Specify your dance styles and start matching!",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                mViewPager.setCurrentItem(1); // Set default view page to Matching
+                mViewPager.setCurrentItem(0); // Set view page to Profile on first time login
             }
         }
 
@@ -162,7 +158,7 @@ public class HomeActivity extends FragmentActivity {
                 case 0: fragment = new ProfileFragment(); break;    // Set tab 0 --> Profile
                 case 1: fragment = new MatchFragment(); break;      // Set tab 1 --> Games List
                 case 2: fragment = new MessageFragment(); break;    // Set tab 2 --> Bets List
-                default: fragment = new ProfileFragment(); break;
+                default: fragment = new MatchFragment(); break;
             }
             return fragment;
         }

@@ -12,10 +12,9 @@ import java.util.Arrays;
 /**
  * Created by nickburrin on 10/5/15.
  */
-@ParseClassName("Armor")
+@ParseClassName("DanceStyle")
 public class DanceStyle extends ParseObject{
-    public DanceStyle() {
-    }
+    public DanceStyle() {}
 
     public String getStyle() {
         return getString("Name");
@@ -34,25 +33,20 @@ public class DanceStyle extends ParseObject{
     }
 
     public ArrayList<String> getPreferences() {
-        JSONArray prefs = getJSONArray("Preferences");
-        ArrayList<String> preferences = new ArrayList<String>();
+        ArrayList<String> preferences = (ArrayList<String>) get("Preferences");
 
-        try {
-            for (int i = 0; i < prefs.length(); i++) {
-                preferences.add(prefs.getString(i));
-            }
-        } catch(JSONException e){
-            e.printStackTrace();
-        }
+//        JSONArray prefs = getJSONArray("Preferences");
+//        try {
+//            for (int i = 0; i < prefs.length(); i++) {
+//                preferences.add(prefs.getString(i));
+//            }
+//        } catch(JSONException e){
+//            e.printStackTrace();
+//        }
         return preferences;
     }
 
     public void setPreferences(ArrayList<String> preferences) {
-        JSONArray prefs = new JSONArray();
-        for(String p: preferences){
-            prefs.put(p);
-        }
-
-        put("Preferences", prefs);
+        put("Preferences", preferences);
     }
 }

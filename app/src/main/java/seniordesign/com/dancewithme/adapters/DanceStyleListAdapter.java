@@ -8,6 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 
 import seniordesign.com.dancewithme.R;
@@ -70,7 +74,12 @@ public class DanceStyleListAdapter extends ArrayAdapter<Object> {
         Object item = getItem(position);
 
         if (getItemViewType(position) == 0) {
-            DanceStyle style = (DanceStyle)item;
+            DanceStyle style = null;
+            try {
+                style = ((DanceStyle)item).fetchIfNeeded();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             holder.style.setText(style.getStyle());
             holder.skill.setText(style.getSkill());

@@ -113,6 +113,11 @@
             android:label="@string/title_activity_home" >
         </activity>
 
+        <activity
+            android:name=".activities.DanceStyleActivity"
+            android:label="@string/title_activity_dancestyle" >
+        </activity>
+
     </application>
 
 </manifest>

@@ -12,10 +12,10 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         Parse.enableLocalDatastore(this);
+        ParseObject.registerSubclass(DanceStyle.class);
         Parse.initialize(this, "Q7azOG47hd1mk0cPmwhUTm3DKcKapSHQepzNdSrd", "NA1kTUjHQqc2vbLDp5ywGvCBMGtLp6EKsAc91nxT");
-        //Parse.enableLocalDatastore(this);
+//        Parse.enableLocalDatastore(this);
 //        Parse.initialize(this, "Q7azOG47hd1mk0cPmwhUTm3DKcKapSHQepzNdSrd", "NA1kTUjHQqc2vbLDp5ywGvCBMGtLp6EKsAc91nxT");
         ParseInstallation.getCurrentInstallation().saveInBackground();
-        ParseObject.registerSubclass(DanceStyle.class);
     }
 }

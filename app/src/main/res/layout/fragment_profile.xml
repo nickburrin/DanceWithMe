@@ -61,6 +61,7 @@
                 android:id="@+id/label_dance_styles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="90"
                 android:text="Dance Styles"
                 android:textSize="32sp" />
 
@@ -68,6 +69,7 @@
                 android:id="@+id/button_add_dancestyles"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="+"
                 android:textStyle="bold"
                 android:textSize="32sp" />

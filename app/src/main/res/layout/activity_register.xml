@@ -75,7 +75,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:entries="@array/gender_array"
-                    android:prompt="@string/gender_prompt"
                     android:spinnerMode="dialog" />
 
                 <!-- Fake TextView to use to set in an error state to allow an error to be shown for the TextView -->

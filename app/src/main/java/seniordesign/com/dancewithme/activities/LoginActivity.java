@@ -185,7 +185,7 @@ public class LoginActivity extends Activity {
 //public class LoginActivity extends Activity{
 //
 //    /**
-//     * Keep track of the login task to ensure we can cancel it if requested.
+//     * Keep track of the login task to ensure we can mCancel it if requested.
 //     */
 //    // UI references.
 //    private AutoCompleteTextView mEmailView;
@@ -229,28 +229,28 @@ public class LoginActivity extends Activity {
 //        mEmailView.setError(null);
 //        mPasswordView.setError(null);
 //
-//        boolean cancel = false;
+//        boolean mCancel = false;
 //        View focusView = null;
 //
 //        // Check for a valid password, if the user entered one.
 //        if (!password.isEmpty() && !isPasswordValid(password)) {
 //            mPasswordView.setError(getString(R.string.error_invalid_password));
 //            focusView = mPasswordView;
-//            cancel = true;
+//            mCancel = true;
 //        }
 //
 //        // Check for a valid email address.
 //        if (email.isEmpty()) {
 //            mEmailView.setError(getString(R.string.error_field_required));
 //            focusView = mEmailView;
-//            cancel = true;
+//            mCancel = true;
 //        } else if (!isEmailValid(email)) {
 //            mEmailView.setError(getString(R.string.error_invalid_email));
 //            focusView = mEmailView;
-//            cancel = true;
+//            mCancel = true;
 //        }
 //
-//        if (cancel) {
+//        if (mCancel) {
 //            // There was an error; don't attempt login and focus the first
 //            // form field with an error.
 //            focusView.requestFocus();

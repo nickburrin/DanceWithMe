@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dancestyles_array">
+        <item>Country Western</item>
+        <item>Tango</item>
+        <item>Salsa</item>
+        <!-- TODO: add more styles -->
+    </string-array>
+</resources>

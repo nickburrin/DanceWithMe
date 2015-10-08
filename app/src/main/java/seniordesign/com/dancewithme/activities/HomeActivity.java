@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -84,9 +86,7 @@ public class HomeActivity extends FragmentActivity {
 
         // Initialize the view pager & pager adapter
         DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
-        mDemoCollectionPagerAdapter =
-                new DemoCollectionPagerAdapter(
-                        getSupportFragmentManager());
+        mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.setOnPageChangeListener(
 
@@ -116,15 +116,20 @@ public class HomeActivity extends FragmentActivity {
         new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                // When swiping between pages, select the                        // corresponding tab.
+                // When swiping between pages, select the corresponding tab.
                 getActionBar().setSelectedNavigationItem(position);
             }
         };
 
-        mViewPager.setCurrentItem(1); // Set default view page to games
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            if(extras.getBoolean("first_time")){
+                mViewPager.setCurrentItem(0); // Set view page to Profile on first time login
+            }
+        }
 
 
-         //Set broadcast listener for logout (
+        //Set broadcast listener for logout (
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.package.ACTION_LOGOUT");
@@ -138,8 +143,6 @@ public class HomeActivity extends FragmentActivity {
         }, intentFilter);
 
     }
-
-
 
     // Pager adapter that contains the different fragments necessary for navigating through the tabs
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
@@ -155,7 +158,7 @@ public class HomeActivity extends FragmentActivity {
                 case 0: fragment = new ProfileFragment(); break;    // Set tab 0 --> Profile
                 case 1: fragment = new MatchFragment(); break;      // Set tab 1 --> Games List
                 case 2: fragment = new MessageFragment(); break;    // Set tab 2 --> Bets List
-                default: fragment = new ProfileFragment(); break;
+                default: fragment = new MatchFragment(); break;
             }
             return fragment;
         }
@@ -166,10 +169,6 @@ public class HomeActivity extends FragmentActivity {
         }
 
     }
-
-
-
-
 }
 
 

@@ -42,9 +42,12 @@ public class RegisterActivity extends ActionBarActivity {
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
 
         // Autofill the email field if it was filled out in the LoginActivity
-        String email = getIntent().getExtras().getString("email");
-        if(email != null){
-            ((EditText) findViewById(R.id.et_email)).setText(email);
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            String email = extras.getString("email");
+            if(email != null){
+                ((EditText) findViewById(R.id.et_email)).setText(email);
+            }
         }
 
         mEmailView = ((EditText) findViewById(R.id.et_email));
@@ -55,6 +58,7 @@ public class RegisterActivity extends ActionBarActivity {
 
         mGenderSpinner = ((Spinner) findViewById(R.id.spinner_gender));
         mGenderSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        mGenderSpinner.setPrompt("Select your gender");
 
         mExistingUserButton = (Button) findViewById(R.id.button_existing_user);
         mExistingUserButton.setOnClickListener(new View.OnClickListener() {
@@ -159,10 +163,10 @@ public class RegisterActivity extends ActionBarActivity {
             incompleteFields = true;
         }
 
-        if (TextUtils.isEmpty(mGenderSpinner.getSelectedItem().toString())) {
+        if (mGenderSpinner.getSelectedItem().toString().equals("Gender")) {
             // Check if user entered email
-            ((TextView)findViewById(R.id.tv_invisible_error)).setError(getString(R.string.error_field_required));
-            focusView = mGenderSpinner;
+            ((TextView)findViewById(R.id.tv_invisible_error)).setError(getString(R.string.error_select_gender));
+            focusView = findViewById(R.id.tv_invisible_error);
             incompleteFields = true;
         }
 
@@ -219,7 +223,7 @@ public class RegisterActivity extends ActionBarActivity {
         try {
             if(query.count() > 0){
                 //There is already an account with this email
-                Toast.makeText(getApplicationContext(), "An account with this email already exists", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "An account with this email already exists", Toast.LENGTH_SHORT).show();
             } else {
                 //Create the new account
                 newUser = new ParseUser();

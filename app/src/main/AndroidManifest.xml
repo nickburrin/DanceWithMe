@@ -93,16 +93,12 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".activities.Create_an_account"
+            android:name=".activities.RegisterActivity"
             android:label="@string/title_activity_create_an_account" >
         </activity>
         <activity
             android:name=".activities.SelectAVenue"
             android:label="@string/title_activity_select_avenue" >
-        </activity>
-        <activity
-            android:name=".activities.ProfileManagement"
-            android:label="@string/title_activity_profile_management" >
         </activity>
         <activity
             android:name=".activities.ForgotYourPassword"
@@ -112,10 +108,17 @@
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home" >
         </activity>
+
         <activity
             android:name=".activities.PushActivity"
             android:label="@string/title_activity_push" >
         </activity>
+
+        <activity
+            android:name=".activities.DanceStyleActivity"
+            android:label="@string/title_activity_dancestyle" >
+        </activity>
+
     </application>
 
 </manifest>

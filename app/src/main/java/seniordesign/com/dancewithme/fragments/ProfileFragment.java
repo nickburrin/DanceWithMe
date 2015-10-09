@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.HomeActivity;
+import seniordesign.com.dancewithme.activities.LoginActivity;
 import seniordesign.com.dancewithme.activities.MessageService;
 
 
@@ -37,6 +39,7 @@ public class ProfileFragment extends HomeTabFragment {
     private Intent intent;
     private Intent serviceIntent;
     private View view;
+    private Button logoutButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,17 @@ public class ProfileFragment extends HomeTabFragment {
                 temp_array_list );
 
         danceStyles.setAdapter(arrayAdapter);
+
+        logoutButton = (Button) view.findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
+                ParseUser.logOut();
+                Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

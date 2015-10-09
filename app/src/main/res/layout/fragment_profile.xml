@@ -50,4 +50,19 @@
         android:divider="@color/grey_input_border"
         android:dividerHeight="1px" />
 
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/logout"
+            android:id="@+id/logoutButton"
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/dark_gray"
+            android:textSize="24sp"
+            android:padding="15dp"
+            android:textColor="@color/sinch_purple" />
+
+
+
 </RelativeLayout>

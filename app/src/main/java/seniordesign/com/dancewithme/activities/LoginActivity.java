@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.parse.LogInCallback;
 //import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.fragments.MessageFragment;
+import seniordesign.com.dancewithme.utils.Logger;
 
 public class LoginActivity extends Activity {
 
@@ -27,6 +29,7 @@ public class LoginActivity extends Activity {
     private String password;
     private Intent intent;
     private Intent serviceIntent;
+    private static final String TAG = "Touba";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +40,16 @@ public class LoginActivity extends Activity {
 //        Parse.enableLocalDatastore(this);
 
 
-
-//        ParseUser currentUser = ParseUser.getCurrentUser();
-//        if (currentUser != null) {
-//            startActivity(intent);
-//            startService(serviceIntent);
-//        }
+        Logger.d(TAG, "WHy the heck is this not working");
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+//            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//            installation.put("username", username);
+//            installation.saveInBackground();
+            Logger.d(TAG, "User Logging in");
+            startActivity(intent);
+            startService(serviceIntent);
+        }
 
         setContentView(R.layout.activity_login);
 
@@ -57,15 +64,17 @@ public class LoginActivity extends Activity {
             public void onClick(View view) {
                 username = usernameField.getText().toString();
                 password = passwordField.getText().toString();
-
+                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                installation.put("username", username);
+                installation.saveInBackground();
+                Logger.d(TAG, "User Logging in");
                 ParseUser.logInInBackground(username, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
-//                            startActivity(intent);
-                            //Intent i = new Intent(LoginActivity.this, ProfileManagement.class);
-                            //Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+//                          THIS STUFF is for real app
                             startActivity(intent);
                             startService(serviceIntent);
+
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "Wrong username/password combo",
@@ -86,7 +95,9 @@ public class LoginActivity extends Activity {
                 ParseUser user = new ParseUser();
                 user.setUsername(username);
                 user.setPassword(password);
-
+                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+                installation.put("username", username);
+                installation.saveInBackground();
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(com.parse.ParseException e) {
                         if (e == null) {

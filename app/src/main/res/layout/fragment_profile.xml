@@ -21,7 +21,8 @@
             android:layout_width="100dip"
             android:layout_height="100dip"
             android:layout_gravity="start"
-            android:paddingRight="50dp"
+            android:scaleType="centerCrop"
+            android:background="@color/transparent"
             android:src="@drawable/android_robot" />
 
         <LinearLayout

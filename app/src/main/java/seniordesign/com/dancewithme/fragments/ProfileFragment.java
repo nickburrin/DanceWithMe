@@ -58,8 +58,6 @@ public class ProfileFragment extends HomeTabFragment {
     private ListView stylesList;
     private DanceStyleListAdapter styleListAdapter;
 
-    ParseUser User;
-    private Bitmap bm = null;
     private HomeActivity activity;
 
     private Intent intent;
@@ -71,26 +69,6 @@ public class ProfileFragment extends HomeTabFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.activity = (HomeActivity)this.getActivity();
-    }
-
-    private void getUser() {
-        User = ParseUser.getCurrentUser();
-
-        if(User != null) {
-            ParseFile profilePic = (ParseFile) User.get("ProfilePicture");
-            if(profilePic != null) {
-                try {
-                    bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
-                    profPic.setImageBitmap(bm);
-                } catch (com.parse.ParseException e) {
-                    Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-            }
-        }else{
-            // TODO: should exit to the login screen, this shouldnt really happen
-            Toast.makeText(this.activity.getApplicationContext(), "No user", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -162,6 +140,24 @@ public class ProfileFragment extends HomeTabFragment {
         initFragment();
     }
 
+    private void getUser() {
+        if(ParseUser.getCurrentUser() != null) {
+            ParseFile profilePic = (ParseFile) ParseUser.getCurrentUser().get("ProfilePicture");
+            if(profilePic != null) {
+                try {
+                    profPic.setImageBitmap(BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length));
+                } catch (com.parse.ParseException e) {
+                    e.printStackTrace();
+                }
+            } else{
+                Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            // TODO: should exit to the login screen, this shouldnt really happen
+            Toast.makeText(this.activity.getApplicationContext(), "No user", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void initFragment() {
         ArrayList<Object> userStyles = (ArrayList<Object>) ParseUser.getCurrentUser().getList("danceStyles");
 
@@ -225,7 +221,7 @@ public class ProfileFragment extends HomeTabFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        User = ParseUser.getCurrentUser();
+
         try {
             // When an Image is picked
             if (requestCode == RESULT_LOAD_IMG && resultCode == this.activity.RESULT_OK && null != data) {
@@ -245,23 +241,21 @@ public class ProfileFragment extends HomeTabFragment {
                 cursor.close();
 
                 ImageView imgView = (ImageView) this.activity.findViewById(R.id.ib_profPic);
-                if(bm!=null){
-                    bm.recycle();
-                }
-                bm = BitmapFactory.decodeFile(imgDecodableString);
+
+                Bitmap bm = BitmapFactory.decodeFile(imgDecodableString);
                 ((BitmapDrawable)imgView.getDrawable()).getBitmap().recycle();
                 imgView.setImageBitmap(bm);
 
 
-                Bitmap out = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()*0.25), (int)(bm.getHeight()*0.25), true);
+                Bitmap out = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()*0.5), (int)(bm.getHeight()*0.5), true);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 out.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
                 stream.close();
-                stream = null;
                 ParseFile pf = new ParseFile(byteArray);
-                User.put("ProfilePicture", pf);
-                User.saveInBackground();
+
+                ParseUser.getCurrentUser().put("ProfilePicture", pf);
+                ParseUser.getCurrentUser().saveInBackground();
             } else {
                 Toast.makeText(this.activity, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();

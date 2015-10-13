@@ -11,7 +11,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -34,7 +33,7 @@ public class DanceStyleActivity extends Activity {
     Button mCancel;
     Button mSubmit;
 
-    DanceStyle style;
+    DanceStyle existingStyle;
     String skillLevel;
     ArrayList<String> prefs = new ArrayList<String>();
 
@@ -43,14 +42,15 @@ public class DanceStyleActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dancestyle);
 
-        DanceStyle styleId = null;
         // Get bundle content
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("DanceStyle");
             query.whereEqualTo("objectId", extras.getString("style_id"));
             try {
-                style = (DanceStyle) query.getFirst();
+                existingStyle = (DanceStyle) query.getFirst();
+                skillLevel = existingStyle.getSkill();
+                prefs = existingStyle.getPreferences();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -64,19 +64,19 @@ public class DanceStyleActivity extends Activity {
 
         mSkill = (RadioGroup) findViewById(R.id.radiogroup_skill_level);
 
-        if(style != null){
-            mDanceStyle.setSelection(adapter.getPosition(style.getStyle()) + 1);
+        if(existingStyle != null){
+            mDanceStyle.setSelection(adapter.getPosition(existingStyle.getStyle()) + 1);
             mDanceStyle.setEnabled(false);
 
-            if(style.getSkill().equals("Beginner")){
+            if(existingStyle.getSkill().equals("Beginner")){
                 mSkill.check(R.id.radio_beginner);
-            } else if(style.getSkill().equals("Intermediate")){
+            } else if(existingStyle.getSkill().equals("Intermediate")){
                 mSkill.check(R.id.radio_intermediate);
             } else{
                 mSkill.check(R.id.radio_expert);
             }
 
-            for(String x: style.getPreferences()){
+            for(String x: existingStyle.getPreferences()){
                 if(x.equals("Beginner")){
                     ((CheckBox)findViewById(R.id.checkbox_beginner)).setChecked(true);
                 } else if(x.equals("Intermediate")){
@@ -114,14 +114,21 @@ public class DanceStyleActivity extends Activity {
             Toast.makeText(this.getApplicationContext(), "Specify a skill level",
                     Toast.LENGTH_SHORT).show();
         } else {
-            DanceStyle newStyle = new DanceStyle();
-            newStyle.setStyle(mDanceStyle.getSelectedItem().toString());
-            newStyle.setSkill(skillLevel);
-            newStyle.setPreferences(prefs);
+            if(existingStyle == null){
+                DanceStyle newStyle = new DanceStyle();
+                newStyle.setStyle(mDanceStyle.getSelectedItem().toString());
+                newStyle.setSkill(skillLevel);
+                newStyle.setPreferences(prefs);
 
-            //ParseObject danceStyles = (ParseObject) ParseUser.getCurrentUser().get("danceStyles");
-            ParseUser.getCurrentUser().add("danceStyles", newStyle);
-            ParseUser.getCurrentUser().saveInBackground();
+                ParseUser.getCurrentUser().add("danceStyles", newStyle);
+                ParseUser.getCurrentUser().saveInBackground();
+            }
+            else{
+                existingStyle.setSkill(skillLevel);
+                existingStyle.setPreferences(prefs);
+                existingStyle.saveInBackground();
+            }
+
         }
     }
 

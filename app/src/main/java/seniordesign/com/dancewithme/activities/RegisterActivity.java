@@ -19,6 +19,8 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 
+import java.util.Arrays;
+
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
 
@@ -233,6 +235,7 @@ public class RegisterActivity extends ActionBarActivity {
                 newUser.put("first_name", firstName);
                 newUser.put("last_name", lastName);
                 newUser.put("gender", gender);
+                newUser.put("danceStyles", Arrays.asList());
             }
         } catch (com.parse.ParseException e) {
             e.printStackTrace();

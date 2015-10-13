@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,7 @@ import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
@@ -46,7 +49,9 @@ public class MatchFragment extends HomeTabFragment {
 
     private ImageButton acceptButton;
     private ImageButton denyButton;
+    private ImageButton profPic;
     private View view;
+    private Bitmap bm = null;
     private ArrayList<String> dislikedUserLikes;
     private ArrayList<String> dislikedUserDislikes;
     private ArrayList<String> myDislikes;
@@ -96,8 +101,19 @@ public class MatchFragment extends HomeTabFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_match, container, false);
         //watch out for this line
-
-
+//        setConversationsList();
+//        ParseUser matchUser = names.get(0);
+//        ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
+//        if(profilePic != null) {
+//            try {
+//                bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
+//                profPic.setImageBitmap(bm);
+//            } catch (com.parse.ParseException e) {
+//                Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//        }
+        profPic = (ImageButton) view.findViewById(R.id.ib_profPic);
         acceptButton = (ImageButton) view.findViewById(R.id.acceptButton);
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +190,17 @@ public class MatchFragment extends HomeTabFragment {
                     }
                 }
                 names.remove(0);
+                ParseUser matchUser = names.get(0);
+                ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
+                if(profilePic != null) {
+                    try {
+                        bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
+                        profPic.setImageBitmap(bm);
+                    } catch (com.parse.ParseException e) {
+                        //Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
 
 
             }
@@ -218,6 +245,18 @@ public class MatchFragment extends HomeTabFragment {
                     ParseUser.getCurrentUser().saveInBackground();
                 }
                 names.remove(0);
+                ParseUser matchUser = names.get(0);
+                ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
+                if(profilePic != null) {
+                    try {
+                        bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
+                        profPic.setImageBitmap(bm);
+                    } catch (com.parse.ParseException e) {
+                        //Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                }
+
             }
         });
 

@@ -1,9 +1,11 @@
 package seniordesign.com.dancewithme.activities;
 import android.app.Application;
+import android.content.Intent;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
+import com.parse.ParseUser;
 import com.parse.PushService;
 import com.parse.ParseObject;
 

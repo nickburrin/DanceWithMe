@@ -33,6 +33,12 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Intent i;
+        if(ParseUser.getCurrentUser() != null){
+            i = new Intent(this, HomeActivity.class);
+            startActivity(i);
+        }
+
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);
 //        Parse.enableLocalDatastore(this);
@@ -41,9 +47,9 @@ public class LoginActivity extends Activity {
         Logger.d(TAG, "WHy the heck is this not working");
         ParseUser currentUser = ParseUser.getCurrentUser();
 //        if (currentUser != null) {
-////            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-////            installation.put("username", username);
-////            installation.saveInBackground();
+//            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//            installation.put("username", username);
+//            installation.saveInBackground();
 //            Logger.d(TAG, "User Logging in");
 //            startActivity(intent);
 //            startService(serviceIntent);
@@ -53,7 +59,7 @@ public class LoginActivity extends Activity {
 
         loginButton = (Button) findViewById(R.id.loginButton);
         signUpButton = (Button) findViewById(R.id.signupButton);
- //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
+        //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
 
@@ -81,10 +87,6 @@ public class LoginActivity extends Activity {
                 ParseUser.logInInBackground(email, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
-//                            startActivity(intent);
-                            //Intent i = new Intent(LoginActivity.this, ProfileManagementActivity.class);
-                            //Intent i = new Intent(LoginActivity.this, HomeActivity.class);
-//>>>>>>> 1a91edf2b247b155be8e15b2655462646c757933
                             startActivity(intent);
                             startService(serviceIntent);
 
@@ -102,34 +104,7 @@ public class LoginActivity extends Activity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//<<<<<<< HEAD
-//
-//                username = usernameField.getText().toString();
-//                password = passwordField.getText().toString();
-//
-//                ParseUser user = new ParseUser();
-//                user.setUsername(username);
-//                user.setPassword(password);
-//                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-//                installation.put("username", username);
-//                installation.saveInBackground();
-//                user.signUpInBackground(new SignUpCallback() {
-//                    public void done(com.parse.ParseException e) {
-//                        if (e == null) {
-//                            Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
-//                            startActivity(i);
-//                        } else {
-//                            Toast.makeText(getApplicationContext(),
-//                                    "There was an error signing up."
-//                                    , Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//                });
-//
-//
-//=======
                 String email = emailField.getText().toString();
-//>>>>>>> 1a91edf2b247b155be8e15b2655462646c757933
 
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 registerIntent.putExtra("email", email);

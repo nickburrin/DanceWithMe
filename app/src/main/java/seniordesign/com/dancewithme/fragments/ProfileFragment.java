@@ -71,14 +71,6 @@ public class ProfileFragment extends HomeTabFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.activity = (HomeActivity)this.getActivity();
-
-        getUser();
-        //dancestyles lower case??
-        //if(User.get("danceStyles").equals(null)){
-        if(User.get("DanceStyles") == null){
-            Toast.makeText(activity.getApplicationContext(), "Welcome! Specify your dance styles and start matching!",
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void getUser() {
@@ -86,7 +78,7 @@ public class ProfileFragment extends HomeTabFragment {
 
         if(User != null) {
             ParseFile profilePic = (ParseFile) User.get("ProfilePicture");
-            if(profilePic!=null) {
+            if(profilePic != null) {
                 try {
                     bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
                     profPic.setImageBitmap(bm);
@@ -106,44 +98,6 @@ public class ProfileFragment extends HomeTabFragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = inflater.inflate(R.layout.fragment_profile, container, false);
-//<<<<<<< HEAD
-//        // Inflate the layout for this fragment
-//        //activity.setContentView(R.layout.activity_profile_management);
-//        ((TextView) view.findViewById(R.id.username)).setText(ParseUser.getCurrentUser().get("first_name")
-//                + " " + ParseUser.getCurrentUser().get("last_name"));
-//
-//        mProfPic = (ImageButton) view.findViewById(R.id.profPic);
-//        mProfPic.setImageDrawable(null); //fill with an image
-//
-//        danceStyles = (ListView) view.findViewById(R.id.lv_dance_styles);
-//
-//        // Instanciating an array list (you don't need to do this, you already have yours).
-//        List<String> temp_array_list = new ArrayList<String>();
-//        temp_array_list.add("one");
-//        temp_array_list.add("two");
-//        temp_array_list.add("three");
-//
-//        // This is the array adapter, it takes the context of the activity as a
-//        // first parameter, the type of list view as a second parameter and your
-//        // array as a third parameter.
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-//                this.activity,
-//                android.R.layout.simple_list_item_1,
-//                temp_array_list );
-//
-//        danceStyles.setAdapter(arrayAdapter);
-//
-//        logoutButton = (Button) view.findViewById(R.id.logoutButton);
-//        logoutButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
-//                ParseUser.logOut();
-//                Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//=======
 
         usernameView = ((TextView) view.findViewById(R.id.tv_username));
         usernameView.setText(ParseUser.getCurrentUser().get("first_name") + " " + ParseUser.getCurrentUser().get("last_name"));
@@ -180,51 +134,50 @@ public class ProfileFragment extends HomeTabFragment {
         });
         stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
-//>>>>>>> 1a91edf2b247b155be8e15b2655462646c757933
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getUser();
+        initFragment();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
         initFragment();
     }
 
     private void initFragment() {
-        // Instaniating an array list (you don't need to do this, you already have yours).
-        ArrayList<Object> userStyles;
-        List<Object> temp = ParseUser.getCurrentUser().getList("danceStyles");
+        ArrayList<Object> userStyles = (ArrayList<Object>) ParseUser.getCurrentUser().getList("danceStyles");
 
-        if(temp == null){
-            userStyles = new ArrayList<Object>();
+        if(userStyles.isEmpty()){
+            Toast.makeText(activity.getApplicationContext(), "Welcome! Specify your dance styles and start matching!",
+                    Toast.LENGTH_SHORT).show();
         } else{
-            userStyles = new ArrayList<Object>(temp);
-        }
+            styleListAdapter = new DanceStyleListAdapter(activity.getApplicationContext(),
+                    userStyles, (MyApplication)activity.getApplication());
 
-        if(userStyles == null || userStyles.isEmpty()){
-            userStyles = new ArrayList<Object>();
-        }
+            stylesList.setAdapter(styleListAdapter);
+            stylesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Object item = styleListAdapter.getItem(position);
+                    if (item instanceof DanceStyle) {
+                        // If clicked on style, go to dance activity
+                        // Get dance obj
+                        DanceStyle style = (DanceStyle) item;
+                        Log.d(TAG, "Clicked on dancestyle:" + style.getId());
 
-        styleListAdapter = new DanceStyleListAdapter(activity.getApplicationContext(),
-                userStyles, (MyApplication)activity.getApplication());
-
-        stylesList.setAdapter(styleListAdapter);
-        stylesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object item = styleListAdapter.getItem(position);
-                if (item instanceof DanceStyle) {
-                    // If clicked on style, go to dance activity
-                    // Get dance obj
-                    DanceStyle style = (DanceStyle) item;
-                    Log.d(TAG, "Clicked on dancestyle:" + style.getStyle());
-
-                    Intent i = new Intent(getActivity(), DanceStyleActivity.class);
-                    i.putExtra("style_id", style.getObjectId());  // Send objectId to the DanceStyleActivity
-                    startActivity(i);
+                        Intent i = new Intent(getActivity(), DanceStyleActivity.class);
+                        i.putExtra("style_id", style.getObjectId());  // Send objectId to the DanceStyleActivity
+                        startActivity(i);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void loadImagefromGallery(View view) {
@@ -297,8 +250,6 @@ public class ProfileFragment extends HomeTabFragment {
                 ParseFile pf = new ParseFile(byteArray);
                 User.put("ProfilePicture", pf);
                 User.saveInBackground();
-
-
             } else {
                 Toast.makeText(this.activity, "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
@@ -309,17 +260,5 @@ public class ProfileFragment extends HomeTabFragment {
             e.printStackTrace();
         }
 
-    }
-
-    public void displayMatchingInterface(View view)
-    {
-        Toast.makeText(activity.getApplicationContext(), "Please wait. We are searching for your dance partner",
-                Toast.LENGTH_SHORT).show();
-        //Intent intent = new Intent(this, InvalidLoginActivity.class);
-        //startActivity(intent);
-        intent = new Intent(activity.getApplicationContext(), HomeActivity.class);
-        serviceIntent = new Intent(activity.getApplicationContext(), MessageService.class);
-        startActivity(intent);
-        //startService(serviceIntent);
     }
 }

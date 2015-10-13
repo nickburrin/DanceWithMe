@@ -16,6 +16,11 @@ import java.util.Arrays;
 public class DanceStyle extends ParseObject{
     public DanceStyle() {}
 
+    public String getId()
+    {
+        return getObjectId();
+    }
+
     public String getStyle() {
         return getString("Name");
     }

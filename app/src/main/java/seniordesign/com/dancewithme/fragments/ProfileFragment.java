@@ -112,6 +112,18 @@ public class ProfileFragment extends HomeTabFragment {
         });
         stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
+
+        logoutButton = (Button) view.findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
+                ParseUser.logOut();
+                Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

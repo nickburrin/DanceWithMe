@@ -84,8 +84,10 @@
             android:background="@color/white"
             android:divider="@color/grey_input_border"
             android:dividerHeight="1px" />
-        <!--
-        <<<<<<< HEAD
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
                 <Button
                     android:layout_width="fill_parent"
@@ -99,11 +101,9 @@
                     android:padding="15dp"
                     android:textColor="@color/sinch_purple" />
 
+        </LinearLayout>
 
 
-        </RelativeLayout>
-        =======
-        -->
     </LinearLayout>
 </LinearLayout>
 <!-->>>>>>> 1a91edf2b247b155be8e15b2655462646c757933-->

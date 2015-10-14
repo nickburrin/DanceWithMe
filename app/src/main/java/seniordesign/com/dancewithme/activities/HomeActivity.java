@@ -125,23 +125,22 @@ public class HomeActivity extends FragmentActivity {
         if(extras != null){
             if(extras.getBoolean("first_time")){
                 mViewPager.setCurrentItem(0); // Set view page to Profile on first time login
+            } else if(extras.getString("event_id") != null ) {
+                mViewPager.setCurrentItem(1); // Set view page to Matching if coming from VenueActivity
             }
         }
-
-
-        //Set broadcast listener for logout (
-
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.package.ACTION_LOGOUT");
-        registerReceiver(new BroadcastReceiver() {
-
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                //At this point you should start the login activity and finish this one
-                finish();
-            }
-        }, intentFilter);
-
+//       Not sure any of this is needed
+//
+//        //Set broadcast listener for logout (
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("com.package.ACTION_LOGOUT");
+//        registerReceiver(new BroadcastReceiver() {
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                //At this point you should start the login activity and finish this one
+//                finish();
+//            }
+//        }, intentFilter);
     }
 
     // Pager adapter that contains the different fragments necessary for navigating through the tabs

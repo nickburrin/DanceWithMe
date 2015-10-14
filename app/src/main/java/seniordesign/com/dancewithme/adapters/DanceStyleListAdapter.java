@@ -5,12 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.parse.Parse;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
 
@@ -57,13 +54,11 @@ public class DanceStyleListAdapter extends ArrayAdapter<Object> {
 
             if (getItemViewType(position) == 0) {
                 // Game object in array
-                convertView = inflater.inflate(R.layout.list_item_dancestyle, parent, false);
+                convertView = inflater.inflate(R.layout.list_item_generic, parent, false);
 
-                // Home team views
-                holder.style = (TextView) convertView.findViewById(R.id.tv_dancestyle);
-                holder.skill = (TextView) convertView.findViewById(R.id.tv_skill);
-            } else {
-               // Some other type of view
+                // list item views
+                holder.style = (TextView) convertView.findViewById(R.id.tv_title);
+                holder.skill = (TextView) convertView.findViewById(R.id.tv_description);
             }
             convertView.setTag(holder);
 
@@ -83,8 +78,6 @@ public class DanceStyleListAdapter extends ArrayAdapter<Object> {
 
             holder.style.setText(style.getStyle());
             holder.skill.setText(style.getSkill());
-        }else{
-            // Set the ViewHolder properties for some other type of view
         }
 
         return convertView;

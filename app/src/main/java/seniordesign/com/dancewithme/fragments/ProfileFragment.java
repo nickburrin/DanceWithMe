@@ -43,6 +43,7 @@ import seniordesign.com.dancewithme.activities.MessageService;
 import seniordesign.com.dancewithme.activities.MyApplication;
 import seniordesign.com.dancewithme.adapters.DanceStyleListAdapter;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
+import seniordesign.com.dancewithme.pojos.Dancehall;
 
 
 public class ProfileFragment extends HomeTabFragment {
@@ -110,8 +111,8 @@ public class ProfileFragment extends HomeTabFragment {
                 startActivity(i);
             }
         });
-        stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
+        stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
         logoutButton = (Button) view.findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {

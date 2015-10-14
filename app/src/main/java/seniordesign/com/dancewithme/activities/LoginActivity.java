@@ -19,6 +19,7 @@ import seniordesign.com.dancewithme.utils.Logger;
 
 
 public class LoginActivity extends Activity {
+    private static final String TAG = "Touba";
 
     private Button signUpButton;
     private Button loginButton;
@@ -27,33 +28,20 @@ public class LoginActivity extends Activity {
     private EditText passwordField;
     private Intent intent;
     private Intent serviceIntent;
-    private static final String TAG = "Touba";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Intent i;
-//        if(ParseUser.getCurrentUser() != null){
-//            i = new Intent(this, HomeActivity.class);
-//            startActivity(i);
-//        }
+        Intent i;
+        if(ParseUser.getCurrentUser() != null){
+            //startActivity(new Intent(this, HomeActivity.class));
+            startActivity(new Intent(this, VenueActivity.class));   // temp for Nick
+        }
 
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);
 //        Parse.enableLocalDatastore(this);
-
-
-        Logger.d(TAG, "WHy the heck is this not working");
-        ParseUser currentUser = ParseUser.getCurrentUser();
-//        if (currentUser != null) {
-//            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-//            installation.put("username", username);
-//            installation.saveInBackground();
-//            Logger.d(TAG, "User Logging in");
-//            startActivity(intent);
-//            startService(serviceIntent);
-//        }
 
         setContentView(R.layout.activity_login);
 
@@ -66,18 +54,6 @@ public class LoginActivity extends Activity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-////<<<<<<< HEAD
-//                username = usernameField.getText().toString();
-//                password = passwordField.getText().toString();
-//                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-//                installation.put("username", username);
-//                installation.saveInBackground();
-//                Logger.d(TAG, "User Logging in");
-//                ParseUser.logInInBackground(username, password, new LogInCallback() {
-//                    public void done(ParseUser user, com.parse.ParseException e) {
-//                        if (user != null) {
-////                          THIS STUFF is for real app
-//=======
                 String email = emailField.getText().toString();
                 String password = passwordField.getText().toString();
                 ParseInstallation installation = ParseInstallation.getCurrentInstallation();
@@ -89,7 +65,6 @@ public class LoginActivity extends Activity {
                         if (user != null) {
                             startActivity(intent);
                             startService(serviceIntent);
-
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "Wrong username/password combo",
@@ -100,7 +75,6 @@ public class LoginActivity extends Activity {
             }
         });
 
-        Button signUpButton = (Button) findViewById(R.id.signupButton);
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,7 +155,7 @@ public class LoginActivity extends Activity {
 //
 //    public void displaySelectAVenue(View view)
 //    {
-//        Intent intent = new Intent(this, SelectAVenue.class);
+//        Intent intent = new Intent(this, VenueActivity.class);
 //        startActivity(intent);
 //    }
 //
@@ -288,7 +262,7 @@ public class LoginActivity extends Activity {
 //            ParseUser.logInInBackground(email, password, new LogInCallback() {
 //                public void done(ParseUser user, com.parse.ParseException e) {
 //                    if (user != null) {
-//                        Intent i = new Intent(LoginActivity.this, SelectAVenue.class);
+//                        Intent i = new Intent(LoginActivity.this, VenueActivity.class);
 //                        startActivity(i);
 //                    } else {
 //                        Toast.makeText(getApplicationContext(),

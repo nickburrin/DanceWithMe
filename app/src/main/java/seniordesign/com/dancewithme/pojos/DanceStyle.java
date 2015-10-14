@@ -38,17 +38,7 @@ public class DanceStyle extends ParseObject{
     }
 
     public ArrayList<String> getPreferences() {
-        ArrayList<String> preferences = (ArrayList<String>) get("Preferences");
-
-//        JSONArray prefs = getJSONArray("Preferences");
-//        try {
-//            for (int i = 0; i < prefs.length(); i++) {
-//                preferences.add(prefs.getString(i));
-//            }
-//        } catch(JSONException e){
-//            e.printStackTrace();
-//        }
-        return preferences;
+        return (ArrayList<String>) get("Preferences");
     }
 
     public void setPreferences(ArrayList<String> preferences) {

@@ -26,6 +26,7 @@ import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
 
 
 public class RegisterActivity extends ActionBarActivity {
+    private static final String TAG = RegisterActivity.class.getSimpleName();
 
     // UI fields
     private EditText mFirstName;

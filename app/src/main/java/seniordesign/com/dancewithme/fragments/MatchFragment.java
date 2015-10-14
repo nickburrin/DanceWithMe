@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.HomeActivity;
@@ -45,6 +46,8 @@ import seniordesign.com.dancewithme.utils.Logger;
 
 
 public class MatchFragment extends HomeTabFragment {
+    private static final String TAG = MatchFragment.class.getSimpleName();;
+
     private String currentUserId;
     private ArrayList<ParseUser> names;
 
@@ -59,7 +62,6 @@ public class MatchFragment extends HomeTabFragment {
     private ParseUser dislikedUser;
     private TextView mNameText;
     //private ParseUser myDislikedUser;
-    private static final String TAG = HomeActivity.class.getSimpleName();;
 
     private int nextMatch;
 
@@ -124,6 +126,8 @@ public class MatchFragment extends HomeTabFragment {
             @Override
             public void onClick(View view) {
                 Logger.d(TAG, "Accept Button Clicked");
+                acceptButton();
+
                 ArrayList<String> myLikes = (ArrayList<String>) ParseUser.getCurrentUser().get("Likes");
                 ArrayList<String> myMatches = (ArrayList<String>) ParseUser.getCurrentUser().get("Matches");
                 //myLikes.add(names.get(0));
@@ -207,8 +211,6 @@ public class MatchFragment extends HomeTabFragment {
                     }
                 }
                 mNameText.setText((String) matchUser.get("first_name"));
-
-
             }
         });
 
@@ -268,15 +270,14 @@ public class MatchFragment extends HomeTabFragment {
         });
 
         return view;
-
     }
 
-
+    private void acceptButton() {
+    }
 
     @Override
     public void onResume() {
         setConversationsList();
         super.onResume();
     }
-
 }

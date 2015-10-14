@@ -37,6 +37,7 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.DanceStyleActivity;
+import seniordesign.com.dancewithme.activities.EditUserActivity;
 import seniordesign.com.dancewithme.activities.HomeActivity;
 import seniordesign.com.dancewithme.activities.LoginActivity;
 import seniordesign.com.dancewithme.activities.MessageService;
@@ -97,8 +98,8 @@ public class ProfileFragment extends HomeTabFragment {
         editProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(ParseUser.getCurrentUser().get("danceStyles"));
-                //enable the user to modify the name, gender, etc.
+                //enable the user to modify their name, email, etc.
+                startActivity(new Intent(activity.getApplicationContext(), EditUserActivity.class));
             }
         });
 

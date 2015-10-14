@@ -95,7 +95,8 @@ public class MessageFragment extends HomeTabFragment {
                         usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-                                openConversation(names, i);
+//                                openConversation(names, i);
+                                openConversation(i);
                             }
                         });
 
@@ -143,7 +144,8 @@ public class MessageFragment extends HomeTabFragment {
     }
 
     //open a conversation with one person
-    public void openConversation(ArrayList<String> names, int pos) {
+//    public void openConversation(ArrayList<String> names, int pos) {
+    public void openConversation(int pos) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("username", names.get(pos));
         query.findInBackground(new FindCallback<ParseUser>() {

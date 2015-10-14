@@ -129,18 +129,6 @@ public class HomeActivity extends FragmentActivity {
                 mViewPager.setCurrentItem(1); // Set view page to Matching if coming from VenueActivity
             }
         }
-//       Not sure any of this is needed
-//
-//        //Set broadcast listener for logout (
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction("com.package.ACTION_LOGOUT");
-//        registerReceiver(new BroadcastReceiver() {
-//            @Override
-//            public void onReceive(Context context, Intent intent) {
-//                //At this point you should start the login activity and finish this one
-//                finish();
-//            }
-//        }, intentFilter);
     }
 
     // Pager adapter that contains the different fragments necessary for navigating through the tabs

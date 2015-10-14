@@ -47,7 +47,7 @@
     <string name="title_activity_select_avenue">SelectAVenue</string>
 
     <!-- Select a Venue Page Strings -->
-    <string name="select_a_venue">Please Select a Venue</string>
+    <string name="prompt_select_a_venue">Please Select a Venue</string>
     <string name="title_activity_profile_management">Profile Management</string>
 
     <!-- Profile Management Page Strings -->

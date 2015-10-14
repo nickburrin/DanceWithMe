@@ -1,48 +1,28 @@
 package seniordesign.com.dancewithme.fragments;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.sinch.android.rtc.PushPair;
-import com.sinch.android.rtc.messaging.Message;
-import com.sinch.android.rtc.messaging.MessageClient;
-import com.sinch.android.rtc.messaging.MessageClientListener;
-import com.sinch.android.rtc.messaging.MessageDeliveryInfo;
-import com.sinch.android.rtc.messaging.MessageFailureInfo;
-import com.sinch.android.rtc.messaging.WritableMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import seniordesign.com.dancewithme.R;
-import seniordesign.com.dancewithme.activities.LoginActivity;
-import seniordesign.com.dancewithme.activities.MessageAdapter;
-import seniordesign.com.dancewithme.activities.MessageService;
 import seniordesign.com.dancewithme.activities.MessagingActivity;
 
 

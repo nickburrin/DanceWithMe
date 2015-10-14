@@ -19,7 +19,7 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/tv_dancestyle"
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Tango"
@@ -28,10 +28,10 @@
             android:textSize="32sp"/>
 
         <TextView
-            android:id="@+id/tv_skill"
+            android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_dancestyle"
+            android:layout_below="@id/tv_title"
             android:text="Expert"
             android:textColor="@color/dark_grey"
             android:textStyle="italic"

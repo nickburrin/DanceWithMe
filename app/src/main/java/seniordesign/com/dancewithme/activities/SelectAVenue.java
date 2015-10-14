@@ -1,7 +1,6 @@
 package seniordesign.com.dancewithme.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.os.Bundle;
@@ -21,7 +20,7 @@ public class SelectAVenue extends Activity implements OnItemClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_avenue);
+        setContentView(R.layout.activity_select_venue);
 
         listViewVenues = (ListView) findViewById(R.id.danceHallsList);
         listViewVenues.setOnItemClickListener(this);

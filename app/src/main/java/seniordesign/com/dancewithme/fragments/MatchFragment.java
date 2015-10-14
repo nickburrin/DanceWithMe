@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 
@@ -56,6 +57,7 @@ public class MatchFragment extends HomeTabFragment {
     private ArrayList<String> dislikedUserDislikes;
     private ArrayList<String> myDislikes;
     private ParseUser dislikedUser;
+    private TextView mNameText;
     //private ParseUser myDislikedUser;
     private static final String TAG = HomeActivity.class.getSimpleName();;
 
@@ -113,6 +115,9 @@ public class MatchFragment extends HomeTabFragment {
 //                e.printStackTrace();
 //            }
 //        }
+
+        mNameText = (TextView) view.findViewById(R.id.nameText);
+//        mNameText.setText(names.get(0).get("first_name") + " ");
         profPic = (ImageButton) view.findViewById(R.id.ib_profPic);
         acceptButton = (ImageButton) view.findViewById(R.id.acceptButton);
         acceptButton.setOnClickListener(new View.OnClickListener() {
@@ -137,9 +142,9 @@ public class MatchFragment extends HomeTabFragment {
                         //send a match push notification
                         //JSONObject json = new JSONObject();
                         JSONObject data = new JSONObject();
-                        String matchMessage = "You just got matched with " + ParseUser.getCurrentUser().getUsername();
+                        String matchMessage = "You just got matched with " + ParseUser.getCurrentUser().get("first_name");
                         try {
-                            data.put("message", matchMessage);
+                            data.put("alert", matchMessage);
                             data.put("title", "DanceWithMe");
                             data.put("from", ParseUser.getCurrentUser().getUsername());
                             //json.put("data", data);
@@ -172,8 +177,8 @@ public class MatchFragment extends HomeTabFragment {
                         ParseQuery parseQuery = ParseInstallation.getQuery();
                         parseQuery.whereEqualTo("username", likedUser.getUsername());
                         parsePush.setQuery(parseQuery);
-                        //parsePush.setMessage("Lets turn up tone");
                         parsePush.setData(data);
+                        //parsePush.setMessage("Lets turn up tone");
                         parsePush.sendInBackground(new SendCallback() {
                             public void done(ParseException e) {
                                 if (e == null) {
@@ -201,6 +206,7 @@ public class MatchFragment extends HomeTabFragment {
                         e.printStackTrace();
                     }
                 }
+                mNameText.setText((String) matchUser.get("first_name"));
 
 
             }
@@ -256,6 +262,7 @@ public class MatchFragment extends HomeTabFragment {
                         e.printStackTrace();
                     }
                 }
+                mNameText.setText(names.get(0).get("first_name") + " ");
 
             }
         });

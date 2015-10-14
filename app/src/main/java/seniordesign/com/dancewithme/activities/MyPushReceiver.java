@@ -77,6 +77,7 @@ public class MyPushReceiver extends ParsePushBroadcastReceiver {
             //JSONObject data = json.getJSONObject("data");
             String title = json.getString("title");
             String message = json.getString("message");
+            //String message = "";
             String from = json.getString("from");
             ParseUser myUser = ParseUser.getCurrentUser();
             ArrayList<String> matchList = (ArrayList<String>) ParseUser.getCurrentUser().get("Matches");

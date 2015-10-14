@@ -33,11 +33,11 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Intent i;
-//        if(ParseUser.getCurrentUser() != null){
-//            i = new Intent(this, HomeActivity.class);
-//            startActivity(i);
-//        }
+        Intent i;
+        if(ParseUser.getCurrentUser() != null){
+            i = new Intent(this, HomeActivity.class);
+            startActivity(i);
+        }
 
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);

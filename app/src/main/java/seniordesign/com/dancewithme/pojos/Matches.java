@@ -40,7 +40,6 @@ public class Matches extends ParseObject{
         return result;
     }
 
-
     public ArrayList<String> getMatches() {
         return (ArrayList<String>) get("matchArray");
     }

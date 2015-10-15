@@ -8,6 +8,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nickburrin on 10/14/15.
@@ -21,6 +22,10 @@ public class Matches extends ParseObject{
         return getObjectId();
     }
 
+    public void setId(String id) {
+        put("userId", id);
+        saveInBackground();
+    }
 
     public String getUserId() {
         return getString("userId");
@@ -40,13 +45,19 @@ public class Matches extends ParseObject{
         return result;
     }
 
-
     public ArrayList<ParseUser> getMatches() {
         return (ArrayList<ParseUser>) get("matchArray");
+    }
+
+    public void setMatches(List<Object> objects) {
+        put("matchArray", objects);
+        saveInBackground();
     }
 
     public void addMatch(ParseUser matchedUser) {
         getMatches().add(matchedUser);
         this.saveInBackground();
     }
+
+
 }

@@ -20,6 +20,7 @@ public class Event extends ParseObject {
 
     public void setDate(Date d){
         put("date", d);
+        saveInBackground();
     }
 
     public String getTitle(){
@@ -28,6 +29,7 @@ public class Event extends ParseObject {
 
     public void setTitle(String t){
         put("title", t);
+        saveInBackground();
     }
 
     public ArrayList<ParseUser> getAttendees(){
@@ -36,6 +38,7 @@ public class Event extends ParseObject {
 
     public void setAttendees(ArrayList<ParseUser> list){
         put("attendees", list);
+        saveInBackground();
     }
 
     public void addAttendee(ParseUser p){

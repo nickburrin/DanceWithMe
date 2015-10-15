@@ -306,40 +306,8 @@ public class MatchFragment extends HomeTabFragment {
     }
 
     private void denyButton(){
-        myDislikes = (ArrayList<String>) ParseUser.getCurrentUser().get("Dislikes");///get the current User's dislikes
-        // myDislikes.put(names.get(0));
-        dislikedUser = names.get(0);//grab the user you just denied
-
-
-        //get denied users Likes and Dislikes
-        dislikedUserLikes = (ArrayList<String>) dislikedUser.get("Likes");
-        dislikedUserDislikes = (ArrayList<String>) dislikedUser.get("Dislikes");
-
-        //Probably not going to use this part of the code -- doesn't buy us anything (can't access users dislikes
-        // set up our query for a User object
-        ParseQuery<ParseUser> userQueryLikes = dislikedUser.getQuery();
-        userQueryLikes.include("Likes");
-        userQueryLikes.whereEqualTo("Likes", ParseUser.getCurrentUser().getUsername());
-        userQueryLikes.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> likeList, ParseException e) {
-                if (!likeList.isEmpty()) {
-                    //dislikedUser.remove("Dislikes");
-                    dislikedUserLikes.remove(ParseUser.getCurrentUser().getUsername());
-                    //dislikedUser.put("Dislikes", disli)
-                    dislikedUser.saveInBackground();
-                    //dislikedUser.
-                }
-            }
-        });
-        if (dislikedUserDislikes.contains(ParseUser.getCurrentUser().getUsername())) {
-            // dislikedUser.remove("Likes");
-            dislikedUserDislikes.remove(ParseUser.getCurrentUser().getUsername());
-            dislikedUser.put("Likes", dislikedUserDislikes);
-            dislikedUser.saveInBackground();
-        } else {
-            myDislikes.add(dislikedUser.getUsername());
-            ParseUser.getCurrentUser().saveInBackground();
-        }
+        ParseUser.getCurrentUser().getList("Dislikes").add(dislikedUser);
+        ParseUser.getCurrentUser().saveInBackground();
     }
 
     private void getNextUser(){

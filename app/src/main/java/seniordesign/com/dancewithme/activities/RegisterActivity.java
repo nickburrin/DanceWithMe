@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
+import seniordesign.com.dancewithme.pojos.Matches;
 
 
 public class RegisterActivity extends ActionBarActivity {
@@ -114,6 +115,12 @@ public class RegisterActivity extends ActionBarActivity {
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(com.parse.ParseException e) {
                         if (e == null) {
+                            // In addition to sign-up, add a Matches object for this user
+                            Matches newUser = new Matches();
+                            newUser.setId(ParseUser.getCurrentUser().getObjectId());
+                            newUser.setMatches(Arrays.asList());
+
+                            // Redirect to ProfileFragment
                             Intent i = new Intent(RegisterActivity.this, HomeActivity.class);
                             i.putExtra("first_time", true);
                             startActivity(i);
@@ -237,6 +244,8 @@ public class RegisterActivity extends ActionBarActivity {
                 newUser.put("last_name", lastName);
                 newUser.put("gender", gender);
                 newUser.put("danceStyles", Arrays.asList());
+                newUser.put("Likes", Arrays.asList());
+                newUser.put("Dislikes", Arrays.asList());
             }
         } catch (com.parse.ParseException e) {
             e.printStackTrace();

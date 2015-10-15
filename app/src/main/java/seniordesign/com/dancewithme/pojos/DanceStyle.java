@@ -27,6 +27,7 @@ public class DanceStyle extends ParseObject{
 
     public void setStyle(String style) {
         put("Name", style);
+        saveInBackground();
     }
 
     public String getSkill() {
@@ -35,6 +36,7 @@ public class DanceStyle extends ParseObject{
 
     public void setSkill(String skill) {
         put("Skill", skill);
+        saveInBackground();
     }
 
     public ArrayList<String> getPreferences() {
@@ -43,5 +45,6 @@ public class DanceStyle extends ParseObject{
 
     public void setPreferences(ArrayList<String> preferences) {
         put("Preferences", preferences);
+        saveInBackground();
     }
 }

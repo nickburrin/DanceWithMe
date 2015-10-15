@@ -26,8 +26,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 
@@ -45,6 +47,7 @@ import seniordesign.com.dancewithme.activities.MyApplication;
 import seniordesign.com.dancewithme.adapters.DanceStyleListAdapter;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
 import seniordesign.com.dancewithme.pojos.Dancehall;
+import seniordesign.com.dancewithme.pojos.Matches;
 
 
 public class ProfileFragment extends HomeTabFragment {

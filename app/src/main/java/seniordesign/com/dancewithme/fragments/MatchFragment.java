@@ -133,7 +133,106 @@ public class MatchFragment extends HomeTabFragment {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.d(TAG, "Accept Button Clicked");
+//                Logger.d(TAG, "Accept Button Clicked");
+//<<<<<<< HEAD
+//                ArrayList<String> myLikes = (ArrayList<String>) ParseUser.getCurrentUser().get("Likes");
+//                ArrayList<String> myMatches = (ArrayList<String>) ParseUser.getCurrentUser().get("Matches");
+//                //myLikes.add(names.get(0));
+//                ParseUser likedUser = names.get(0);
+//                ArrayList<ParseObject> likedUserLikes = (ArrayList<ParseObject>)likedUser.get("Likes");
+//
+//                ArrayList<ParseObject> likedUserDislikes = (ArrayList<ParseObject>)likedUser.get("Dislikes");                // set up our query for a User object
+//                ParseQuery<ParseUser> userQuery = likedUser.getQuery();
+//
+//                userQuery.include("Likes");
+//                userQuery.include("Dislikes");
+//                if(!likedUserDislikes.contains(ParseUser.getCurrentUser().getUsername())){
+//                    if(likedUserLikes.contains(ParseUser.getCurrentUser().getUsername())){//there is a like situation
+//                        myMatches.add(likedUser.getUsername());
+//                        ParseUser.getCurrentUser().saveInBackground();
+//                        //send a match push notification
+//                        //JSONObject json = new JSONObject();
+//                        JSONObject data = new JSONObject();
+//                        String matchMessage = "You just got matched with " + ParseUser.getCurrentUser().get("first_name");
+//                        try {
+//                            data.put("alert", matchMessage);
+//                            data.put("title", "DanceWithMe");
+//                            data.put("from", ParseUser.getCurrentUser().getUsername());
+//                            //json.put("data", data);
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                            return;
+//                        }
+//
+//
+////                        ParsePush parsePush = new ParsePush();
+////                        parsePush.setData(data);
+////
+////                        ParseQuery<ParseInstallation> parseQuery = ParseInstallation.getQuery();
+////
+////                        parseQuery.whereEqualTo("username", likedUser.getUsername());
+////                        parsePush.setQuery(parseQuery);
+////                        parsePush.sendInBackground(new SendCallback() {
+////                            public void done(ParseException e) {
+////                                if (e == null) {
+////                                    Log.d("push", "The push campaign has been created.");
+////                                } else {
+////                                    Log.d("push", "Error sending push:" + e.getMessage());
+////                                }
+////                            }
+////                        });
+//
+//                        ParsePush parsePush = new ParsePush();
+//                        //parsePush.setData(data);
+//
+//                        ParseQuery parseQuery = ParseInstallation.getQuery();
+//                        parseQuery.whereEqualTo("username", likedUser.getUsername());
+//                        parsePush.setQuery(parseQuery);
+//                        parsePush.setData(data);
+//                        (ArrayList<String>) UserMatches.get("username");
+//                        //parsePush.setMessage("Lets turn up tone");
+//                        parsePush.sendInBackground(new SendCallback() {
+//                            public void done(ParseException e) {
+//                                if (e == null) {
+//                                    Log.d("push", "The push campaign has been created.");
+//                                } else {
+//                                    Log.d("push", "Error sending push:" + e.getMessage());
+//                                }
+//                            }
+//                        });
+//
+//
+//                    }else{
+//                        myLikes.add(likedUser.getUsername());
+//                        ParseUser.getCurrentUser().saveInBackground();
+//                    }
+//                }
+//                //add user matches
+//                ParseQuery<ParseObject> query = ParseQuery.getQuery("Matches");
+//                query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+//                try {
+//                    existingStyle = (UserMatches) query.getFirst();
+//                    skillLevel = existingStyle.getSkill();
+//                    prefs = existingStyle.getPreferences();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                names.remove(0);
+//                ParseUser matchUser = names.get(0);
+//                ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
+//                if(profilePic != null) {
+//                    try {
+//                        bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
+//                        profPic.setImageBitmap(bm);
+//                    } catch (com.parse.ParseException e) {
+//                        //Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                    }
+//                }
+//                mNameText.setText((String) matchUser.get("first_name"));
+//
+//
+//=======
                 acceptButton();
                 getNextUser();
             }
@@ -153,8 +252,8 @@ public class MatchFragment extends HomeTabFragment {
     }
 
     private void acceptButton() {
-        ArrayList<String> myLikes = (ArrayList<String>) ParseUser.getCurrentUser().get("Likes");
-        ArrayList<String> myMatches = (ArrayList<String>) ParseUser.getCurrentUser().get("Matches");
+        ArrayList<ParseUser> myLikes = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Likes");
+        ArrayList<ParseUser> myMatches = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Matches");
 
         ParseUser likedUser = names.get(0);
         ArrayList<ParseObject> likedUserLikes = (ArrayList<ParseObject>)likedUser.get("Likes");
@@ -164,9 +263,9 @@ public class MatchFragment extends HomeTabFragment {
         userQuery.include("Likes");
         userQuery.include("Dislikes");
 
-        if(likedUserDislikes.contains(ParseUser.getCurrentUser().getUsername()) == false){
-            if(likedUserLikes.contains(ParseUser.getCurrentUser().getUsername())){//there is a like situation
-                myMatches.add(likedUser.getUsername());
+        if(likedUserDislikes.contains(ParseUser.getCurrentUser()) == false){
+            if(likedUserLikes.contains(ParseUser.getCurrentUser())){//there is a like situation
+                myMatches.add(likedUser);
                 ParseUser.getCurrentUser().saveInBackground();
 
                 //send a match push notification
@@ -175,7 +274,7 @@ public class MatchFragment extends HomeTabFragment {
                 try {
                     data.put("alert", matchMessage);
                     data.put("title", "DanceWithMe");
-                    data.put("from", ParseUser.getCurrentUser().getUsername());
+                    data.put("from", ParseUser.getCurrentUser().getObjectId());
                     //json.put("data", data);
                 }catch (Exception e){
                     e.printStackTrace();
@@ -200,47 +299,15 @@ public class MatchFragment extends HomeTabFragment {
                 });
 
             }else{
-                myLikes.add(likedUser.getUsername());
+                myLikes.add(likedUser);
                 ParseUser.getCurrentUser().saveInBackground();
             }
         }
     }
 
     private void denyButton(){
-        myDislikes = (ArrayList<String>) ParseUser.getCurrentUser().get("Dislikes");///get the current User's dislikes
-        // myDislikes.put(names.get(0));
-        dislikedUser = names.get(0);//grab the user you just denied
-
-
-        //get denied users Likes and Dislikes
-        dislikedUserLikes = (ArrayList<String>) dislikedUser.get("Likes");
-        dislikedUserDislikes = (ArrayList<String>) dislikedUser.get("Dislikes");
-
-        //Probably not going to use this part of the code -- doesn't buy us anything (can't access users dislikes
-        // set up our query for a User object
-        ParseQuery<ParseUser> userQueryLikes = dislikedUser.getQuery();
-        userQueryLikes.include("Likes");
-        userQueryLikes.whereEqualTo("Likes", ParseUser.getCurrentUser().getUsername());
-        userQueryLikes.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> likeList, ParseException e) {
-                if (!likeList.isEmpty()) {
-                    //dislikedUser.remove("Dislikes");
-                    dislikedUserLikes.remove(ParseUser.getCurrentUser().getUsername());
-                    //dislikedUser.put("Dislikes", disli)
-                    dislikedUser.saveInBackground();
-                    //dislikedUser.
-                }
-            }
-        });
-        if (dislikedUserDislikes.contains(ParseUser.getCurrentUser().getUsername())) {
-            // dislikedUser.remove("Likes");
-            dislikedUserDislikes.remove(ParseUser.getCurrentUser().getUsername());
-            dislikedUser.put("Likes", dislikedUserDislikes);
-            dislikedUser.saveInBackground();
-        } else {
-            myDislikes.add(dislikedUser.getUsername());
-            ParseUser.getCurrentUser().saveInBackground();
-        }
+        ParseUser.getCurrentUser().getList("Dislikes").add(dislikedUser);
+        ParseUser.getCurrentUser().saveInBackground();
     }
 
     private void getNextUser(){
@@ -265,3 +332,58 @@ public class MatchFragment extends HomeTabFragment {
         super.onResume();
     }
 }
+
+
+//    private void acceptButton() {
+//        ArrayList<String> myLikes = (ArrayList<String>) ParseUser.getCurrentUser().get("Likes");
+//        ArrayList<String> myMatches = (ArrayList<String>) ParseUser.getCurrentUser().get("Matches");
+//
+//        ParseUser likedUser = names.get(0);
+//        ArrayList<ParseObject> likedUserLikes = (ArrayList<ParseObject>)likedUser.get("Likes");
+//        ArrayList<ParseObject> likedUserDislikes = (ArrayList<ParseObject>)likedUser.get("Dislikes");                // set up our query for a User object
+//
+//        ParseQuery<ParseUser> userQuery = likedUser.getQuery();
+//        userQuery.include("Likes");
+//        userQuery.include("Dislikes");
+//
+//        if(likedUserDislikes.contains(ParseUser.getCurrentUser().getUsername()) == false){
+//            if(likedUserLikes.contains(ParseUser.getCurrentUser().getUsername())){//there is a like situation
+//                myMatches.add(likedUser.getUsername());
+//                ParseUser.getCurrentUser().saveInBackground();
+//
+//                //send a match push notification
+//                JSONObject data = new JSONObject();
+//                String matchMessage = "You just got matched with " + ParseUser.getCurrentUser().get("first_name");
+//                try {
+//                    data.put("alert", matchMessage);
+//                    data.put("title", "DanceWithMe");
+//                    data.put("from", ParseUser.getCurrentUser().getUsername());
+//                    //json.put("data", data);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                    return;
+//                }
+//
+//                ParseQuery parseQuery = ParseInstallation.getQuery();
+//                parseQuery.whereEqualTo("username", likedUser.getUsername());
+//
+//                ParsePush parsePush = new ParsePush();
+//                parsePush.setQuery(parseQuery);
+//                parsePush.setData(data);
+//                //parsePush.setMessage("Lets turn up tone");
+//                parsePush.sendInBackground(new SendCallback() {
+//                    public void done(ParseException e) {
+//                        if (e == null) {
+//                            Log.d("push", "The push campaign has been created.");
+//                        } else {
+//                            Log.d("push", "Error sending push:" + e.getMessage());
+//                        }
+//                    }
+//                });
+//
+//            }else{
+//                myLikes.add(likedUser.getUsername());
+//                ParseUser.getCurrentUser().saveInBackground();
+//            }
+//        }
+//    }

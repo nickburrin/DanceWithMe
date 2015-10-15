@@ -40,7 +40,12 @@ public class Matches extends ParseObject{
         return result;
     }
 
-    public ArrayList<String> getMatches() {
-        return (ArrayList<String>) get("matchArray");
+    public ArrayList<ParseUser> getMatches() {
+        return (ArrayList<ParseUser>) get("matchArray");
+    }
+
+    public void addMatch(ParseUser matchedUser) {
+        getMatches().add(matchedUser);
+        this.saveInBackground();
     }
 }

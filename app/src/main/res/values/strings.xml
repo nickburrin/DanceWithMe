@@ -26,7 +26,7 @@
     <string name="title_activity_create_an_account">Create an Account</string>
 
     <!--Profile Management -->
-    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_profile">Edit</string>
     <string name="add_styles">+</string>
 
     <!-- Create an Account Page Strings -->

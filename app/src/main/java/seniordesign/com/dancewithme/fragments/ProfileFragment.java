@@ -37,12 +37,14 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.DanceStyleActivity;
+import seniordesign.com.dancewithme.activities.EditUserActivity;
 import seniordesign.com.dancewithme.activities.HomeActivity;
 import seniordesign.com.dancewithme.activities.LoginActivity;
 import seniordesign.com.dancewithme.activities.MessageService;
 import seniordesign.com.dancewithme.activities.MyApplication;
 import seniordesign.com.dancewithme.adapters.DanceStyleListAdapter;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
+import seniordesign.com.dancewithme.pojos.Dancehall;
 
 
 public class ProfileFragment extends HomeTabFragment {
@@ -96,8 +98,8 @@ public class ProfileFragment extends HomeTabFragment {
         editProf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println(ParseUser.getCurrentUser().get("danceStyles"));
-                //enable the user to modify the name, gender, etc.
+                //enable the user to modify their name, email, etc.
+                startActivity(new Intent(activity.getApplicationContext(), EditUserActivity.class));
             }
         });
 
@@ -110,8 +112,8 @@ public class ProfileFragment extends HomeTabFragment {
                 startActivity(i);
             }
         });
-        stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
+        stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
         logoutButton = (Button) view.findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {

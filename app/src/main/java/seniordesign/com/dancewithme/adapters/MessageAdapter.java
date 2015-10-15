@@ -1,4 +1,4 @@
-package seniordesign.com.dancewithme.activities;
+package seniordesign.com.dancewithme.adapters;
 import android.app.Activity;
 import android.util.Pair;
 import android.view.LayoutInflater;

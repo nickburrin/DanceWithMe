@@ -26,6 +26,7 @@ import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
 
 
 public class RegisterActivity extends ActionBarActivity {
+    private static final String TAG = RegisterActivity.class.getSimpleName();
 
     // UI fields
     private EditText mFirstName;
@@ -250,7 +251,7 @@ public class RegisterActivity extends ActionBarActivity {
         Toast.makeText(getApplicationContext(), "Your account has been created successfully. We will direct you to the Select a Venue page.",
                 Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, SelectAVenue.class);
+        Intent intent = new Intent(this, VenueActivity.class);
         startActivity(intent);
     }
 }

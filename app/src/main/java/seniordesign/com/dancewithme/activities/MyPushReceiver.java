@@ -13,10 +13,14 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.parse.ParseException;
 import com.parse.ParsePushBroadcastReceiver;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import seniordesign.com.dancewithme.helper.NotificationUtils;
+import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
 import seniordesign.com.dancewithme.R;
@@ -79,19 +83,25 @@ public class MyPushReceiver extends ParsePushBroadcastReceiver {
             String message = json.getString("message");
             //String message = "";
             String from = json.getString("from");
-            ParseUser myUser = ParseUser.getCurrentUser();
-            ArrayList<String> matchList = (ArrayList<String>) ParseUser.getCurrentUser().get("Matches");
-            matchList.add(from);
-            ParseUser.getCurrentUser().saveInBackground();
+
+            //ParseUser myUser = ParseUser.getCurrentUser();
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereEqualTo("objectId", from);
+            ParseUser matchedUser = (ParseUser) query.getFirst();
+
+            ParseQuery<Matches> matchQuery = ParseQuery.getQuery("Matches");
+            matchQuery.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+            Matches userMatches = matchQuery.getFirst();
+            userMatches.addMatch(matchedUser);
 
 
-            //if (!isBackground) {
-                Intent resultIntent = new Intent(context, HomeActivity.class);
-                showNotificationMessage(context, title, message, resultIntent);
-            //}
+            Intent resultIntent = new Intent(context, HomeActivity.class);
+            showNotificationMessage(context, title, message, resultIntent);
 
         } catch (JSONException e) {
             Log.e(TAG, "Push message json exception: " + e.getMessage());
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 

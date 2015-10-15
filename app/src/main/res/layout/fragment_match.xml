@@ -16,21 +16,23 @@
 
         <TextView
             android:id="@+id/nameText"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
+            android:background="@color/dwm_blue"
             android:layout_gravity="center_horizontal"
             android:text="New Text"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:layout_marginTop="20dp"/>
 
         <ImageButton
             android:id="@+id/ib_profPic"
             android:layout_width="fill_parent"
             android:layout_height="400dp"
             android:scaleType="centerCrop"
-            android:background="@color/transparent"
+            android:background="@color/dwm_blue"
+            android:padding="5dp"
             android:src="@drawable/android_robot" />
     </LinearLayout>
 

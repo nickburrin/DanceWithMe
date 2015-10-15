@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseBroadcastReceiver;
 import com.parse.ParseUser;
 
 import seniordesign.com.dancewithme.R;
@@ -36,6 +37,7 @@ public class HomeActivity extends FragmentActivity {
     ParseUser user;
     HomeActivity activity;
     MyApplication application;
+    BroadcastReceiver receiver;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +131,29 @@ public class HomeActivity extends FragmentActivity {
                 mViewPager.setCurrentItem(1); // Set view page to Matching if coming from VenueActivity
             }
         }
+//<<<<<<< HEAD
+//
+//
+//        //Set broadcast listener for logout (
+//
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction("com.package.ACTION_LOGOUT");
+//        registerReceiver(new BroadcastReceiver() {
+//
+//            @Override
+//            public void onReceive(Context context, Intent intent) {
+//                //At this point you should start the login activity and finish this one
+//                finish();
+//            }
+//
+//
+//        }, intentFilter);
+//
+//=======
+
     }
+
+
 
     // Pager adapter that contains the different fragments necessary for navigating through the tabs
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {

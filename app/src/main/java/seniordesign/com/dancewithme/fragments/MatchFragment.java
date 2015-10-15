@@ -41,6 +41,7 @@ import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.HomeActivity;
 import seniordesign.com.dancewithme.activities.LoginActivity;
 import seniordesign.com.dancewithme.activities.MessageService;
+import seniordesign.com.dancewithme.pojos.UserMatches;
 import seniordesign.com.dancewithme.utils.Logger;
 
 
@@ -178,6 +179,7 @@ public class MatchFragment extends HomeTabFragment {
                         parseQuery.whereEqualTo("username", likedUser.getUsername());
                         parsePush.setQuery(parseQuery);
                         parsePush.setData(data);
+                        (ArrayList<String>) UserMatches.get("username");
                         //parsePush.setMessage("Lets turn up tone");
                         parsePush.sendInBackground(new SendCallback() {
                             public void done(ParseException e) {
@@ -189,10 +191,21 @@ public class MatchFragment extends HomeTabFragment {
                             }
                         });
 
+
                     }else{
                         myLikes.add(likedUser.getUsername());
                         ParseUser.getCurrentUser().saveInBackground();
                     }
+                }
+                //add user matches
+                ParseQuery<ParseObject> query = ParseQuery.getQuery("Matches");
+                query.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+                try {
+                    existingStyle = (UserMatches) query.getFirst();
+                    skillLevel = existingStyle.getSkill();
+                    prefs = existingStyle.getPreferences();
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
                 names.remove(0);
                 ParseUser matchUser = names.get(0);

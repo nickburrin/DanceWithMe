@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseBroadcastReceiver;
 import com.parse.ParseUser;
 
 import seniordesign.com.dancewithme.R;
@@ -36,6 +37,7 @@ public class HomeActivity extends FragmentActivity {
     ParseUser user;
     HomeActivity activity;
     MyApplication application;
+    BroadcastReceiver receiver;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,9 +142,13 @@ public class HomeActivity extends FragmentActivity {
                 //At this point you should start the login activity and finish this one
                 finish();
             }
+
+
         }, intentFilter);
 
     }
+
+
 
     // Pager adapter that contains the different fragments necessary for navigating through the tabs
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {

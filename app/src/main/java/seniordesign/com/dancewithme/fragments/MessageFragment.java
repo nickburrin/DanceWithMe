@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -24,6 +25,7 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.MessagingActivity;
+import seniordesign.com.dancewithme.pojos.Matches;
 
 
 public class MessageFragment extends HomeTabFragment {
@@ -54,73 +56,76 @@ public class MessageFragment extends HomeTabFragment {
 
     private void setConversationsList() {
 
-        ArrayList<String> myMatchesNames = (ArrayList<String>) ParseUser.getCurrentUser().get("Matches");
-        names = new ArrayList<String>();
-        for(int i=0; i<myMatchesNames.size(); i++){
-            ParseQuery<ParseUser> query = ParseUser.getQuery();
-            query.whereEqualTo("username", myMatchesNames.get(i));
-            query.findInBackground(new FindCallback<ParseUser>() {
-                public void done(List<ParseUser> userList, com.parse.ParseException e) {
-                    if (e == null) {
-                        for (int i = 0; i < userList.size(); i++) {
-                            names.add(userList.get(i).getUsername().toString());
-                        }
+        ParseQuery<Matches> matchQuery = ParseQuery.getQuery("Matches");
+        matchQuery.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
 
-                        usersListView = (ListView) view.findViewById(R.id.usersListView);
-                        namesArrayAdapter =
-                                new ArrayAdapter<String>(activity.getApplicationContext(),
-                                        R.layout.user_list_item, names);
-                        usersListView.setAdapter(namesArrayAdapter);
+        try {
+            ArrayList<ParseUser> myMatches = (ArrayList<ParseUser>) matchQuery.getFirst().get("matchArray");
+            names = new ArrayList<String>();
+            for (int i = 0; i < myMatches.size(); i++) {
+                ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+                userQuery.whereEqualTo("objectId", myMatches.get(0).get("objectId"));
+                names.add((String) userQuery.getFirst().get("first_name"));
 
-                        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+                usersListView = (ListView) view.findViewById(R.id.usersListView);
+                namesArrayAdapter =
+                        new ArrayAdapter<String>(activity.getApplicationContext(),
+                                R.layout.user_list_item, names);
+                usersListView.setAdapter(namesArrayAdapter);
+
+                usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> a, View v, int i, long l) {
 //                                openConversation(names, i);
-                                openConversation(i);
-                            }
-                        });
-
-                    } else {
-                        Toast.makeText(activity.getApplicationContext(),
-                                "Error loading user list",
-                                Toast.LENGTH_LONG).show();
+                        openConversation(i);
                     }
-                }
-            });
+                });
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-//        currentUserId = ParseUser.getCurrentUser().getObjectId();
-//        names = new ArrayList<String>();
+//                ParseQuery<ParseUser> query = ParseUser.getQuery();
+//                query.whereEqualTo("username", myMatches.get(i));
+//                query.findInBackground(new FindCallback<ParseUser>() {
+//                    public void done(List<ParseUser> userList, com.parse.ParseException e) {
+//                        if (e == null) {
+//                            for (int i = 0; i < userList.size(); i++) {
+//                                ParseQuery<ParseUser> userQuery = ParseQuery.getQuery();
+//                                userQuery.whereEqualTo("objectId", )
+//                                userQuery.getFirst()
+//                                names.add(userList.get(i).getUsername().toString());
+//                            }
 //
+//                            usersListView = (ListView) view.findViewById(R.id.usersListView);
+//                            namesArrayAdapter =
+//                                    new ArrayAdapter<String>(activity.getApplicationContext(),
+//                                            R.layout.user_list_item, names);
+//                            usersListView.setAdapter(namesArrayAdapter);
 //
-//        ParseQuery<ParseUser> query = ParseUser.getQuery();
-//        query.whereNotEqualTo("objectId", currentUserId);
-//        query.findInBackground(new FindCallback<ParseUser>() {
-//            public void done(List<ParseUser> userList, com.parse.ParseException e) {
-//                if (e == null) {
-//                    for (int i=0; i<userList.size(); i++) {
-//                        names.add(userList.get(i).getUsername().toString());
-//                    }
+//                            usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                                @Override
+//                                public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+////                                openConversation(names, i);
+//                                    openConversation(i);
+//                                }
+//                            });
 //
-//                    usersListView = (ListView) view.findViewById(R.id.usersListView);
-//                    namesArrayAdapter =
-//                            new ArrayAdapter<String>(activity.getApplicationContext(),
-//                                    R.layout.user_list_item, names);
-//                    usersListView.setAdapter(namesArrayAdapter);
-//
-//                    usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-//                            openConversation(names, i);
+//                        } else {
+//                            Toast.makeText(activity.getApplicationContext(),
+//                                    "Error loading user list",
+//                                    Toast.LENGTH_LONG).show();
 //                        }
-//                    });
-//
-//                } else {
-//                    Toast.makeText(activity.getApplicationContext(),
-//                            "Error loading user list",
-//                            Toast.LENGTH_LONG).show();
-//                }
+//                    }
+//    });
 //            }
-//        });
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+
+
+
     }
 
     //open a conversation with one person

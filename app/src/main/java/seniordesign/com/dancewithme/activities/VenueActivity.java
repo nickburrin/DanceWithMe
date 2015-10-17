@@ -71,12 +71,12 @@ public class VenueActivity extends Activity implements LocationListener{
                     // Get dancehall obj
                     Dancehall venue = (Dancehall) item;
                     Log.d(TAG, "Clicked on dancehall:" + venue.getId());
-
+/*
                     Location venueLoc = new Location(LocationManager.GPS_PROVIDER);
                     venueLoc.setLatitude(venue.getLocation().getLatitude());
                     venueLoc.setLongitude(venue.getLocation().getLongitude());
                     Log.d(TAG, "Distance is:" + venueLoc.distanceTo(currentLocation)*METERS_TO_MILES);
-
+*/
                     Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                     i.putExtra("event_id", venue.getObjectId());  // Send objectId to the DanceStyleActivity
                     startActivity(i);

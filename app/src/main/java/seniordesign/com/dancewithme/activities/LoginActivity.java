@@ -35,8 +35,8 @@ public class LoginActivity extends Activity {
 
         Intent i;
         if(ParseUser.getCurrentUser() != null){
-            //startActivity(new Intent(this, HomeActivity.class));
-            startActivity(new Intent(this, VenueActivity.class));   // temp for Nick
+            startActivity(new Intent(this, HomeActivity.class));
+            //startActivity(new Intent(this, VenueActivity.class));   // temp for Nick
         }
 
         intent = new Intent(getApplicationContext(), HomeActivity.class);

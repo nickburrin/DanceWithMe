@@ -116,9 +116,11 @@ public class RegisterActivity extends ActionBarActivity {
                     public void done(com.parse.ParseException e) {
                         if (e == null) {
                             // In addition to sign-up, add a Matches object for this user
-                            Matches newUser = new Matches();
-                            newUser.setId(ParseUser.getCurrentUser().getObjectId());
-                            newUser.setMatches(Arrays.asList());
+                            Matches newMatcher = new Matches();
+                            newMatcher.setId(ParseUser.getCurrentUser().getObjectId());
+                            newMatcher.setMatches(Arrays.asList());
+                            ParseUser.getCurrentUser().put("Matches", newMatcher);
+                            ParseUser.getCurrentUser().saveInBackground();
 
                             // Redirect to ProfileFragment
                             Intent i = new Intent(RegisterActivity.this, HomeActivity.class);

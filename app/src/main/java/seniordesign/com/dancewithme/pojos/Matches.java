@@ -8,6 +8,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nickburrin on 10/14/15.
@@ -18,11 +19,23 @@ public class Matches extends ParseObject{
 
     public String getId()
     {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getObjectId();
     }
 
 
     public String getUserId() {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getString("userId");
     }
 
@@ -41,12 +54,24 @@ public class Matches extends ParseObject{
     }
 
 
-    public ArrayList<ParseUser> getMatches() {
-        return (ArrayList<ParseUser>) get("matchArray");
+    public List<ParseUser> getMatches() {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return getList("matchArray");
     }
 
     public void addMatch(ParseUser matchedUser) {
-        getMatches().add(matchedUser);
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        this.addUnique("matchArray", matchedUser);
         this.saveInBackground();
     }
 }

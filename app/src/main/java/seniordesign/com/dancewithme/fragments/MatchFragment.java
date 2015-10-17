@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Queue;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
 
@@ -253,7 +254,7 @@ public class MatchFragment extends HomeTabFragment {
 
     private void acceptButton() {
         ArrayList<ParseUser> myLikes = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Likes");
-        ArrayList<ParseUser> myMatches = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Matches");
+        ArrayList<ParseUser> myMatches = (ArrayList<ParseUser>) ((Matches) ParseUser.getCurrentUser().get("Matches")).get("matchArray");
 
         ParseUser likedUser = names.get(0);
         ArrayList<ParseObject> likedUserLikes = (ArrayList<ParseObject>)likedUser.get("Likes");

@@ -19,6 +19,12 @@ public class Matches extends ParseObject{
 
     public String getId()
     {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getObjectId();
     }
 
@@ -28,6 +34,12 @@ public class Matches extends ParseObject{
     }
 
     public String getUserId() {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getString("userId");
     }
 
@@ -45,8 +57,14 @@ public class Matches extends ParseObject{
         return result;
     }
 
-    public ArrayList<ParseUser> getMatches() {
-        return (ArrayList<ParseUser>) get("matchArray");
+    public List<ParseUser> getMatches() {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return getList("matchArray");
     }
 
     public void setMatches(List<Object> objects) {
@@ -55,7 +73,13 @@ public class Matches extends ParseObject{
     }
 
     public void addMatch(ParseUser matchedUser) {
-        getMatches().add(matchedUser);
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        this.addUnique("matchArray", matchedUser);
         this.saveInBackground();
     }
 

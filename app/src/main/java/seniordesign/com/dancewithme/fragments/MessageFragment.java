@@ -46,27 +46,17 @@ public class MessageFragment extends HomeTabFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_message, container, false);
-
-
         showSpinner();
-
 
         return view;
     }
 
     private void setConversationsList() {
-        Matches userMatches = (Matches) ParseUser.getCurrentUser().get("Matches");
-        try {
-            userMatches.fetchIfNeeded();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        List<ParseUser> myMatchesNames = userMatches.getMatches();
+        List<ParseUser> userMatches = ((Matches) ParseUser.getCurrentUser().get("Matches")).getMatches();
         names = new ArrayList<String>();
 
-        for(int i = 0; i < myMatchesNames.size(); i++) {
-            names.add(myMatchesNames.get(i).getEmail());
+        for(ParseUser i: userMatches) {
+            names.add(i.getEmail());
 //            ParseQuery<ParseUser> query = ParseUser.getQuery();
 //            query.whereEqualTo("username", myMatchesNames.get(i));
 //            query.findInBackground(new FindCallback<ParseUser>() {
@@ -89,7 +79,6 @@ public class MessageFragment extends HomeTabFragment {
                 openConversation(i);
             }
         });
-
     }
 
     // Open a conversation with one person

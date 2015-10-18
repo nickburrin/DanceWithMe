@@ -16,8 +16,10 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.pojos.DanceStyle;
 import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
@@ -35,6 +37,7 @@ public class MatchFragment extends HomeTabFragment {
     private TextView mNameText;
     private View view;
 
+    private String eventStyle;
 
     public MatchFragment() {
         // Required empty public constructor
@@ -43,6 +46,11 @@ public class MatchFragment extends HomeTabFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null){
+            eventStyle = extras.getString("eventStyle");
+        }
     }
 
     @Override
@@ -133,9 +141,47 @@ public class MatchFragment extends HomeTabFragment {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
         try {
+            // Get all the attendees and remove Dislikes
             names = (ArrayList<ParseUser>) query.find();
+            names.removeAll(ParseUser.getCurrentUser().getList("Dislikes"));
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        sortUsers(names);
+    }
+
+    private void sortUsers(ArrayList<ParseUser> users) {
+        namesQueue = new LinkedList<ParseUser>();
+
+        ParseQuery<DanceStyle> styleQuery = ParseQuery.getQuery("DanceStyle");
+        styleQuery.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+        styleQuery.whereEqualTo("style", eventStyle);
+
+        DanceStyle style = null;
+        try {
+            style = styleQuery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        // This is a little tricky bc we have to find the specific dancestyle for each
+        //  user who is attending this event. Its a lot of work. Not sure how to efficiently
+        //  grab it from the array of danceStyles
+        if(style.getSkill().equals("Beginner")){
+            for(ParseUser user: users){
+                //if(user is a beginner, add to the list first)
+            }
+            for(ParseUser user: users){
+                //if(user is a intermediate, add to the list here)
+            }
+            for(ParseUser user: users){
+                //if(user is an expert, add to the list last)
+            }
+        } else if(style.getSkill().equals("Intermediate")){
+
+        } else {
+
         }
     }
 

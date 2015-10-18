@@ -22,11 +22,11 @@ public class DanceStyle extends ParseObject{
     }
 
     public String getStyle() {
-        return getString("Name");
+        return getString("style");
     }
 
     public void setStyle(String style) {
-        put("Name", style);
+        put("style", style);
         saveInBackground();
     }
 

@@ -16,17 +16,32 @@ import java.util.Arrays;
 public class DanceStyle extends ParseObject{
     public DanceStyle() {}
 
+    public DanceStyle(String id, String style, String skill, ArrayList<String> prefs){
+        setUserId(id);
+        setStyle(style);
+        setSkill(skill);
+        setPreferences(prefs);
+    }
+
     public String getId()
     {
         return getObjectId();
     }
 
+    public String setUserId(){
+        return getString("userId");
+    }
+
+    public void setUserId(String s){
+        put("userId", s);
+    }
+
     public String getStyle() {
-        return getString("Name");
+        return getString("style");
     }
 
     public void setStyle(String style) {
-        put("Name", style);
+        put("style", style);
         saveInBackground();
     }
 

@@ -20,6 +20,7 @@ import com.parse.SignUpCallback;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
@@ -116,9 +117,7 @@ public class RegisterActivity extends ActionBarActivity {
                     public void done(com.parse.ParseException e) {
                         if (e == null) {
                             // In addition to sign-up, add a Matches object for this user
-                            Matches newMatcher = new Matches();
-                            newMatcher.setId(ParseUser.getCurrentUser().getObjectId());
-                            newMatcher.setMatches(Arrays.asList());
+                            Matches newMatcher = new Matches(ParseUser.getCurrentUser().getObjectId(), Arrays.asList());
                             ParseUser.getCurrentUser().put("Matches", newMatcher);
                             ParseUser.getCurrentUser().saveInBackground();
 

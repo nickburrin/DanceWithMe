@@ -32,6 +32,14 @@ public class Event extends ParseObject {
         saveInBackground();
     }
 
+    public String getStyle() {
+        return getString("style");
+    }
+
+    public void setStyle(String s) {
+        put("style", s);
+    }
+
     public ArrayList<ParseUser> getAttendees(){
         return (ArrayList<ParseUser>) get("attendees");
     }

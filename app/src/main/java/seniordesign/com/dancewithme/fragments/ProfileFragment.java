@@ -26,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -35,6 +36,7 @@ import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import seniordesign.com.dancewithme.R;
@@ -52,6 +54,7 @@ import seniordesign.com.dancewithme.pojos.Matches;
 
 public class ProfileFragment extends HomeTabFragment {
     private static final String TAG = ProfileFragment.class.getSimpleName();
+    private final List<String> STYLE_LIST = Arrays.asList("Country", "Salsa", "Tango");
 
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;
@@ -164,7 +167,14 @@ public class ProfileFragment extends HomeTabFragment {
     }
 
     private void initFragment() {
-        ArrayList<Object> userStyles = (ArrayList<Object>) ParseUser.getCurrentUser().getList("danceStyles");
+        ArrayList<Object> userStyles = new ArrayList<Object>();
+
+        Object ds = null;
+        for(String style: STYLE_LIST){
+            if((ds = ParseUser.getCurrentUser().get(style)) != null){
+                userStyles.add(ds);
+            }
+        }
 
         if(userStyles.isEmpty()){
             Toast.makeText(activity.getApplicationContext(), "Welcome! Specify your dance styles and start matching!",

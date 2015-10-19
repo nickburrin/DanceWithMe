@@ -17,6 +17,11 @@ import java.util.List;
 public class Matches extends ParseObject{
     public Matches(){}
 
+    public Matches(String id, List matches){
+        setUserId(id);
+        setMatches(matches);
+    }
+
     public String getId()
     {
         try {
@@ -28,7 +33,7 @@ public class Matches extends ParseObject{
         return getObjectId();
     }
 
-    public void setId(String id) {
+    public void setUserId(String id) {
         put("userId", id);
         saveInBackground();
     }
@@ -67,7 +72,7 @@ public class Matches extends ParseObject{
         return getList("matchArray");
     }
 
-    public void setMatches(List<Object> objects) {
+    public void setMatches(List<ParseUser> objects) {
         put("matchArray", objects);
         saveInBackground();
     }

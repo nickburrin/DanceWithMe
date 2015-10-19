@@ -115,10 +115,8 @@ public class DanceStyleActivity extends Activity {
                     Toast.LENGTH_SHORT).show();
         } else {
             if(existingStyle == null){
-                DanceStyle newStyle = new DanceStyle();
-                newStyle.setStyle(mDanceStyle.getSelectedItem().toString());
-                newStyle.setSkill(skillLevel);
-                newStyle.setPreferences(prefs);
+                DanceStyle newStyle = new DanceStyle(ParseUser.getCurrentUser().getObjectId(),
+                        mDanceStyle.getSelectedItem().toString(), skillLevel, prefs);
 
                 ParseUser.getCurrentUser().add("danceStyles", newStyle);
                 ParseUser.getCurrentUser().saveInBackground();

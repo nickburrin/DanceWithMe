@@ -113,7 +113,6 @@ public class MatchFragment extends HomeTabFragment {
 
     private void setConversationsList() {
         names = new ArrayList<ParseUser>();
-        //namesQueue = new LinkedList<ParseUser>();
         /*
             This is good, but I think we can optimize it with a few things:
                 1)  ***** DONE ******
@@ -151,11 +150,11 @@ public class MatchFragment extends HomeTabFragment {
             e.printStackTrace();
         }
 
-        sortUsers(names);
+        namesQueue = sortUsers(names);
     }
 
-    private void sortUsers(ArrayList<ParseUser> attendees) {
-        namesQueue = new LinkedList<ParseUser>();
+    private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
+        LinkedList<ParseUser> temp = new LinkedList<ParseUser>();
 
         DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(eventStyle);
 
@@ -169,7 +168,7 @@ public class MatchFragment extends HomeTabFragment {
                 for(String skill: BEGINNER_MAPPING) {
                     for (ParseUser user : attendees) {
                         if(((DanceStyle)user.get(eventStyle)).getSkill().equals(skill)){
-                            namesQueue.add(user);
+                            temp.add(user);
                             attendees.remove(user);
                         }
                     }
@@ -179,7 +178,7 @@ public class MatchFragment extends HomeTabFragment {
                 for(String skill: INTERMEDIATE_MAPPING) {
                     for (ParseUser user : attendees) {
                         if(((DanceStyle)user.get(eventStyle)).getSkill().equals(skill)){
-                            namesQueue.add(user);
+                            temp.add(user);
                             attendees.remove(user);
                         }
                     }
@@ -189,7 +188,7 @@ public class MatchFragment extends HomeTabFragment {
                 for(String skill: EXPERT_MAPPING) {
                     for (ParseUser user : attendees) {
                         if(((DanceStyle)user.get(eventStyle)).getSkill().equals(skill)){
-                            namesQueue.add(user);
+                            temp.add(user);
                             attendees.remove(user);
                         }
                     }
@@ -202,12 +201,14 @@ public class MatchFragment extends HomeTabFragment {
             for(String skill: prefs){
                 for(ParseUser user: attendees){
                     if(((DanceStyle)user.get(eventStyle)).getSkill().equals(skill)){
-                        namesQueue.add(user);
+                        temp.add(user);
                         attendees.remove(user);
                     }
                 }
             }
         }
+
+        return temp;
     }
 
     private void acceptButton() {

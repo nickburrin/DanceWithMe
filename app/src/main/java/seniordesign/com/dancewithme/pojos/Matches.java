@@ -18,6 +18,7 @@ public class Matches extends ParseObject{
     public Matches(){}
 
     public Matches(String id, List matches){
+        this();
         setUserId(id);
         setMatches(matches);
     }

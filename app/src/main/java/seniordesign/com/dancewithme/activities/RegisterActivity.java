@@ -244,7 +244,6 @@ public class RegisterActivity extends ActionBarActivity {
                 newUser.put("first_name", firstName);
                 newUser.put("last_name", lastName);
                 newUser.put("gender", gender);
-                newUser.put("danceStyles", Arrays.asList());
                 newUser.put("Likes", Arrays.asList());
                 newUser.put("Dislikes", Arrays.asList());
             }

@@ -1,6 +1,7 @@
 package seniordesign.com.dancewithme.pojos;
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 
 import java.util.ArrayList;
@@ -22,10 +23,22 @@ public class DanceStyle extends ParseObject{
 
     public String getId()
     {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getObjectId();
     }
 
-    public String setUserId(){
+    public String getUserId(){
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getString("userId");
     }
 
@@ -35,6 +48,12 @@ public class DanceStyle extends ParseObject{
     }
 
     public String getStyle() {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getString("style");
     }
 
@@ -44,6 +63,12 @@ public class DanceStyle extends ParseObject{
     }
 
     public String getSkill() {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return getString("Skill");
     }
 
@@ -53,6 +78,12 @@ public class DanceStyle extends ParseObject{
     }
 
     public ArrayList<String> getPreferences() {
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         return (ArrayList<String>) get("Preferences");
     }
 

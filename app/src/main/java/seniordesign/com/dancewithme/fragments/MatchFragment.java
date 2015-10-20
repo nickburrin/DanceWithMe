@@ -126,7 +126,8 @@ public class MatchFragment extends HomeTabFragment {
                     i.e.
                         if(ParseUserA likes ParseUserB)
                             ParseUserA.likes.add(ParseUserB);
-                2) Once you have a list of all the users, you can immediately
+                2) ****** DONE ******
+                    Once you have a list of all the users, you can immediately
                     remove those users who you already matched to or dislike.
                     This then would be the array you sort based on preferences.
                      i.e.
@@ -159,16 +160,10 @@ public class MatchFragment extends HomeTabFragment {
     }
 
     private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
-        LinkedList<ParseUser> temp = new LinkedList<ParseUser>();
+        LinkedList<ParseUser> temp = new LinkedList();
 
-        if(ParseUser.getCurrentUser().get(eventStyle) instanceof ArrayList){
-            System.out.println("Success");
-        } else{
-            System.out.println("Fail");
-        }
+        DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(eventStyle);
 
-        //DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(eventStyle);
-/*
         // This is a little tricky bc we have to find the specific dancestyle for each
         //  user who is attending this event. Its a lot of work. Not sure how to efficiently
         //  grab it from the array of danceStyles
@@ -218,7 +213,7 @@ public class MatchFragment extends HomeTabFragment {
                 }
             }
         }
-*/
+
         return temp;
 
     }

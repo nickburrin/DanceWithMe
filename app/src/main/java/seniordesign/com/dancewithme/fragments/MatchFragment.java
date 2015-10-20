@@ -150,7 +150,7 @@ public class MatchFragment extends HomeTabFragment {
         query.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
         try {
             // Get all the attendees and remove Dislikes
-            names = (ArrayList<ParseUser>) query.find();
+            names = new ArrayList<ParseUser> (query.find());
             names.removeAll(ParseUser.getCurrentUser().getList("Dislikes"));
         } catch (ParseException e) {
             e.printStackTrace();
@@ -208,8 +208,9 @@ public class MatchFragment extends HomeTabFragment {
                 for(ParseUser user: attendees){
                     if(((DanceStyle)user.get(eventStyle)).getSkill().equals(skill)){
                         temp.add(user);
-                        attendees.remove(user);
+                        //attendees.remove(user);
                     }
+
                 }
             }
         }

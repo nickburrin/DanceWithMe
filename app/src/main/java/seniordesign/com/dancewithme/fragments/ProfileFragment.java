@@ -143,10 +143,12 @@ public class ProfileFragment extends HomeTabFragment {
     }
 
     @Override
-    public void onResume(){
+     public void onResume(){
         super.onResume();
         initFragment();
     }
+
+
 
     private void getUser() {
         if(ParseUser.getCurrentUser() != null) {

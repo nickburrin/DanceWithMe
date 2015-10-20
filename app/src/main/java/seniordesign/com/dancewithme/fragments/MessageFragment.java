@@ -44,8 +44,14 @@ public class MessageFragment extends HomeTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_message, container, false);
-        showSpinner();
+        //showSpinner();
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setConversationsList();
     }
 
     private void setConversationsList() {
@@ -121,8 +127,14 @@ public class MessageFragment extends HomeTabFragment {
 
     @Override
     public void onResume() {
-        setConversationsList();
         super.onResume();
+        setConversationsList();
+
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
     }
 
 }

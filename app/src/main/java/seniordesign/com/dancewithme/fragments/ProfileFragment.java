@@ -86,7 +86,7 @@ public class ProfileFragment extends HomeTabFragment {
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         usernameView = ((TextView) view.findViewById(R.id.tv_username));
-        usernameView.setText(ParseUser.getCurrentUser().get("first_name") + " " + ParseUser.getCurrentUser().get("last_name"));
+        usernameView.setText(ParseUser.getCurrentUser().getString("first_name") + " " + ParseUser.getCurrentUser().getString("last_name"));
 
         profPic = (ImageButton) view.findViewById(R.id.ib_profPic);
         profPic.setOnTouchListener(new ImageView.OnTouchListener() {
@@ -167,11 +167,11 @@ public class ProfileFragment extends HomeTabFragment {
     }
 
     private void initFragment() {
-        ArrayList<Object> userStyles = new ArrayList<Object>();
+        ArrayList<Object> userStyles = new ArrayList();
 
         Object ds = null;
         for(String style: STYLE_LIST){
-            if((ds = ParseUser.getCurrentUser().get(style)) != null){
+            if((ds = ParseUser.getCurrentUser().getParseObject(style)) != null){
                 userStyles.add(ds);
             }
         }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -106,9 +107,13 @@ public class MatchFragment extends HomeTabFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setConversationsList();
-        getNextUser();
-        fillPage();
+        if(ParseUser.getCurrentUser().get(eventStyle) != null){
+            setConversationsList();
+            getNextUser();
+            fillPage();
+        } else{
+            Toast.makeText(activity.getApplicationContext(), "You need to create a dance style for this event", Toast.LENGTH_LONG);
+        }
     }
 
     private void setConversationsList() {
@@ -156,8 +161,14 @@ public class MatchFragment extends HomeTabFragment {
     private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
         LinkedList<ParseUser> temp = new LinkedList<ParseUser>();
 
-        DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(eventStyle);
+        if(ParseUser.getCurrentUser().get(eventStyle) instanceof ArrayList){
+            System.out.println("Success");
+        } else{
+            System.out.println("Fail");
+        }
 
+        //DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(eventStyle);
+/*
         // This is a little tricky bc we have to find the specific dancestyle for each
         //  user who is attending this event. Its a lot of work. Not sure how to efficiently
         //  grab it from the array of danceStyles
@@ -207,8 +218,9 @@ public class MatchFragment extends HomeTabFragment {
                 }
             }
         }
-
+*/
         return temp;
+
     }
 
     private void acceptButton() {
@@ -277,27 +289,30 @@ public class MatchFragment extends HomeTabFragment {
     }
 
     private void getNextUser(){
-        if(namesQueue.size() > 0){
-            matchUser = namesQueue.remove();
-        }
-//        if(names.size() > 0){
-//            matchUser = names.get(0);
-//            names.remove(0);
+//        if(namesQueue.size() > 0){
+//            matchUser = namesQueue.remove();
 //        }
+        if(names.size() > 0){
+            matchUser = names.get(0);
+            names.remove(0);
+        }
     }
 
     private void fillPage() {
-        ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
-        if(profilePic != null) {
-            try {
+        try {
+            ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
+
+            if (profilePic != null) {
+
                 Bitmap bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
                 profPic.setImageBitmap(bm);
-            } catch (ParseException e) {
-                //Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
             }
-        } else {
-            profPic.setImageDrawable(getResources().getDrawable(R.drawable.android_robot));
+            else{
+                profPic.setImageDrawable(getResources().getDrawable(R.drawable.android_robot));
+            }
+        } catch (Exception e) {
+            //Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
         mNameText.setText((String) matchUser.get("first_name"));
     }

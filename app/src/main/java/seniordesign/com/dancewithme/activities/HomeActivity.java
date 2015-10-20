@@ -125,10 +125,10 @@ public class HomeActivity extends FragmentActivity {
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
-            if(extras.getBoolean("first_time")){
+            if(extras.getBoolean("first_time")) {
                 mViewPager.setCurrentItem(0); // Set view page to Profile on first time login
             } else if(extras.getString("event_id") != null ) {
-                mViewPager.setCurrentItem(1); // Set view page to Matching if coming from VenueActivity
+                mViewPager.setCurrentItem(0); // Set view page to Matching if coming from VenueActivity
             }
         }
 //<<<<<<< HEAD
@@ -167,9 +167,9 @@ public class HomeActivity extends FragmentActivity {
             Fragment fragment;
             switch (i){
                 case 0: fragment = new ProfileFragment(); break;    // Set tab 0 --> Profile
-                case 1: fragment = new MatchFragment(); break;      // Set tab 1 --> Games List
-                case 2: fragment = new MessageFragment(); break;    // Set tab 2 --> Bets List
-                default: fragment = new MatchFragment(); break;
+                case 1: fragment = new MatchFragment(); break;      // Set tab 1 --> MatchFragmet
+                case 2: fragment = new MessageFragment(); break;    // Set tab 2 --> MessageFragment
+                default: fragment = new ProfileFragment(); break;
             }
             return fragment;
         }

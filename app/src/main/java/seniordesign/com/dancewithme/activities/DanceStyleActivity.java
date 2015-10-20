@@ -17,6 +17,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.NothingSelectedSpinnerAdapter;
@@ -34,6 +35,7 @@ public class DanceStyleActivity extends Activity {
     Button mSubmit;
 
     DanceStyle existingStyle;
+    String style;
     String skillLevel;
     ArrayList<String> prefs = new ArrayList<String>();
 
@@ -49,6 +51,7 @@ public class DanceStyleActivity extends Activity {
             query.whereEqualTo("objectId", extras.getString("style_id"));
             try {
                 existingStyle = (DanceStyle) query.getFirst();
+                style = existingStyle.getStyle();
                 skillLevel = existingStyle.getSkill();
                 prefs = existingStyle.getPreferences();
             } catch (ParseException e) {
@@ -56,6 +59,7 @@ public class DanceStyleActivity extends Activity {
             }
         }
 
+        // TODO: Need to remove option of creating dancestyles that already exist!
         mDanceStyle = (Spinner) findViewById(R.id.spinner_dance_style);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.dancestyles_array, android.R.layout.simple_spinner_item);
@@ -103,22 +107,26 @@ public class DanceStyleActivity extends Activity {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitDanceStyle();
-                finish();
+                if(submitDanceStyle() == true) {
+                    finish();
+                }
             }
         });
     }
 
-    private void submitDanceStyle() {
-        if(skillLevel == null){
-            Toast.makeText(this.getApplicationContext(), "Specify a skill level",
+    private boolean submitDanceStyle() {
+        style = mDanceStyle.getSelectedItem().toString();
+
+        if(skillLevel == null || style == null){
+            Toast.makeText(this.getApplicationContext(), "Complete all fields",
                     Toast.LENGTH_SHORT).show();
+            return false;
         } else {
             if(existingStyle == null){
                 DanceStyle newStyle = new DanceStyle(ParseUser.getCurrentUser().getObjectId(),
-                        mDanceStyle.getSelectedItem().toString(), skillLevel, prefs);
+                        style, skillLevel, prefs);
 
-                ParseUser.getCurrentUser().add("danceStyles", newStyle);
+                ParseUser.getCurrentUser().put(style, newStyle);
                 ParseUser.getCurrentUser().saveInBackground();
             }
             else{
@@ -127,6 +135,7 @@ public class DanceStyleActivity extends Activity {
                 existingStyle.saveInBackground();
             }
 
+            return true;
         }
     }
 

@@ -86,7 +86,7 @@ public class DanceStyleListAdapter extends ArrayAdapter<Object> {
     @Override
     public int getViewTypeCount() {
         // we have two view types, games and times
-        return 1;
+        return 2;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class DanceStyleListAdapter extends ArrayAdapter<Object> {
         if (position < stylesList.size())
             item = stylesList.get(position);
 
-        if (item != null && item instanceof DanceStyle)
+        if ( (item != null) && ( item instanceof DanceStyle) )
             return 0; // DanceStyle object
         else
             return 1; // Some other item

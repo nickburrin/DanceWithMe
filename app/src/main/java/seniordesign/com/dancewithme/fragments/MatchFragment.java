@@ -3,6 +3,7 @@ package seniordesign.com.dancewithme.fragments;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,13 @@ import android.widget.Toast;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SendCallback;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -40,6 +46,7 @@ public class MatchFragment extends HomeTabFragment {
     private ImageButton profPic;
     private TextView mNameText;
     private View view;
+    private Bitmap bm;
 
     private String eventStyle = "Country";
 
@@ -63,19 +70,20 @@ public class MatchFragment extends HomeTabFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_match, container, false);
         //watch out for this line
-//        setConversationsList();
-//        ParseUser matchUser = names.get(0);
-//        ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
-//        if(profilePic != null) {
-//            try {
-//                bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
-//                profPic.setImageBitmap(bm);
-//            } catch (com.parse.ParseException e) {
-//                Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//        }
-
+        setConversationsList();
+        ParseUser matchUser = names.get(0);
+        /*
+        ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
+        if(profilePic != null) {
+            try {
+                bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
+                profPic.setImageBitmap(bm);
+            } catch (com.parse.ParseException e) {
+                Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        }
+*/
         mNameText = (TextView) view.findViewById(R.id.nameText);
         profPic = (ImageButton) view.findViewById(R.id.ib_profPic);
 
@@ -204,7 +212,7 @@ public class MatchFragment extends HomeTabFragment {
             // Current User has preferences, sort according to their preferences
             ArrayList<String> prefs = style.getPreferences();
 
-            for(String skill: prefs){
+                for(String skill: prefs){
                 for(ParseUser user: attendees){
                     if(((DanceStyle)user.get(eventStyle)).getSkill().equals(skill)){
                         temp.add(user);
@@ -240,10 +248,10 @@ public class MatchFragment extends HomeTabFragment {
             myMatches.getMatches().add(matchUser);
             theirMatches.getMatches().add(ParseUser.getCurrentUser());
             */
-            /*
-                JUST WANT TO SEE IF THIS WORKS WITHOUT NOTIFICATIONS
 
-            //send a match push notification
+              //  JUST WANT TO SEE IF THIS WORKS WITHOUT NOTIFICATIONS
+
+            //send a match push notification to other user
             JSONObject data = new JSONObject();
             String matchMessage = "You just got matched with " + ParseUser.getCurrentUser().get("first_name");
             try {
@@ -257,7 +265,7 @@ public class MatchFragment extends HomeTabFragment {
             }
 
             ParseQuery parseQuery = ParseInstallation.getQuery();
-            parseQuery.whereEqualTo("username", likedUser.getUsername());
+            parseQuery.whereEqualTo("username", matchUser.getUsername());
 
             ParsePush parsePush = new ParsePush();
             parsePush.setQuery(parseQuery);
@@ -272,7 +280,37 @@ public class MatchFragment extends HomeTabFragment {
                     }
                 }
             });
-            */
+
+            //send a match push notification to myself
+            JSONObject data1 = new JSONObject();
+            String matchMessage1 = "You just got matched with " + matchUser.get("first_name");
+            try {
+                data1.put("alert", matchMessage1);
+                data1.put("title", "DanceWithMe");
+                data1.put("from", matchUser.getObjectId());
+                //json.put("data", data);
+            }catch (Exception e){
+                e.printStackTrace();
+                return;
+            }
+
+            ParseQuery parseQuery1 = ParseInstallation.getQuery();
+            parseQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+
+            ParsePush parsePush1 = new ParsePush();
+            parsePush1.setQuery(parseQuery1);
+            parsePush1.setData(data1);
+            //parsePush.setMessage("Lets turn up tone");
+            parsePush1.sendInBackground(new SendCallback() {
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.d("push", "The push campaign has been created.");
+                    } else {
+                        Log.d("push", "Error sending push:" + e.getMessage());
+                    }
+                }
+            });
+
         }
 
         ParseUser.getCurrentUser().saveInBackground();

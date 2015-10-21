@@ -32,15 +32,16 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        intent = new Intent(getApplicationContext(), HomeActivity.class);
+        serviceIntent = new Intent(getApplicationContext(), MessageService.class);
         Intent i;
         if(ParseUser.getCurrentUser() != null){
+            startService(serviceIntent);
             startActivity(new Intent(this, HomeActivity.class));
             //startActivity(new Intent(this, VenueActivity.class));   // temp for Nick
         }
 
-        intent = new Intent(getApplicationContext(), HomeActivity.class);
-        serviceIntent = new Intent(getApplicationContext(), MessageService.class);
+
 //        Parse.enableLocalDatastore(this);
 
         setContentView(R.layout.activity_login);

@@ -29,6 +29,7 @@ public class MyPushReceiver extends ParsePushBroadcastReceiver {
     private final String TAG = MyPushReceiver.class.getSimpleName();
 
     private NotificationUtils notificationUtils;
+    private String from;
 
     private Intent parseIntent;
 
@@ -46,6 +47,7 @@ public class MyPushReceiver extends ParsePushBroadcastReceiver {
 
         try {
             JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+            from = json.getString("from");
 
             Log.e(TAG, "Push received: " + json);
 
@@ -67,6 +69,20 @@ public class MyPushReceiver extends ParsePushBroadcastReceiver {
     @Override
     protected void onPushOpen(Context context, Intent intent) {
         super.onPushOpen(context, intent);
+
+        JSONObject json = null;
+        try {
+            json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+            from = json.getString("from");
+            Intent messageIntent = new Intent(context, MessagingActivity.class);
+            messageIntent.putExtra("RECIPIENT_ID", from);
+            messageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //startActivity(messageIntent);
+            context.startActivity(messageIntent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -82,7 +98,7 @@ public class MyPushReceiver extends ParsePushBroadcastReceiver {
             String title = json.getString("title");
             String message = json.getString("message");
             //String message = "";
-            String from = json.getString("from");
+            //String from = json.getString("from");
 
             //ParseUser myUser = ParseUser.getCurrentUser();
             ParseQuery<ParseUser> query = ParseUser.getQuery();

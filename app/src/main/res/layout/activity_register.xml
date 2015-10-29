@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/wallet_holo_blue_light" >
+    android:background="@color/dwm_blue" >
 
 
     <ScrollView
@@ -27,15 +27,19 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/username"
                 android:inputType="textEmailAddress"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"/>
 
             <EditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
-                android:inputType="text"
-                android:layout_weight="1" />
+                android:inputType="textPassword"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"/>
 
             <EditText
                 android:id="@+id/et_confirm_password"
@@ -43,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
                 android:inputType="text"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColorHint="@color/white"/>
 
             <EditText
                 android:id="@+id/et_first_name"
@@ -51,7 +56,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/first_name"
                 android:inputType="text"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"/>
 
             <EditText
                 android:id="@+id/et_last_name"
@@ -59,7 +66,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/last_name"
                 android:inputType="text"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -88,13 +97,13 @@
 
             <Button android:id="@+id/button_existing_user"
                 android:background="#00000000"
-                android:textColor="@color/list_item_grey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/action_existing_user"
                 android:layout_marginTop="5dp"
                 android:textSize="14sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <Button
                 android:id="@+id/button_submit_new_account"

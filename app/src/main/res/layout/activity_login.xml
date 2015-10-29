@@ -75,7 +75,8 @@
 
             <Button android:id="@+id/signupButton"
                 style="@style/ButtonTransparent"
-                android:text="@string/action_register" />
+                android:text="@string/action_register"
+                android:textColor="@color/white"/>
 
             <Button android:id="@+id/loginButton"
                 style="@style/button_confirm"

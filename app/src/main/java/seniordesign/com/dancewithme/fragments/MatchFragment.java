@@ -45,6 +45,7 @@ public class MatchFragment extends HomeTabFragment {
     private ImageButton denyButton;
     private ImageButton profPic;
     private TextView mNameText;
+    private TextView mSkillText;
     private View view;
     private Bitmap bm;
 
@@ -85,6 +86,7 @@ public class MatchFragment extends HomeTabFragment {
         }
 */
         mNameText = (TextView) view.findViewById(R.id.nameText);
+        mSkillText = (TextView) view.findViewById(R.id.skillText);
         profPic = (ImageButton) view.findViewById(R.id.ib_profPic);
 
         acceptButton = (ImageButton) view.findViewById(R.id.acceptButton);
@@ -349,6 +351,9 @@ public class MatchFragment extends HomeTabFragment {
             e.printStackTrace();
         }
         mNameText.setText((String) matchUser.get("first_name"));
+       // DanceStyle matchUserDanceStyle = new DanceStyle();
+        DanceStyle matchUserDanceStyle = (DanceStyle) matchUser.get("Country");
+        mSkillText.setText(matchUserDanceStyle.getSkill());
     }
 }
 

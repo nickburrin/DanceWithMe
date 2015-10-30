@@ -7,6 +7,8 @@ import com.parse.ParseInstallation;
 import com.parse.PushService;
 import com.parse.ParseObject;
 
+import com.facebook.FacebookSdk;
+
 import seniordesign.com.dancewithme.pojos.DanceStyle;
 import seniordesign.com.dancewithme.pojos.Dancehall;
 import seniordesign.com.dancewithme.pojos.Event;

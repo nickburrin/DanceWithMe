@@ -352,8 +352,7 @@ public class MatchFragment extends HomeTabFragment {
         }
         mNameText.setText((String) matchUser.get("first_name"));
        // DanceStyle matchUserDanceStyle = new DanceStyle();
-        DanceStyle matchUserDanceStyle = (DanceStyle) matchUser.get("Country");
-        mSkillText.setText(matchUserDanceStyle.getSkill());
+        mSkillText.setText(((DanceStyle) matchUser.get(eventStyle)).getSkill());
     }
 }
 

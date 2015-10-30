@@ -32,6 +32,10 @@ public class Event extends ParseObject {
         saveInBackground();
     }
 
+    public Dancehall getLocation(){
+        return (Dancehall) get("location");
+    }
+
     public String getStyle() {
         return getString("style");
     }

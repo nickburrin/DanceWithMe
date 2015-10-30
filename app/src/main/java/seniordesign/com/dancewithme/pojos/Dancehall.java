@@ -22,12 +22,12 @@ public class Dancehall extends ParseObject {
         return getString("Venue");
     }
 
-    public ParseGeoPoint getLocation() {
-        return getParseGeoPoint("location");
+    public ParseGeoPoint getGeoPoint() {
+        return getParseGeoPoint("latlong");
     }
 
-    public ArrayList<String> getAttendees() {
-        return (ArrayList<String>) get("attendees");
+    public ArrayList<Event> getEvents() {
+        return (ArrayList<Event>) get("events");
     }
 
     public String getAddress(){

@@ -65,7 +65,7 @@ public class MessageFragment extends HomeTabFragment {
                 e.printStackTrace();
             }
 
-            names.add((String) i.get("first_name"));
+            names.add(i.getString("first_name") + " " + i.getString("last_name"));
 
 //            ParseQuery<ParseUser> query = ParseUser.getQuery();
 //            query.whereEqualTo("username", myMatchesNames.get(i));

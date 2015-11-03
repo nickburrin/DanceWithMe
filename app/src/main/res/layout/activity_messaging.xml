@@ -2,6 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/off_white"
                 >
 
     <ListView
@@ -12,13 +13,14 @@
             android:layout_above="@+id/divider"
             android:padding="0dip"
             android:divider="@null"
-            android:dividerHeight="0dp" android:stackFromBottom="true" tools:listitem="@layout/message_left"/>
+            android:dividerHeight="0dp" android:stackFromBottom="true" tools:listitem="@layout/message_left"
+            android:background="@color/off_white" />
     
     <RelativeLayout 
         android:id="@+id/divider"
         android:layout_width="fill_parent"
 		android:layout_height="1dip"
-		android:background="@color/off_white"
+		android:background="@color/block_grey"
 		android:layout_above="@+id/relSendMessage" />
 
     <RelativeLayout

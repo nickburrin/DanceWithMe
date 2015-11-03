@@ -30,9 +30,10 @@
                 android:background="@color/dwm_blue"
                 android:layout_gravity="right"
                 android:text="New Text"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textColor="@color/white"
-                android:layout_marginTop="0dp"/>
+                android:layout_marginTop="0dp"
+                android:paddingLeft="8dp"/>
 
             <TextView
                 android:id="@+id/skillText"
@@ -41,9 +42,9 @@
                 android:background="@color/dwm_blue"
                 android:gravity="right"
                 android:text="New Text"
-                android:textSize="28sp"
+                android:textSize="24sp"
                 android:textColor="@color/white"
-                />
+                android:paddingRight="10dp"/>
         </LinearLayout>
 
 
@@ -75,7 +76,8 @@
             android:background="@color/transparent"
             android:layout_gravity="center_vertical"
             android:layout_weight="50"
-            android:src="@drawable/x4"/>
+            android:src="@drawable/x4"
+            />
 
         <ImageButton
             android:id="@+id/acceptButton"
@@ -84,7 +86,8 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="50"
             android:background="@color/transparent"
-            android:src="@drawable/rsz_dancewithme2"/>
+            android:src="@drawable/rsz_dancewithme2"
+            />
 
     </LinearLayout>
 </LinearLayout>

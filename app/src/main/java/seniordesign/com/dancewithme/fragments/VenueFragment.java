@@ -1,18 +1,15 @@
-package seniordesign.com.dancewithme.activities;
+package seniordesign.com.dancewithme.fragments;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Looper;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -20,31 +17,45 @@ import android.widget.ListView;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.activities.MatchActivity;
 import seniordesign.com.dancewithme.adapters.DancehallListAdapter;
 import seniordesign.com.dancewithme.pojos.Dancehall;
 
-public class VenueActivity extends Activity implements LocationListener{
-    private static final String TAG = VenueActivity.class.getSimpleName();
+public class VenueFragment extends HomeTabFragment implements LocationListener{
+    private static final String TAG = VenueFragment.class.getSimpleName();
     private final double METERS_TO_MILES = 0.00062137;
+    private String[] DANCE_STYLES = new String[]{"Country", "Salsa", "Tango"};
 
     private ArrayList<ParseObject> venues;
     private ListView venue_list;
     private LocationManager mLocationManager;
     private Location currentLocation;
 
+    private View view;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_venue);
 
-        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        mLocationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+    }
 
-        venue_list = (ListView) findViewById(R.id.lv_dancehalls);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_venue, container, false);
+        venue_list = (ListView) view.findViewById(R.id.lv_dancehalls);
+
+        return view;
     }
 
     @Override
@@ -54,14 +65,25 @@ public class VenueActivity extends Activity implements LocationListener{
     }
 
     private void initListView() {
+
+        // What dance styles does the User have?
+        ArrayList<String> userStyles = new ArrayList<>();
+        for(int i = 0; i < DANCE_STYLES.length; i++){
+            if(ParseUser.getCurrentUser().get(DANCE_STYLES[i]) != null){
+                userStyles.add(DANCE_STYLES[i]);
+            }
+        }
+
+        // Find all Dancehalls of the User's dance styles
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Dancehall");
+        query.whereContainedIn("style", userStyles);
         try {
             venues = (ArrayList) query.find();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        venue_list.setAdapter(new DancehallListAdapter(this, venues));
+        venue_list.setAdapter(new DancehallListAdapter(getActivity(), venues));
         venue_list.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -77,19 +99,12 @@ public class VenueActivity extends Activity implements LocationListener{
                     venueLoc.setLongitude(venue.getLocation().getLongitude());
                     Log.d(TAG, "Distance is:" + venueLoc.distanceTo(currentLocation)*METERS_TO_MILES);
 */
-                    Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                    i.putExtra("event_id", venue.getObjectId());  // Send objectId to the DanceStyleActivity
+                    Intent i = new Intent(getActivity().getApplicationContext(), MatchActivity.class);
+                    i.putExtra("venueId", venue.getObjectId());  // Send objectId to the DanceStyleActivity
                     startActivity(i);
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_select_avenue, menu);
-        return true;
     }
 
     @Override

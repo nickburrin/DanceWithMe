@@ -20,10 +20,10 @@ import com.parse.SignUpCallback;
 
 
 import java.util.Arrays;
-import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
+import seniordesign.com.dancewithme.fragments.VenueFragment;
 import seniordesign.com.dancewithme.pojos.Matches;
 
 
@@ -260,7 +260,7 @@ public class RegisterActivity extends ActionBarActivity {
         Toast.makeText(getApplicationContext(), "Your account has been created successfully. We will direct you to the Select a Venue page.",
                 Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, VenueActivity.class);
+        Intent intent = new Intent(this, VenueFragment.class);
         startActivity(intent);
     }
 }

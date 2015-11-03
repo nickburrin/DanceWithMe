@@ -6,44 +6,41 @@
     android:orientation="vertical"
     android:layout_gravity="center_horizontal"
     android:background="@color/transparent"
-    android:weightSum="100">
+    android:weightSum="100"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:layout_weight="80"
-        android:layout_marginTop="10dp"
-        android:padding="5dp">
+        android:layout_weight="80">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_margin="0dp"
-            android:padding="0dp">
+            android:background="@color/dwm_blue">
 
             <TextView
                 android:id="@+id/nameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/dwm_blue"
-                android:layout_gravity="right"
-                android:text="New Text"
+                android:layout_gravity="left"
+                android:text="First Name"
                 android:textSize="28sp"
-                android:textColor="@color/white"
-                android:layout_marginTop="0dp"/>
+                android:textColor="@color/white"/>
 
             <TextView
                 android:id="@+id/skillText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/dwm_blue"
                 android:gravity="right"
-                android:text="New Text"
+                android:text="Skill"
                 android:textSize="28sp"
-                android:textColor="@color/white"
-                />
+                android:textColor="@color/white" />
         </LinearLayout>
 
 
@@ -53,7 +50,6 @@
             android:layout_height="400dp"
             android:scaleType="centerCrop"
             android:background="@color/dwm_blue"
-            android:padding="5dp"
             android:paddingRight="10dp"
             android:paddingLeft="10dp"
             android:src="@drawable/android_robot" />

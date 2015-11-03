@@ -19,7 +19,7 @@ import seniordesign.com.dancewithme.utils.Logger;
 
 
 public class LoginActivity extends Activity {
-    private static final String TAG = "Touba";
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     private Button signUpButton;
     private Button loginButton;
@@ -39,7 +39,7 @@ public class LoginActivity extends Activity {
         if(ParseUser.getCurrentUser() != null){
             startService(serviceIntent);
             startActivity(new Intent(this, HomeActivity.class));
-            //startActivity(new Intent(this, VenueActivity.class));   // temp for Nick
+            //startActivity(new Intent(this, VenueFragment.class));   // temp for Nick
         }
         */
 

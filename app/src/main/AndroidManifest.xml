@@ -94,7 +94,7 @@
             android:label="@string/title_activity_create_an_account" >
         </activity>
         <activity
-            android:name=".activities.VenueActivity"
+            android:name=".fragments.VenueFragment"
             android:label="@string/title_activity_select_avenue" >
         </activity>
         <activity

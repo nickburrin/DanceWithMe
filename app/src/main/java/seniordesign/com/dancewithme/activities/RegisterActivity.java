@@ -253,14 +253,4 @@ public class RegisterActivity extends ActionBarActivity {
 
         return newUser;
     }
-
-
-    public void displaySelectAVenue(View view)
-    {
-        Toast.makeText(getApplicationContext(), "Your account has been created successfully. We will direct you to the Select a Venue page.",
-                Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(this, VenueFragment.class);
-        startActivity(intent);
-    }
 }

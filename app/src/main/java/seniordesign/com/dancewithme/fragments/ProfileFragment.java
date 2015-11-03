@@ -148,8 +148,6 @@ public class ProfileFragment extends HomeTabFragment {
         initFragment();
     }
 
-
-
     private void getUser() {
         if(ParseUser.getCurrentUser() != null) {
             ParseFile profilePic = (ParseFile) ParseUser.getCurrentUser().get("ProfilePicture");
@@ -170,6 +168,8 @@ public class ProfileFragment extends HomeTabFragment {
 
     private void initFragment() {
         ArrayList<Object> userStyles = new ArrayList();
+
+        usernameView.setText(ParseUser.getCurrentUser().getString("first_name") + " " + ParseUser.getCurrentUser().getString("last_name"));
 
         Object ds = null;
         for(String style: STYLE_LIST){

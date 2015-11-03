@@ -41,8 +41,8 @@ public class Dancehall extends ParseObject {
     }
 
     public void addAttendee(ParseUser p){
-        getAttendees().add(p);
-        this.saveInBackground();
+        addUnique("attendees", p);
+        saveInBackground();
     }
 
     public String getAddress(){

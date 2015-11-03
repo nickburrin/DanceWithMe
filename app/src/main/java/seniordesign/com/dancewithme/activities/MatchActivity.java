@@ -62,16 +62,11 @@ public class MatchActivity extends Activity {
         if((venueId = getIntent().getExtras().getString("venueId")) != null){
             ParseQuery<Dancehall> query = ParseQuery.getQuery("Dancehall");
             query.whereEqualTo("objectId", venueId);
-            query.getFirstInBackground(new GetCallback<Dancehall>() {
-                @Override
-                public void done(Dancehall dancehall, ParseException e) {
-                    if(e != null){
-                        venue = dancehall;
-                    } else{
-                        Logger.d(TAG, e.getMessage());
-                    }
-                }
-            });
+            try {
+                venue = query.getFirst();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         } else{
             Logger.d(TAG, "ERROR: Could not retrieve venueId from extras");
         }
@@ -106,16 +101,26 @@ public class MatchActivity extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        if(ParseUser.getCurrentUser().get(venue.getStyle()) != null){
-            setConversationsList();
+
+        //
+        if(setConversationsList() == true){
             getNextUser();
             fillPage();
         } else{
-            Toast.makeText(getApplicationContext(), "You need to create a dance style for this event", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "It looks like you've seen everyone attending, come back later!", Toast.LENGTH_LONG).show();
+
+            try {
+                // Wait half a second before exiting
+                Thread.sleep(500);
+            } catch(InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+
+            finish();
         }
     }
 
-    private void setConversationsList() {
+    private boolean setConversationsList() {
         /*
             This is good, but I think we can optimize it with a few things:
                 2) ****** DONE ******
@@ -136,12 +141,18 @@ public class MatchActivity extends Activity {
 
         // Get all Users of opposite sex that are not me
 
-        // Remove Dislikes and Likes from this group
+        // Remove this User, Dislikes, and Likes from this group
         ArrayList<ParseUser> attendees = new ArrayList<>(venue.getAttendees());
-        attendees.removeAll(ParseUser.getCurrentUser().getList("Dislikes"));
-        attendees.removeAll(ParseUser.getCurrentUser().getList("Likes"));
+        attendees.remove(ParseUser.getCurrentUser());
+        attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Dislikes"));
+        attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Likes"));
+
+        if(attendees.size() == 0){
+            return false;
+        }
 
         namesQueue = sortUsers(attendees);
+        return true;
     }
 
     private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
@@ -198,7 +209,6 @@ public class MatchActivity extends Activity {
         }
 
         return temp;
-
     }
 
     private void acceptButton() {

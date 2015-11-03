@@ -26,10 +26,10 @@ import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.MatchActivity;
 import seniordesign.com.dancewithme.adapters.DancehallListAdapter;
 import seniordesign.com.dancewithme.pojos.Dancehall;
+import seniordesign.com.dancewithme.utils.Logger;
 
 public class VenueFragment extends HomeTabFragment implements LocationListener{
     private static final String TAG = VenueFragment.class.getSimpleName();
-    private final double METERS_TO_MILES = 0.00062137;
     private String[] DANCE_STYLES = new String[]{"Country", "Salsa", "Tango"};
 
     private ArrayList<ParseObject> venues;
@@ -49,8 +49,7 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_venue, container, false);
         venue_list = (ListView) view.findViewById(R.id.lv_dancehalls);
@@ -61,11 +60,11 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
     @Override
     public void onResume() {
         super.onResume();
+        currentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         initListView();
     }
 
     private void initListView() {
-
         // What dance styles does the User have?
         ArrayList<String> userStyles = new ArrayList<>();
         for(int i = 0; i < DANCE_STYLES.length; i++){
@@ -75,6 +74,7 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
         }
 
         // Find all Dancehalls of the User's dance styles
+        // TODO: need to refine this for Dancehalls with multiple styles
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Dancehall");
         query.whereContainedIn("style", userStyles);
         try {
@@ -83,7 +83,7 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
             e.printStackTrace();
         }
 
-        venue_list.setAdapter(new DancehallListAdapter(getActivity(), venues));
+        venue_list.setAdapter(new DancehallListAdapter(getActivity(), venues, currentLocation));
         venue_list.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,13 +92,9 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
                     // If clicked on dancehall, go to Matching
                     // Get dancehall obj
                     Dancehall venue = (Dancehall) item;
-                    Log.d(TAG, "Clicked on dancehall:" + venue.getId());
-/*
-                    Location venueLoc = new Location(LocationManager.GPS_PROVIDER);
-                    venueLoc.setLatitude(venue.getLocation().getLatitude());
-                    venueLoc.setLongitude(venue.getLocation().getLongitude());
-                    Log.d(TAG, "Distance is:" + venueLoc.distanceTo(currentLocation)*METERS_TO_MILES);
-*/
+                    venue.addAttendee(ParseUser.getCurrentUser());
+                    Log.d(TAG, "Added User to dancehall: " + venue.getId());
+
                     Intent i = new Intent(getActivity().getApplicationContext(), MatchActivity.class);
                     i.putExtra("venueId", venue.getObjectId());  // Send objectId to the DanceStyleActivity
                     startActivity(i);
@@ -129,17 +125,17 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
 
     @Override
     public void onProviderDisabled(String provider) {
-        Log.d("Latitude", "disable");
+        Logger.d("Latitude", "disable");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        Log.d("Latitude", "enable");
+        Logger.d("Latitude", "enable");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Log.d("Latitude","status");
+        Logger.d("Latitude","status");
     }
 
 }

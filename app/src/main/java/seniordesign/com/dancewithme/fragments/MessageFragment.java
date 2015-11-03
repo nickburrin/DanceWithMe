@@ -59,6 +59,11 @@ public class MessageFragment extends HomeTabFragment {
         names = new ArrayList<String>();
 
         for(ParseUser i: userMatches) {
+            try {
+                i.fetchIfNeeded();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             names.add(i.getEmail());
 //            ParseQuery<ParseUser> query = ParseUser.getQuery();
 //            query.whereEqualTo("username", myMatchesNames.get(i));

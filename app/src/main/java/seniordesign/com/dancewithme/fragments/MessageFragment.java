@@ -44,7 +44,7 @@ public class MessageFragment extends HomeTabFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_message, container, false);
-        showSpinner();
+        //showSpinner();
         return view;
     }
 
@@ -59,7 +59,7 @@ public class MessageFragment extends HomeTabFragment {
         names = new ArrayList<String>();
 
         for(ParseUser i: userMatches) {
-            names.add(i.getEmail());
+            names.add((String) i.get("first_name"));
 //            ParseQuery<ParseUser> query = ParseUser.getQuery();
 //            query.whereEqualTo("username", myMatchesNames.get(i));
 //            query.findInBackground(new FindCallback<ParseUser>() {
@@ -88,7 +88,7 @@ public class MessageFragment extends HomeTabFragment {
     //  public void openConversation(ArrayList<String> names, int pos) {
     public void openConversation(int pos) {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("username", names.get(pos));
+        query.whereEqualTo("first_name", names.get(pos));
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> user, com.parse.ParseException e) {
                 if (e == null) {

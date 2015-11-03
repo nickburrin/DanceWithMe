@@ -19,8 +19,9 @@
             android:id="@+id/login_form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="30dp"
-            android:orientation="vertical">
+            android:layout_margin="20dp"
+            android:orientation="vertical"
+            android:paddingTop="40dp">
 
             <ImageView
                 android:id="@+id/dancewithme"
@@ -68,7 +69,7 @@
                 <EditText
                     android:id="@+id/loginPassword"
                     style="@style/LoginEditText"
-                    android:hint="@string/prompt_password"
+                    android:hint="Password"
                     android:inputType="textPassword"
                     android:imeOptions="actionDone"/>
             </LinearLayout>
@@ -76,11 +77,13 @@
             <Button android:id="@+id/signupButton"
                 style="@style/ButtonTransparent"
                 android:text="@string/action_register"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:padding="20dp"/>
 
             <Button android:id="@+id/loginButton"
                 style="@style/button_confirm"
                 android:text="@string/action_sign_in"
+                android:textSize="20sp"
                 android:layout_marginTop="16dp"/>
 
         </LinearLayout>

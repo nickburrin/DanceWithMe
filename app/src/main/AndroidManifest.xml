@@ -65,7 +65,8 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -77,7 +78,8 @@
 
         <activity
             android:name=".activities.MessagingActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
 
         <activity
@@ -91,7 +93,8 @@
 
         <activity
             android:name=".activities.RegisterActivity"
-            android:label="@string/title_activity_create_an_account" >
+            android:label="@string/title_activity_create_an_account"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
         <activity
             android:name=".activities.VenueActivity"
@@ -113,7 +116,8 @@
 
         <activity
             android:name=".activities.DanceStyleActivity"
-            android:label="@string/title_activity_dancestyle" >
+            android:label="@string/title_activity_dancestyle"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
 
     </application>

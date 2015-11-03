@@ -65,20 +65,22 @@ public class EditUserActivity extends Activity{
     }
 
     private void updateUser() {
-        String email = ((EditText) findViewById(R.id.et_email)).getText().toString();
-        String firstName = ((EditText) findViewById(R.id.et_first_name)).getText().toString();
-        String lastName = ((EditText) findViewById(R.id.et_last_name)).getText().toString();
+        String email = mEmailView.getText().toString();
+        String firstName = mFirstName.getText().toString();
+        String lastName = mLastName.getText().toString();
 
         if(email.isEmpty() || firstName.isEmpty() || lastName.isEmpty()){
             Toast.makeText(this.getApplicationContext(), "Please complete all fields", Toast.LENGTH_SHORT).show();
-        } else if(isEmailValid(email)){
+        } else if(isEmailValid(email) == false){
             Toast.makeText(this.getApplicationContext(), "Enter a valid email", Toast.LENGTH_SHORT).show();
         } else {
-            //Create the new account
+            // Modify account information
             ParseUser.getCurrentUser().setEmail(email);
+            ParseUser.getCurrentUser().put("username", email);
             ParseUser.getCurrentUser().put("first_name", firstName);
             ParseUser.getCurrentUser().put("last_name", lastName);
             ParseUser.getCurrentUser().saveInBackground();
+            finish();
         }
     }
 

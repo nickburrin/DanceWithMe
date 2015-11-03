@@ -59,7 +59,14 @@ public class MessageFragment extends HomeTabFragment {
         names = new ArrayList<String>();
 
         for(ParseUser i: userMatches) {
+            try {
+                i.fetchIfNeeded();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
             names.add((String) i.get("first_name"));
+
 //            ParseQuery<ParseUser> query = ParseUser.getQuery();
 //            query.whereEqualTo("username", myMatchesNames.get(i));
 //            query.findInBackground(new FindCallback<ParseUser>() {

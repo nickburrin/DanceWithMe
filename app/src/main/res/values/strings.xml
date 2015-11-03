@@ -96,5 +96,6 @@
     <string name="prompt_preferences">Partner Skill Level</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_dancestyle">DanceStyleActivity</string>
+    <string name="title_activity_match">MatchActivity</string>
 </resources>
 

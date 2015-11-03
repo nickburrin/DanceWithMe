@@ -74,12 +74,19 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".activities.MessageService" />
+        <activity
+            android:name=".activities.ForgotYourPassword"
+            android:label="@string/title_activity_forgot_your_password" >
+        </activity>
 
         <activity
-            android:name=".activities.MessagingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:name=".activities.RegisterActivity"
+            android:label="@string/title_activity_create_an_account" >
+        </activity>
+
+        <activity
+            android:name=".activities.HomeActivity"
+            android:label="@string/title_activity_home" >
         </activity>
 
         <activity
@@ -87,26 +94,14 @@
             android:screenOrientation="portrait" >
         </activity>
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <activity
+            android:name=".activities.DanceStyleActivity"
+            android:label="@string/title_activity_dancestyle" >
+        </activity>
 
         <activity
-            android:name=".activities.RegisterActivity"
-            android:label="@string/title_activity_create_an_account"
-            android:theme="@android:style/Theme.NoTitleBar">
-        </activity>
-        <activity
-            android:name=".activities.VenueActivity"
-            android:label="@string/title_activity_select_avenue" >
-        </activity>
-        <activity
-            android:name=".activities.ForgotYourPassword"
-            android:label="@string/title_activity_forgot_your_password" >
-        </activity>
-        <activity
-            android:name=".activities.HomeActivity"
-            android:label="@string/title_activity_home" >
+            android:name=".activities.MatchActivity"
+            android:label="@string/title_activity_match" >
         </activity>
 
         <activity
@@ -115,10 +110,15 @@
         </activity>
 
         <activity
-            android:name=".activities.DanceStyleActivity"
-            android:label="@string/title_activity_dancestyle"
-            android:theme="@android:style/Theme.NoTitleBar">
+            android:name=".activities.MessagingActivity"
+            android:screenOrientation="portrait" >
         </activity>
+
+        <service android:name=".activities.MessageService" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
     </application>
 

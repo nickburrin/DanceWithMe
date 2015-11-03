@@ -31,7 +31,8 @@
                 android:layout_gravity="left"
                 android:text="First Name"
                 android:textSize="28sp"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:paddingLeft="8dp"/>
 
             <TextView
                 android:id="@+id/skillText"
@@ -40,7 +41,8 @@
                 android:gravity="right"
                 android:text="Skill"
                 android:textSize="28sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:paddingRight="8dp"/>
         </LinearLayout>
 
 
@@ -72,6 +74,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="50"
             android:src="@drawable/x4"
+            android:paddingBottom="5dp"
             />
 
         <ImageButton
@@ -82,6 +85,7 @@
             android:layout_weight="50"
             android:background="@color/transparent"
             android:src="@drawable/rsz_dancewithme2"
+            android:paddingBottom="5dp"
             />
 
     </LinearLayout>

@@ -101,7 +101,8 @@
 
         <activity
             android:name=".activities.MatchActivity"
-            android:label="@string/title_activity_match" >
+            android:label="@string/title_activity_match"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
 
         <activity
@@ -111,7 +112,8 @@
 
         <activity
             android:name=".activities.MessagingActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
 
         <service android:name=".activities.MessageService" />

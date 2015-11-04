@@ -59,7 +59,14 @@ public class MessageFragment extends HomeTabFragment {
         names = new ArrayList<String>();
 
         for(ParseUser i: userMatches) {
-            names.add((String) i.get("first_name"));
+            try {
+                i.fetchIfNeeded();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            names.add(i.getString("first_name"));
+
 //            ParseQuery<ParseUser> query = ParseUser.getQuery();
 //            query.whereEqualTo("username", myMatchesNames.get(i));
 //            query.findInBackground(new FindCallback<ParseUser>() {
@@ -96,9 +103,7 @@ public class MessageFragment extends HomeTabFragment {
                     intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(activity.getApplicationContext(),
-                            "Error finding that user",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity.getApplicationContext(), "Error finding that user", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -129,7 +134,6 @@ public class MessageFragment extends HomeTabFragment {
     public void onResume() {
         super.onResume();
         setConversationsList();
-
     }
 
     @Override

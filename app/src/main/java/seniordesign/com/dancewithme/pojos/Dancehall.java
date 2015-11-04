@@ -3,6 +3,7 @@ package seniordesign.com.dancewithme.pojos;
 import com.parse.ParseClassName;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -22,12 +23,26 @@ public class Dancehall extends ParseObject {
         return getString("Venue");
     }
 
+    public String getStyle(){
+        return getString("style");
+    }
+
     public ParseGeoPoint getGeoPoint() {
         return getParseGeoPoint("latlong");
     }
 
-    public ArrayList<Event> getEvents() {
-        return (ArrayList<Event>) get("events");
+    public ArrayList<ParseUser> getAttendees(){
+        return (ArrayList<ParseUser>) get("attendees");
+    }
+
+    public void setAttendees(ArrayList<ParseUser> list){
+        put("attendees", list);
+        saveInBackground();
+    }
+
+    public void addAttendee(ParseUser p){
+        addUnique("attendees", p);
+        saveInBackground();
     }
 
     public String getAddress(){

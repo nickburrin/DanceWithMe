@@ -2,6 +2,9 @@ package seniordesign.com.dancewithme.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,8 @@ import android.widget.TextView;
 
 import com.parse.ParseException;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import seniordesign.com.dancewithme.R;
@@ -20,20 +25,23 @@ import seniordesign.com.dancewithme.pojos.Dancehall;
  */
 public class DancehallListAdapter extends ArrayAdapter<java.lang.Object> {
     private static final String TAG = DancehallListAdapter.class.getSimpleName();
+    private final double METERS_TO_MILES = 0.00062137;
 
     private ArrayList<java.lang.Object> dancehalls;
     Activity activity;
+    Location userLocation;
 
     static class ViewHolder {
-        TextView dancehall;
-        TextView address;
+        TextView dancehallAndStyle;
+        TextView distanceAndAttendees;
     }
 
 
-    public DancehallListAdapter(Activity context, ArrayList items) {
+    public DancehallListAdapter(Activity context, ArrayList items, Location userLoc) {
         super(context, 0,  items);
         this.activity = context;
         this.dancehalls = items;
+        this.userLocation = userLoc;
     }
 
     @Override
@@ -49,8 +57,8 @@ public class DancehallListAdapter extends ArrayAdapter<java.lang.Object> {
                 convertView = inflater.inflate(R.layout.list_item_generic, parent, false);
 
                 // list item views
-                holder.dancehall = (TextView) convertView.findViewById(R.id.tv_title);
-                holder.address = (TextView) convertView.findViewById(R.id.tv_description);
+                holder.dancehallAndStyle = (TextView) convertView.findViewById(R.id.tv_title);
+                holder.distanceAndAttendees = (TextView) convertView.findViewById(R.id.tv_description);
             } else {
                 // Some other type of view
             }
@@ -70,8 +78,21 @@ public class DancehallListAdapter extends ArrayAdapter<java.lang.Object> {
                 e.printStackTrace();
             }
 
-            holder.dancehall.setText(venue.getName());
-            holder.address.setText(venue.getAddress());
+
+            // This will tell you how far away a dance hall is
+            Location venueLoc = new Location(LocationManager.GPS_PROVIDER);
+            venueLoc.setLatitude(venue.getGeoPoint().getLatitude());
+            venueLoc.setLongitude(venue.getGeoPoint().getLongitude());
+
+            String distance = "1.0";
+            if(userLocation != null){
+                NumberFormat formatter = new DecimalFormat("#0.0");
+                distance = formatter.format(venueLoc.distanceTo(userLocation) * METERS_TO_MILES);
+            }
+
+            holder.dancehallAndStyle.setText(venue.getName() + "- " + venue.getStyle());
+            holder.distanceAndAttendees.setText(distance + "mi, Attendees: "
+                    + venue.getAttendees().size());
         }
 
         return convertView;

@@ -126,7 +126,7 @@ public class ProfileFragment extends HomeTabFragment {
             @Override
             public void onClick(View view) {
                 activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
-                ParseUser.logOut();
+                ParseUser.logOutInBackground();
                 Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }
@@ -148,8 +148,6 @@ public class ProfileFragment extends HomeTabFragment {
         initFragment();
     }
 
-
-
     private void getUser() {
         if(ParseUser.getCurrentUser() != null) {
             ParseFile profilePic = (ParseFile) ParseUser.getCurrentUser().get("ProfilePicture");
@@ -170,6 +168,8 @@ public class ProfileFragment extends HomeTabFragment {
 
     private void initFragment() {
         ArrayList<Object> userStyles = new ArrayList();
+
+        usernameView.setText(ParseUser.getCurrentUser().getString("first_name") + " " + ParseUser.getCurrentUser().getString("last_name"));
 
         Object ds = null;
         for(String style: STYLE_LIST){
@@ -210,29 +210,6 @@ public class ProfileFragment extends HomeTabFragment {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
         startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
-    }
-
-    //@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        activity.getMenuInflater().inflate(R.menu.menu_profile_management, menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

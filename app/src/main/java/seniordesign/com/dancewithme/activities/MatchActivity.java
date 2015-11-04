@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
@@ -102,11 +101,10 @@ public class MatchActivity extends Activity {
     public void onResume() {
         super.onResume();
 
-        //
-        if(setConversationsList() == true){
-            getNextUser();
-            fillPage();
-        } else{
+        setConversationsList();
+        getNextUser();
+
+        if(fillPage() == false){
             Toast.makeText(this, "It looks like you've seen everyone attending, come back later!", Toast.LENGTH_LONG).show();
 
             try {
@@ -120,7 +118,7 @@ public class MatchActivity extends Activity {
         }
     }
 
-    private boolean setConversationsList() {
+    private void setConversationsList() {
         /*
             This is good, but I think we can optimize it with a few things:
                 2) ****** DONE ******
@@ -147,73 +145,119 @@ public class MatchActivity extends Activity {
         attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Dislikes"));
         attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Likes"));
 
-        if(attendees.size() == 0){
-            return false;
-        }
+//        if(attendees.size() == 0){
+//            return false;
+//        }
 
         namesQueue = sortUsers(attendees);
-        return true;
+//        return true;
     }
 
     private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
         LinkedList<ParseUser> temp = new LinkedList<>();
 
-        DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(venue.getStyle());
-        String myGender = ParseUser.getCurrentUser().getString("gender");
+        if(attendees.size() > 0) {
+            DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(venue.getStyle());
+            String myGender = ParseUser.getCurrentUser().getString("gender");
 
-        if(style.getPreferences().isEmpty()){
-            // Current User has no preferences, sort according to predefined requirements
-            if(style.getSkill().equals("Beginner")){
-                // Current user is a Beginner, sort based on following order: Beg, Int, Exp
-                for(String skill: BEGINNER_MAPPING) {
-                    for (ParseUser user : attendees) {
-                        // Only add this User if their skill matches and their of the opposite gender
-                        if(((DanceStyle)user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)){
-                            temp.add(user);
+            if (style.getPreferences().isEmpty()) {
+                // Current User has no preferences, sort according to predefined requirements
+                if (style.getSkill().equals("Beginner")) {
+                    // Current user is a Beginner, sort based on following order: Beg, Int, Exp
+                    for (String skill : BEGINNER_MAPPING) {
+                        for (ParseUser user : attendees) {
+                            // Only add this User if their skill matches and their of the opposite gender
+                            if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
+                                temp.add(user);
+                            }
                         }
                     }
-                }
-            } else if(style.getSkill().equals("Intermediate")){
-                // Current user is a Intermediate, sort based on following order: Int, Exp, Beg
-                for(String skill: INTERMEDIATE_MAPPING) {
-                    for (ParseUser user : attendees) {
-                        // Only add this User if their skill matches and their of the opposite gender
-                        if(((DanceStyle)user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)){
-                            temp.add(user);
+                } else if (style.getSkill().equals("Intermediate")) {
+                    // Current user is a Intermediate, sort based on following order: Int, Exp, Beg
+                    for (String skill : INTERMEDIATE_MAPPING) {
+                        for (ParseUser user : attendees) {
+                            // Only add this User if their skill matches and their of the opposite gender
+                            if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
+                                temp.add(user);
+                            }
+                        }
+                    }
+                } else {
+                    // Current user is an Expert, sort based on following order: Exp, Int, Beg
+                    for (String skill : EXPERT_MAPPING) {
+                        for (ParseUser user : attendees) {
+                            // Only add this User if their skill matches and their of the opposite gender
+                            if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
+                                temp.add(user);
+                            }
                         }
                     }
                 }
             } else {
-                // Current user is an Expert, sort based on following order: Exp, Int, Beg
-                for(String skill: EXPERT_MAPPING) {
+                // Current User has preferences, sort according to their preferences
+                ArrayList<String> prefs = style.getPreferences();
+
+                for (String skill : prefs) {
                     for (ParseUser user : attendees) {
                         // Only add this User if their skill matches and their of the opposite gender
-                        if(((DanceStyle)user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)){
-                            temp.add(user);
-                        }
-                    }
-                }
-            }
-        } else {
-            // Current User has preferences, sort according to their preferences
-            ArrayList<String> prefs = style.getPreferences();
 
-            for(String skill: prefs){
-                for(ParseUser user: attendees){
-                    // Only add this User if their skill matches and their of the opposite gender
-
-                    try {
-                        if (((DanceStyle) user.fetchIfNeeded().get(venue.getStyle())).getSkill().equals(skill) && !user.fetchIfNeeded().getString("gender").equals(myGender)) {
-                            temp.add(user);
+                        try {
+                            if (((DanceStyle) user.fetchIfNeeded().get(venue.getStyle())).getSkill().equals(skill) && !user.fetchIfNeeded().getString("gender").equals(myGender)) {
+                                temp.add(user);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                    }catch (ParseException e) {
-                        e.printStackTrace();
                     }
                 }
             }
         }
 
         return temp;
+    }
+
+    private void getNextUser(){
+        if(namesQueue.size() > 0){
+            matchUser = namesQueue.remove();
+        }
+//        if(attendees.size() > 0){
+//            matchUser = attendees.get(0);
+//            attendees.remove(0);
+//        }
+    }
+
+    private boolean fillPage() {
+        if(matchUser != null){
+            try {
+                ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
+
+                if (profilePic != null) {
+                    Bitmap bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
+                    profPic.setImageBitmap(bm);
+                }
+                else{
+                    if(matchUser.getString("gender").equals("Male")){
+                        profPic.setImageDrawable(getResources().getDrawable(R.drawable.blank_avatar_male));
+                    } else{
+                        profPic.setImageDrawable(getResources().getDrawable(R.drawable.blank_avatar_female));
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            mNameText.setText(matchUser.getString("first_name"));
+            mSkillText.setText(((DanceStyle) matchUser.get(venue.getStyle())).getSkill());
+
+            return true;
+        }
+        else {
+            profPic.setImageDrawable(getResources().getDrawable(R.drawable.blank_avatar_male));
+            mNameText.setText(null);
+            mSkillText.setText(null);
+
+            return false;
+        }
     }
 
     private void acceptButton() {
@@ -293,35 +337,5 @@ public class MatchActivity extends Activity {
         // Grab the user you just denied and add it to Dislikes
         ParseUser.getCurrentUser().addUnique("Dislikes", matchUser);
         ParseUser.getCurrentUser().saveInBackground();
-    }
-
-    private void getNextUser(){
-        if(namesQueue.size() > 0){
-            matchUser = namesQueue.remove();
-        }
-//        if(attendees.size() > 0){
-//            matchUser = attendees.get(0);
-//            attendees.remove(0);
-//        }
-    }
-
-    private void fillPage() {
-        try {
-            ParseFile profilePic = (ParseFile) matchUser.get("ProfilePicture");
-
-            if (profilePic != null) {
-                Bitmap bm = BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length);
-                profPic.setImageBitmap(bm);
-            }
-            else{
-                profPic.setImageDrawable(getResources().getDrawable(R.drawable.android_robot));
-            }
-        } catch (Exception e) {
-            //Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
-        mNameText.setText(matchUser.getString("first_name"));
-        // DanceStyle matchUserDanceStyle = new DanceStyle();
-        mSkillText.setText(((DanceStyle) matchUser.get(venue.getStyle())).getSkill());
     }
 }

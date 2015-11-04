@@ -134,7 +134,6 @@ public class MessageFragment extends HomeTabFragment {
     public void onResume() {
         super.onResume();
         setConversationsList();
-
     }
 
     @Override

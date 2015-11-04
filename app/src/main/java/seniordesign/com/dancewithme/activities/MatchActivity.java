@@ -82,7 +82,18 @@ public class MatchActivity extends Activity {
                 Logger.d(TAG, "Accept Button Clicked");
                 acceptButton();
                 getNextUser();
-                fillPage();
+                if(fillPage() == false){
+                    Toast.makeText(getApplicationContext(), "It looks like you've seen everyone attending, come back later!", Toast.LENGTH_LONG).show();
+
+                    try {
+                        // Wait half a second before exiting
+                        Thread.sleep(500);
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    finish();
+                }
             }
         });
 
@@ -92,7 +103,18 @@ public class MatchActivity extends Activity {
                 Logger.d(TAG, "Deny Button Clicked");
                 denyButton();
                 getNextUser();
-                fillPage();
+                if(fillPage() == false){
+                    Toast.makeText(getApplicationContext(), "It looks like you've seen everyone attending, come back later!", Toast.LENGTH_LONG).show();
+
+                    try {
+                        // Wait half a second before exiting
+                        Thread.sleep(500);
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+
+                    finish();
+                }
             }
         });
     }
@@ -229,6 +251,8 @@ public class MatchActivity extends Activity {
     private void getNextUser(){
         if(namesQueue.size() > 0){
             matchUser = namesQueue.remove();
+        } else{
+            matchUser = null;
         }
 //        if(attendees.size() > 0){
 //            matchUser = attendees.get(0);

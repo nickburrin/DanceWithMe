@@ -86,21 +86,21 @@ public class HomeActivity extends FragmentActivity {
                     public void onPageSelected(int position) {
                         // When swiping between pages, select the
                         // corresponding tab.
-//                        if (position == 0){
-//                            profileTab.setIcon(R.drawable.settings);
-//                            venueTab.setIcon(R.drawable.match);
-//                            messageTab.setIcon(R.drawable.message);
-//                        }
-//                        else if (position == 1){
-//                            profileTab.setIcon(R.drawable.tab_account);
-//                            venueTab.setIcon(R.drawable.tab_bets);
-//                            messageTab.setIcon(R.drawable.tab_games);
-//                        }
-//                        else if (position == 2){
-//                            profileTab.setIcon(R.drawable.settings);
-//                            venueTab.setIcon(R.drawable.match);
-//                            messageTab.setIcon(R.drawable.message);
-//                        }
+                        if (position == 0){
+                            profileTab.setIcon(R.drawable.tab_account_sel);
+                            venueTab.setIcon(R.drawable.tab_match);
+                            messageTab.setIcon(R.drawable.tab_message);
+                        }
+                        else if (position == 1){
+                            profileTab.setIcon(R.drawable.tab_account_sel);
+                            venueTab.setIcon(R.drawable.tab_match);
+                            messageTab.setIcon(R.drawable.tab_message);
+                        }
+                        else if (position == 2){
+                            profileTab.setIcon(R.drawable.tab_account_sel);
+                            venueTab.setIcon(R.drawable.tab_match);
+                            messageTab.setIcon(R.drawable.tab_message);
+                        }
                         getActionBar().setSelectedNavigationItem(position);
                     }
                 });

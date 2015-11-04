@@ -90,7 +90,7 @@ public class DancehallListAdapter extends ArrayAdapter<java.lang.Object> {
                 distance = formatter.format(venueLoc.distanceTo(userLocation) * METERS_TO_MILES);
             }
 
-            holder.dancehallAndStyle.setText(venue.getName() + ", " + venue.getStyle());
+            holder.dancehallAndStyle.setText(venue.getName() + "- " + venue.getStyle());
             holder.distanceAndAttendees.setText(distance + "mi, Attendees: "
                     + venue.getAttendees().size());
         }

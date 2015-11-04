@@ -6,21 +6,21 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.MatchActivity;
@@ -28,11 +28,12 @@ import seniordesign.com.dancewithme.adapters.DancehallListAdapter;
 import seniordesign.com.dancewithme.pojos.Dancehall;
 import seniordesign.com.dancewithme.utils.Logger;
 
+
 public class VenueFragment extends HomeTabFragment implements LocationListener{
     private static final String TAG = VenueFragment.class.getSimpleName();
     private String[] DANCE_STYLES = new String[]{"Country", "Salsa", "Tango"};
 
-    private ArrayList<ParseObject> venues;
+    private ArrayList<Dancehall> venues;
     private ListView venue_list;
     private LocationManager mLocationManager;
     private Location currentLocation;
@@ -73,14 +74,30 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
             }
         }
 
+        if(userStyles.size() == 0){
+            Toast.makeText(getActivity().getApplicationContext(), "You must specify dance styles before you can match", Toast.LENGTH_LONG).show();
+        }
+
         // Find all Dancehalls of the User's dance styles
         // TODO: need to refine this for Dancehalls with multiple styles
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Dancehall");
-        query.whereContainedIn("style", userStyles);
+        ArrayList<Dancehall> temp = null;
+
+        ParseQuery<Dancehall> query = ParseQuery.getQuery("Dancehall");
+        query.whereWithinMiles("latlong", new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()), 50.0);
         try {
-            venues = (ArrayList) query.find();
+            temp = (ArrayList) query.find();
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        venues = new ArrayList<>();
+        for(Dancehall v: temp){
+            for(String s: userStyles){
+                if(v.getStyle().contains(s)){
+                    venues.add(v);
+                    break;
+                }
+            }
         }
 
         venue_list.setAdapter(new DancehallListAdapter(getActivity(), venues, currentLocation));
@@ -101,21 +118,6 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

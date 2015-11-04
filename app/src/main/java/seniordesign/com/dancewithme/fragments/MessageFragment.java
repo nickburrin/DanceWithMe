@@ -103,9 +103,7 @@ public class MessageFragment extends HomeTabFragment {
                     intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(activity.getApplicationContext(),
-                            "Error finding that user",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity.getApplicationContext(), "Error finding that user", Toast.LENGTH_SHORT).show();
                 }
             }
         });

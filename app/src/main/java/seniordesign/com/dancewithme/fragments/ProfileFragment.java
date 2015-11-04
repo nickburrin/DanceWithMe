@@ -126,7 +126,7 @@ public class ProfileFragment extends HomeTabFragment {
             @Override
             public void onClick(View view) {
                 activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
-                ParseUser.logOut();
+                ParseUser.logOutInBackground();
                 Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }

@@ -33,7 +33,7 @@
     <application
         android:name=".activities.MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/dancewithme"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
@@ -64,7 +64,7 @@
 
         <activity
             android:name=".activities.LoginActivity"
-            android:label="DanceWithMe"
+            android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>

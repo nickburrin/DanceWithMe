@@ -137,20 +137,13 @@ public class MatchActivity extends Activity {
                     ArrayList anyways
          */
 
-        // Get all Users of opposite sex that are not me
-
         // Remove this User, Dislikes, and Likes from this group
         ArrayList<ParseUser> attendees = new ArrayList<>(venue.getAttendees());
         attendees.remove(ParseUser.getCurrentUser());
         attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Dislikes"));
         attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Likes"));
 
-//        if(attendees.size() == 0){
-//            return false;
-//        }
-
         namesQueue = sortUsers(attendees);
-//        return true;
     }
 
     private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
@@ -166,6 +159,11 @@ public class MatchActivity extends Activity {
                     // Current user is a Beginner, sort based on following order: Beg, Int, Exp
                     for (String skill : BEGINNER_MAPPING) {
                         for (ParseUser user : attendees) {
+                            try{
+                                user.fetchIfNeeded();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                             // Only add this User if their skill matches and their of the opposite gender
                             if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
                                 temp.add(user);
@@ -176,6 +174,11 @@ public class MatchActivity extends Activity {
                     // Current user is a Intermediate, sort based on following order: Int, Exp, Beg
                     for (String skill : INTERMEDIATE_MAPPING) {
                         for (ParseUser user : attendees) {
+                            try{
+                                user.fetchIfNeeded();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                             // Only add this User if their skill matches and their of the opposite gender
                             if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
                                 temp.add(user);
@@ -186,6 +189,12 @@ public class MatchActivity extends Activity {
                     // Current user is an Expert, sort based on following order: Exp, Int, Beg
                     for (String skill : EXPERT_MAPPING) {
                         for (ParseUser user : attendees) {
+                            try{
+                                user.fetchIfNeeded();
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
                             // Only add this User if their skill matches and their of the opposite gender
                             if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
                                 temp.add(user);
@@ -200,13 +209,14 @@ public class MatchActivity extends Activity {
                 for (String skill : prefs) {
                     for (ParseUser user : attendees) {
                         // Only add this User if their skill matches and their of the opposite gender
-
-                        try {
-                            if (((DanceStyle) user.fetchIfNeeded().get(venue.getStyle())).getSkill().equals(skill) && !user.fetchIfNeeded().getString("gender").equals(myGender)) {
-                                temp.add(user);
-                            }
+                        try{
+                            user.fetchIfNeeded();
                         } catch (ParseException e) {
                             e.printStackTrace();
+                        }
+
+                        if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
+                            temp.add(user);
                         }
                     }
                 }

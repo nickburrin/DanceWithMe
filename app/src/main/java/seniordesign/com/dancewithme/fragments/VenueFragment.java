@@ -66,20 +66,7 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
     }
 
     private void initListView() {
-        // What dance styles does the User have?
-        ArrayList<String> userStyles = new ArrayList<>();
-        for(int i = 0; i < DANCE_STYLES.length; i++){
-            if(ParseUser.getCurrentUser().get(DANCE_STYLES[i]) != null){
-                userStyles.add(DANCE_STYLES[i]);
-            }
-        }
-
-        if(userStyles.size() == 0){
-            Toast.makeText(getActivity().getApplicationContext(), "You must specify dance styles before you can match", Toast.LENGTH_LONG).show();
-        }
-
         // Find all Dancehalls of the User's dance styles
-        // TODO: need to refine this for Dancehalls with multiple styles
         ArrayList<Dancehall> temp = null;
 
         ParseQuery<Dancehall> query = ParseQuery.getQuery("Dancehall");
@@ -87,17 +74,20 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
         try {
             temp = (ArrayList) query.find();
         } catch (ParseException e) {
-            e.printStackTrace();
+            Toast.makeText(getActivity().getApplicationContext(), "There were not venues found with 50 miles", Toast.LENGTH_LONG).show();
+            return;
         }
 
         venues = new ArrayList<>();
         for(Dancehall v: temp){
-            for(String s: userStyles){
-                if(v.getStyle().contains(s)){
-                    venues.add(v);
-                    break;
-                }
+            if(ParseUser.getCurrentUser().get(v.getStyle()) != null){
+                venues.add(v);
             }
+        }
+
+        if(venues.size() == 0){
+            Toast.makeText(getActivity().getApplicationContext(), "You must specify dance styles before you can match", Toast.LENGTH_LONG).show();
+            return;
         }
 
         venue_list.setAdapter(new DancehallListAdapter(getActivity(), venues, currentLocation));

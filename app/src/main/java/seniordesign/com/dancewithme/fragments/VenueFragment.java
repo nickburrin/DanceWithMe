@@ -70,7 +70,7 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
         ArrayList<Dancehall> temp = null;
 
         ParseQuery<Dancehall> query = ParseQuery.getQuery("Dancehall");
-        query.whereWithinMiles("latlong", new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()), 50.0);
+        query.whereWithinMiles("latlong", new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()), 1000.0);
         try {
             temp = (ArrayList) query.find();
         } catch (ParseException e) {

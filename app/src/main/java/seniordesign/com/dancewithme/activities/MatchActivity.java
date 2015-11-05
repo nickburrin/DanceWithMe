@@ -187,8 +187,12 @@ public class MatchActivity extends Activity {
                                 e.printStackTrace();
                             }
                             // Only add this User if their skill matches and their of the opposite gender
-                            if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
-                                temp.add(user);
+                            try {
+                                if (((DanceStyle) user.fetchIfNeeded().get(venue.getStyle())).getSkill().equals(skill) && !user.fetchIfNeeded().getString("gender").equals(myGender)) {
+                                    temp.add(user);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -237,8 +241,12 @@ public class MatchActivity extends Activity {
                             e.printStackTrace();
                         }
 
-                        if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
-                            temp.add(user);
+                        try {
+                            if (((DanceStyle) user.fetchIfNeeded().get(venue.getStyle())).getSkill().equals(skill) && !user.fetchIfNeeded().getString("gender").equals(myGender)) {
+                                temp.add(user);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
                     }
                 }

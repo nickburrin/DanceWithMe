@@ -203,9 +203,7 @@ public class LoginActivity extends Activity {
                                 loginResult.getAccessToken(),
                                 new GraphRequest.GraphJSONObjectCallback() {
                                     @Override
-                                    public void onCompleted(
-                                            JSONObject object,
-                                            GraphResponse response) {
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
                                         // Application code
                                         Log.e("GraphResponse", "-------------" + response.toString());
                                         try {
@@ -244,6 +242,7 @@ public class LoginActivity extends Activity {
                     }
                 });
     }
+
     public void createAccount(){
         // Only create an account if all fields check out
         if(UIFieldsOK() == true) {
@@ -293,14 +292,10 @@ public class LoginActivity extends Activity {
 
         if (id.isEmpty()) {
             // Check if the user entered password
-
             incompleteFields = true;
         }
 
-
-
         if (email.isEmpty()) {
-
             incompleteFields = true;
         }
 
@@ -311,13 +306,11 @@ public class LoginActivity extends Activity {
             incompleteFields = true;
         }
 
-
-
         return !incompleteFields;
     }
+
     private ParseUser extractParseUser() {
         ParseUser newUser = null;
-
 
         // See if there exists an existing user with the same email
         ParseQuery<ParseUser> query = ParseUser.getQuery();
@@ -345,6 +338,7 @@ public class LoginActivity extends Activity {
 
         return newUser;
     }
+
     private void attemptLogin(){
         //boolean newUser;
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
@@ -362,11 +356,13 @@ public class LoginActivity extends Activity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
     @Override
     public void onDestroy() {
         stopService(new Intent(this, MessageService.class));

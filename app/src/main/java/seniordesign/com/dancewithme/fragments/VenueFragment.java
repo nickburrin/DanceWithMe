@@ -1,5 +1,6 @@
 package seniordesign.com.dancewithme.fragments;
 
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,7 +17,6 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -29,9 +29,9 @@ import seniordesign.com.dancewithme.pojos.Dancehall;
 import seniordesign.com.dancewithme.utils.Logger;
 
 
-public class VenueFragment extends HomeTabFragment implements LocationListener{
+public class VenueFragment extends Fragment implements LocationListener{
     private static final String TAG = VenueFragment.class.getSimpleName();
-    private String[] DANCE_STYLES = new String[]{"Country", "Salsa", "Tango"};
+    private String[] DANCE_STYLES = new String[]{"Country", "Salsa", "Tango", "Swing"};
 
     private ArrayList<Dancehall> venues;
     private ListView venue_list;
@@ -59,6 +59,18 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        currentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        initListView();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         currentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -70,11 +82,17 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
         ArrayList<Dancehall> temp = null;
 
         ParseQuery<Dancehall> query = ParseQuery.getQuery("Dancehall");
-        query.whereWithinMiles("latlong", new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()), 1000.0);
+
+        if(currentLocation != null) {
+            query.whereWithinMiles("latlong", new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()), 50.0);
+        } else {
+            query.whereNotEqualTo("objectId", null);
+        }
+
         try {
             temp = (ArrayList) query.find();
         } catch (ParseException e) {
-            Toast.makeText(getActivity().getApplicationContext(), "There were not venues found with 50 miles", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(), "There were no venues found with 50 miles", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -86,7 +104,7 @@ public class VenueFragment extends HomeTabFragment implements LocationListener{
         }
 
         if(venues.size() == 0){
-            Toast.makeText(getActivity().getApplicationContext(), "You must specify dance styles before you can match", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(), "Specify your dance styles to start matching!", Toast.LENGTH_LONG).show();
             return;
         }
 

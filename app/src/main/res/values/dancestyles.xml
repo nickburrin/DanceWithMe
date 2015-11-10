@@ -4,6 +4,7 @@
         <item>Country</item>
         <item>Tango</item>
         <item>Salsa</item>
+        <item>Swing</item>
         <!-- TODO: add more styles -->
     </string-array>
 </resources>

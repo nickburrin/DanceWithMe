@@ -80,44 +80,26 @@ public class HomeActivity extends FragmentActivity {
         mDemoCollectionPagerAdapter = new DemoCollectionPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
         mViewPager.setOnPageChangeListener(
-
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
                     public void onPageSelected(int position) {
                         // When swiping between pages, select the
                         // corresponding tab.
-                        if (position == 0){
-                            profileTab.setIcon(R.drawable.tab_account_sel);
-                            venueTab.setIcon(R.drawable.tab_match);
-                            messageTab.setIcon(R.drawable.tab_message);
-                        }
-                        else if (position == 1){
-                            profileTab.setIcon(R.drawable.tab_account_sel);
-                            venueTab.setIcon(R.drawable.tab_match);
-                            messageTab.setIcon(R.drawable.tab_message);
-                        }
-                        else if (position == 2){
-                            profileTab.setIcon(R.drawable.tab_account_sel);
-                            venueTab.setIcon(R.drawable.tab_match);
-                            messageTab.setIcon(R.drawable.tab_message);
-                        }
+                        profileTab.setIcon(R.drawable.tab_account_sel);
+                        venueTab.setIcon(R.drawable.tab_match);
+                        messageTab.setIcon(R.drawable.tab_message);
+
                         getActionBar().setSelectedNavigationItem(position);
                     }
                 });
-        new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // When swiping between pages, select the corresponding tab.
-                getActionBar().setSelectedNavigationItem(position);
-            }
-        };
-
+/*
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             if(extras.getBoolean("first_time")) {
-                mViewPager.setCurrentItem(0); // Set view page to Profile on first time login
             }
         }
+*/
+        mViewPager.setCurrentItem(1); // Set default view page to Venues
     }
 
 

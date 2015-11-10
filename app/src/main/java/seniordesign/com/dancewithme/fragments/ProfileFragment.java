@@ -1,5 +1,6 @@
 package seniordesign.com.dancewithme.fragments;
 
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,16 +11,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -52,7 +48,7 @@ import seniordesign.com.dancewithme.pojos.Dancehall;
 import seniordesign.com.dancewithme.pojos.Matches;
 
 
-public class ProfileFragment extends HomeTabFragment {
+public class ProfileFragment extends Fragment {
     private static final String TAG = ProfileFragment.class.getSimpleName();
     private final List<String> STYLE_LIST = Arrays.asList("Country", "Salsa", "Tango");
 
@@ -143,6 +139,11 @@ public class ProfileFragment extends HomeTabFragment {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+    }
+
+    @Override
      public void onResume(){
         super.onResume();
         initFragment();
@@ -202,6 +203,18 @@ public class ProfileFragment extends HomeTabFragment {
                     }
                 }
             });
+
+            /*
+            stylesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    Object item = styleListAdapter.getItem(position);
+                    if (item instanceof DanceStyle) {
+                        // Delete the dance style and refresh page
+                    }
+                }
+            });
+            */
         }
     }
 

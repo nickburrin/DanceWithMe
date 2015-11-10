@@ -1,5 +1,6 @@
 package seniordesign.com.dancewithme.fragments;
 
+import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,7 +29,7 @@ import seniordesign.com.dancewithme.activities.MessagingActivity;
 import seniordesign.com.dancewithme.pojos.Matches;
 
 
-public class MessageFragment extends HomeTabFragment {
+public class MessageFragment extends Fragment {
     private String currentUserId;
     private ArrayAdapter<String> namesArrayAdapter;
     private ArrayList<String> names;
@@ -78,7 +79,7 @@ public class MessageFragment extends HomeTabFragment {
 
         }
 
-        namesArrayAdapter = new ArrayAdapter<String>(activity.getApplicationContext(),
+        namesArrayAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
                 R.layout.user_list_item, names);
         usersListView = (ListView) view.findViewById(R.id.usersListView);
         usersListView.setAdapter(namesArrayAdapter);
@@ -99,11 +100,11 @@ public class MessageFragment extends HomeTabFragment {
         query.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> user, com.parse.ParseException e) {
                 if (e == null) {
-                    Intent intent = new Intent(activity.getApplicationContext(), MessagingActivity.class);
+                    Intent intent = new Intent(getActivity().getApplicationContext(), MessagingActivity.class);
                     intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(activity.getApplicationContext(), "Error finding that user", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Error finding that user", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -111,7 +112,7 @@ public class MessageFragment extends HomeTabFragment {
 
     //show a loading spinner while the sinch client starts
     private void showSpinner() {
-        progressDialog = new ProgressDialog(this.activity);
+        progressDialog = new ProgressDialog(getActivity());
         progressDialog.setTitle("Loading");
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
@@ -122,12 +123,12 @@ public class MessageFragment extends HomeTabFragment {
                 Boolean success = intent.getBooleanExtra("success", false);
                 progressDialog.dismiss();
                 if (!success) {
-                    Toast.makeText(activity.getApplicationContext(), "Messaging service failed to start", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Messaging service failed to start", Toast.LENGTH_LONG).show();
                 }
             }
         };
 
-        LocalBroadcastManager.getInstance(this.activity).registerReceiver(receiver, new IntentFilter("seniordesign.com.dancewithme.activities.HomeActivity"));
+        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver, new IntentFilter("seniordesign.com.dancewithme.activities.HomeActivity"));
     }
 
     @Override
@@ -167,14 +168,14 @@ public class MessageFragment extends HomeTabFragment {
 //        // Inflate the layout for this fragment
 //        View view = inflater.inflate(R.layout.fragment_message, container, false);
 //
-//        activity.bindService(new Intent(this.activity, MessageService.class), serviceConnection, 0);
+//        getActivity().bindService(new Intent(this.getActivity(), MessageService.class), serviceConnection, 0);
 //
-//        Intent intent = activity.getIntent();
+//        Intent intent = getActivity().getIntent();
 //        recipientId = intent.getStringExtra("RECIPIENT_ID");
 //        currentUserId = ParseUser.getCurrentUser().getObjectId();
 //
 //        messagesList = (ListView) view.findViewById(R.id.listMessages);
-//        messageAdapter = new MessageAdapter(this.activity);
+//        messageAdapter = new MessageAdapter(this.getActivity());
 //        messagesList.setAdapter(messageAdapter);
 //        populateMessageHistory();
 //
@@ -217,7 +218,7 @@ public class MessageFragment extends HomeTabFragment {
 //    private void sendMessage() {
 //        messageBody = messageBodyField.getText().toString();
 //        if (messageBody.isEmpty()) {
-//            Toast.makeText(this.activity, "Please enter a message", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this.getActivity(), "Please enter a message", Toast.LENGTH_LONG).show();
 //            return;
 //        }
 //
@@ -228,7 +229,7 @@ public class MessageFragment extends HomeTabFragment {
 //    @Override
 //    public void onDestroy() {
 //        messageService.removeMessageClientListener(messageClientListener);
-//        activity.unbindService(serviceConnection);
+//        getActivity().unbindService(serviceConnection);
 //        super.onDestroy();
 //    }
 //

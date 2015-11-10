@@ -18,6 +18,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.NothingSelectedSpinnerAdapter;
@@ -28,6 +29,7 @@ import seniordesign.com.dancewithme.pojos.DanceStyle;
  */
 public class DanceStyleActivity extends Activity {
     private static final String TAG = DanceStyleActivity.class.getSimpleName();    // Used for debugging
+    ArrayList<String> DANCE_STYLES = new ArrayList(Arrays.asList("Country", "Salsa", "Tango", "Swing"));
 
     Spinner mDanceStyle;
     RadioGroup mSkill;
@@ -60,9 +62,16 @@ public class DanceStyleActivity extends Activity {
         }
 
         // TODO: Need to remove option of creating dancestyles that already exist!
+        List<String> stylesUserDoesntHave = new ArrayList<>();
+        for(String s: DANCE_STYLES){
+            if(ParseUser.getCurrentUser().get(s) == null){
+                stylesUserDoesntHave.add(s);
+            }
+        }
+
         mDanceStyle = (Spinner) findViewById(R.id.spinner_dance_style);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.dancestyles_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, stylesUserDoesntHave);
+        // = ArrayAdapter.createFromResource(this, R.array.dancestyles_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mDanceStyle.setAdapter(new NothingSelectedSpinnerAdapter(adapter, R.layout.contact_spinner_row_nothing_selected, this));
 

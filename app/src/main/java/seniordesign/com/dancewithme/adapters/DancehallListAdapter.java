@@ -84,10 +84,12 @@ public class DancehallListAdapter extends ArrayAdapter<java.lang.Object> {
             venueLoc.setLatitude(venue.getGeoPoint().getLatitude());
             venueLoc.setLongitude(venue.getGeoPoint().getLongitude());
 
-            String distance = "1.0";
+            String distance;
             if(userLocation != null){
                 NumberFormat formatter = new DecimalFormat("#0.0");
                 distance = formatter.format(venueLoc.distanceTo(userLocation) * METERS_TO_MILES);
+            } else {
+                distance = "-.-";
             }
 
             holder.dancehallAndStyle.setText(venue.getName() + "- " + venue.getStyle());

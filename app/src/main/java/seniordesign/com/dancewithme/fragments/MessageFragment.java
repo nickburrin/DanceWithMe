@@ -135,6 +135,9 @@ public class MessageFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setConversationsList();
+        if(namesArrayAdapter != null){
+            namesArrayAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

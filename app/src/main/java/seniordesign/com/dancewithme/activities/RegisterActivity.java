@@ -246,6 +246,7 @@ public class RegisterActivity extends ActionBarActivity {
                 newUser.put("gender", gender);
                 newUser.put("Likes", Arrays.asList());
                 newUser.put("Dislikes", Arrays.asList());
+                newUser.put("Favorites", Arrays.asList());
             }
         } catch (com.parse.ParseException e) {
             e.printStackTrace();

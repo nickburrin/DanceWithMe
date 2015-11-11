@@ -79,6 +79,7 @@ public class VenueFragment extends Fragment implements LocationListener{
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         //if (activityReady) {
+        ParseUser.getCurrentUser().saveInBackground();
         if (getActivity() != null) {
             if (visible) {
                 initListView();

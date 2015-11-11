@@ -58,41 +58,41 @@ public class MessageFragment extends Fragment {
     }
 
     private void setConversationsList() {
-        List<ParseUser> userMatches = ((Matches) ParseUser.getCurrentUser().get("Matches")).getMatches();
-        names = new ArrayList<>();
 
-        for(ParseUser i: userMatches) {
-            try {
-                i.fetchIfNeeded();
-            } catch (ParseException e) {
-                e.printStackTrace();
+            //ParseUser.getCurrentUser().fetch();
+        try {
+            List<ParseUser> userMatches = ((Matches) ParseUser.getCurrentUser().fetch().get("Matches")).getMatches();
+            names = new ArrayList<>();
+
+            for(ParseUser i: userMatches) {
+                try {
+                    i.fetchIfNeeded();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                names.add(i.getString("first_name"));
+
+
+
             }
 
-            names.add(i.getString("first_name"));
+            // TODO: fill the adapter with Users instead of Strings
+            namesArrayAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+                    R.layout.user_list_item, names);
+            usersListView = (ListView) view.findViewById(R.id.usersListView);
+            usersListView.setAdapter(namesArrayAdapter);
 
-//            ParseQuery<ParseUser> query = ParseUser.getQuery();
-//            query.whereEqualTo("username", myMatchesNames.get(i));
-//            query.findInBackground(new FindCallback<ParseUser>() {
-//                public void done(List<ParseUser> userList, com.parse.ParseException e) {
-//                    if (e == null) {
-//                        for (int i = 0; i < userList.size(); i++) {
-//                            names.add(userList.get(i).getUsername().toString());
-//                        }
-
+            usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+                    openConversation(i);
+                }
+            });
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        // TODO: fill the adapter with Users instead of Strings
-        namesArrayAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
-                R.layout.user_list_item, names);
-        usersListView = (ListView) view.findViewById(R.id.usersListView);
-        usersListView.setAdapter(namesArrayAdapter);
-
-        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-                openConversation(i);
-            }
-        });
     }
 
     // Open a conversation with one person
@@ -145,6 +145,7 @@ public class MessageFragment extends Fragment {
         super.setMenuVisibility(visible);
   //      onResume();
         //if (activityReady) {
+        ParseUser.getCurrentUser().saveInBackground();
         if (getActivity() != null) {
             if (visible) {
                 setConversationsList();

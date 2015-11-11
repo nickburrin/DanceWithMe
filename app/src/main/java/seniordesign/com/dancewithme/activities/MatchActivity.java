@@ -289,12 +289,12 @@ public class MatchActivity extends Activity {
             ((Matches) matchUser.get("Matches")).addMatch(ParseUser.getCurrentUser());
 
             //send a match push notification to other user
-            JSONObject data = new JSONObject();
+            JSONObject otherData = new JSONObject();
             String matchMessage = "You just got matched with " + ParseUser.getCurrentUser().get("first_name");
             try {
-                data.put("alert", matchMessage);
-                data.put("title", "DanceWithMe");
-                data.put("from", ParseUser.getCurrentUser().getObjectId());
+                otherData.put("alert", matchMessage);
+                otherData.put("title", "DanceWithMe");
+                otherData.put("from", ParseUser.getCurrentUser().getObjectId());
             }catch (Exception e){
                 e.printStackTrace();
                 return;
@@ -305,11 +305,11 @@ public class MatchActivity extends Activity {
 
             ParsePush otherPush = new ParsePush();
             otherPush.setQuery(otherQuery);
-            otherPush.setData(data);
+            otherPush.setData(otherData);
             otherPush.sendInBackground(new SendCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
-                        Log.d("push", "The push campaign has been created.");
+                        Log.d("push", "The push campaign to matched user has been created.");
                     } else {
                         Log.d("push", "Error sending push:" + e.getMessage());
                     }
@@ -317,30 +317,26 @@ public class MatchActivity extends Activity {
             });
 
             //send a match push notification to myself
-            JSONObject data1 = new JSONObject();
-            String otherMessage = "You just got matched with " + matchUser.get("first_name");
+            JSONObject meData = new JSONObject();
+            String meMessage = "You just got matched with " + matchUser.get("first_name");
             try {
-                data1.put("alert", otherMessage);
-                data1.put("title", "DanceWithMe");
-                data1.put("from", matchUser.getObjectId());
+                meData.put("alert", meMessage);
+                meData.put("title", "DanceWithMe");
+                meData.put("from", matchUser.getObjectId());
                 //json.put("data", data);
             }catch (Exception e){
                 e.printStackTrace();
                 return;
             }
-
-
             ParseQuery meQuery = ParseInstallation.getQuery();
             meQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-
-
             ParsePush mePush = new ParsePush();
             mePush.setQuery(meQuery);
-            mePush.setData(data1);
+            mePush.setData(meData);
             mePush.sendInBackground(new SendCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
-                        Log.d("push", "The push campaign has been created.");
+                        Log.d("push", "The push campaign to self has been created.");
                     } else {
                         Log.d("push", "Error sending push:" + e.getMessage());
                     }
@@ -349,6 +345,7 @@ public class MatchActivity extends Activity {
         }
 
         ParseUser.getCurrentUser().saveInBackground();
+        //matchUser.saveInBackground();
     }
 
     private void denyButton(){

@@ -17,7 +17,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -148,7 +150,12 @@ public class MessageFragment extends Fragment {
         ParseUser.getCurrentUser().saveInBackground();
         if (getActivity() != null) {
             if (visible) {
-                setConversationsList();
+                ParseUser.getCurrentUser().fetchInBackground(new GetCallback<ParseUser>() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        setConversationsList();
+                    }
+                });
             }
         }
     }

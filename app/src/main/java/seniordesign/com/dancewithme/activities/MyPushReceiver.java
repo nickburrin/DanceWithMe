@@ -1,17 +1,10 @@
 package seniordesign.com.dancewithme.activities;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.parse.ParseException;
@@ -21,9 +14,7 @@ import com.parse.ParseUser;
 
 import seniordesign.com.dancewithme.helper.NotificationUtils;
 import seniordesign.com.dancewithme.pojos.Matches;
-import seniordesign.com.dancewithme.utils.Logger;
 
-import seniordesign.com.dancewithme.R;
 
 public class MyPushReceiver extends ParsePushBroadcastReceiver {
     private final String TAG = MyPushReceiver.class.getSimpleName();

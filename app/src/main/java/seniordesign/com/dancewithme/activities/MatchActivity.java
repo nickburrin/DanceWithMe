@@ -38,7 +38,6 @@ public class MatchActivity extends Activity {
 
     private Dancehall venue;
     private ParseUser matchUser;
-    private ArrayList<ParseUser> attendees;
     private LinkedList<ParseUser> namesQueue;
 
     private ImageButton profPic;
@@ -141,24 +140,6 @@ public class MatchActivity extends Activity {
     }
 
     private void setConversationsList() {
-        /*
-            This is good, but I think we can optimize it with a few things:
-                2) ****** DONE ******
-                    Once you have a list of all the users, you can immediately
-                    remove those users who you already matched to or dislike.
-                    This then would be the array you sort based on preferences.
-                     i.e.
-                        attendees = (ArrayList<ParseUser>) resultFromQuery;
-                        attendees.removeAll(user.get("Dislikes"));
-                        attendees.removeAll(user.get("Matches"));
-                3) Alaap was right, we can use a Queue, which allows us to
-                    pull and remove the next user (the head of queue) in the
-                    same method call Queue.poll(); The only thing we would
-                    have to do is sort the Users and add them to the Queue
-                    in correct order (which we would have to do with an
-                    ArrayList anyways
-         */
-
         // Remove this User, Dislikes, and Likes from this group
         ArrayList<ParseUser> attendees = new ArrayList<>(venue.getAttendees());
         attendees.remove(ParseUser.getCurrentUser());
@@ -262,10 +243,6 @@ public class MatchActivity extends Activity {
         } else{
             matchUser = null;
         }
-//        if(attendees.size() > 0){
-//            matchUser = attendees.get(0);
-//            attendees.remove(0);
-//        }
     }
 
     private boolean fillPage() {
@@ -359,7 +336,6 @@ public class MatchActivity extends Activity {
             ParsePush parsePush1 = new ParsePush();
             parsePush1.setQuery(parseQuery1);
             parsePush1.setData(data1);
-            //parsePush.setMessage("Lets turn up tone");
             parsePush1.sendInBackground(new SendCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
@@ -369,7 +345,6 @@ public class MatchActivity extends Activity {
                     }
                 }
             });
-
         }
 
         ParseUser.getCurrentUser().saveInBackground();

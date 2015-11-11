@@ -295,19 +295,18 @@ public class MatchActivity extends Activity {
                 data.put("alert", matchMessage);
                 data.put("title", "DanceWithMe");
                 data.put("from", ParseUser.getCurrentUser().getObjectId());
-                //json.put("data", data);
             }catch (Exception e){
                 e.printStackTrace();
                 return;
             }
 
-            ParseQuery parseQuery = ParseInstallation.getQuery();
-            parseQuery.whereEqualTo("username", matchUser.getUsername());
+            ParseQuery otherQuery = ParseInstallation.getQuery();
+            otherQuery.whereEqualTo("username", matchUser.getUsername());
 
-            ParsePush parsePush = new ParsePush();
-            parsePush.setQuery(parseQuery);
-            parsePush.setData(data);
-            parsePush.sendInBackground(new SendCallback() {
+            ParsePush otherPush = new ParsePush();
+            otherPush.setQuery(otherQuery);
+            otherPush.setData(data);
+            otherPush.sendInBackground(new SendCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
                         Log.d("push", "The push campaign has been created.");
@@ -319,9 +318,9 @@ public class MatchActivity extends Activity {
 
             //send a match push notification to myself
             JSONObject data1 = new JSONObject();
-            String matchMessage1 = "You just got matched with " + matchUser.get("first_name");
+            String otherMessage = "You just got matched with " + matchUser.get("first_name");
             try {
-                data1.put("alert", matchMessage1);
+                data1.put("alert", otherMessage);
                 data1.put("title", "DanceWithMe");
                 data1.put("from", matchUser.getObjectId());
                 //json.put("data", data);
@@ -330,13 +329,13 @@ public class MatchActivity extends Activity {
                 return;
             }
 
-            ParseQuery parseQuery1 = ParseInstallation.getQuery();
-            parseQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            ParseQuery meQuery = ParseInstallation.getQuery();
+            otherQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
 
-            ParsePush parsePush1 = new ParsePush();
-            parsePush1.setQuery(parseQuery1);
-            parsePush1.setData(data1);
-            parsePush1.sendInBackground(new SendCallback() {
+            ParsePush mePush = new ParsePush();
+            mePush.setQuery(meQuery);
+            mePush.setData(data1);
+            mePush.sendInBackground(new SendCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
                         Log.d("push", "The push campaign has been created.");

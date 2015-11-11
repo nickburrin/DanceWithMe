@@ -331,7 +331,7 @@ public class MatchActivity extends Activity {
             }
 
             ParseQuery parseQuery1 = ParseInstallation.getQuery();
-            parseQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            parseQuery1.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
 
             ParsePush parsePush1 = new ParsePush();
             parsePush1.setQuery(parseQuery1);

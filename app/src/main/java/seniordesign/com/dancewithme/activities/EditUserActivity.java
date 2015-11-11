@@ -3,20 +3,14 @@ package seniordesign.com.dancewithme.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.Arrays;
-
 import seniordesign.com.dancewithme.R;
-import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
+
 
 /**
  * Created by nickburrin on 10/14/15.
@@ -27,7 +21,6 @@ public class EditUserActivity extends Activity{
     private EditText mEmailView;
     private EditText mFirstName;
     private EditText mLastName;
-    private Spinner mGenderSpinner;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,11 +36,6 @@ public class EditUserActivity extends Activity{
 
         mLastName = ((EditText) findViewById(R.id.et_last_name));
         mLastName.setText(user.getString("last_name"));
-
-//          Not sure if we should allow them to change gender lol
-//        mGenderSpinner = ((Spinner) findViewById(R.id.spinner_gender));
-//        mGenderSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
-//        mGenderSpinner.setPrompt("Select your gender");
 
         findViewById(R.id.button_cancel_changes).setOnClickListener(new View.OnClickListener() {
             @Override

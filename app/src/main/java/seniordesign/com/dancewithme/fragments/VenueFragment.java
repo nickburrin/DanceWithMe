@@ -40,7 +40,6 @@ public class VenueFragment extends Fragment implements LocationListener{
     private View view;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,20 +71,22 @@ public class VenueFragment extends Fragment implements LocationListener{
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "hit the onResume for Venue frag");
         currentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         initListView();
     }
+
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
         //if (activityReady) {
+        ParseUser.getCurrentUser().saveInBackground();
         if (getActivity() != null) {
             if (visible) {
                 initListView();
             }
         }
     }
+
     private void initListView() {
         // Find all Dancehalls of the User's dance styles
         ArrayList<Dancehall> temp = null;
@@ -140,7 +141,6 @@ public class VenueFragment extends Fragment implements LocationListener{
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = location;
-        //initListView();
     }
 
     @Override
@@ -157,5 +157,4 @@ public class VenueFragment extends Fragment implements LocationListener{
     public void onStatusChanged(String provider, int status, Bundle extras) {
         Logger.d("Latitude","status");
     }
-
 }

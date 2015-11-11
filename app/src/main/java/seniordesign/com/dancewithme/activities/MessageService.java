@@ -1,4 +1,5 @@
 package seniordesign.com.dancewithme.activities;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -14,6 +15,7 @@ import com.sinch.android.rtc.SinchError;
 import com.sinch.android.rtc.messaging.MessageClient;
 import com.sinch.android.rtc.messaging.MessageClientListener;
 import com.sinch.android.rtc.messaging.WritableMessage;
+
 
 public class MessageService extends Service implements SinchClientListener {
 
@@ -90,8 +92,7 @@ public class MessageService extends Service implements SinchClientListener {
     }
 
     @Override
-    public void onRegistrationCredentialsRequired(SinchClient client, ClientRegistration clientRegistration) {
-    }
+    public void onRegistrationCredentialsRequired(SinchClient client, ClientRegistration clientRegistration) {}
 
     public void sendMessage(String recipientUserId, String textBody) {
         if (messageClient != null) {

@@ -1,4 +1,5 @@
 package seniordesign.com.dancewithme.activities;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.MessageAdapter;
+
 
 public class MessagingActivity extends Activity {
 

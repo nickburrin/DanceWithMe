@@ -46,11 +46,15 @@ public class DanceStyleActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dancestyle);
 
+        ArrayAdapter<String> adapter;
+
         // Get bundle content
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
+            // The activity is modifying an existing style
             ParseQuery<ParseObject> query = ParseQuery.getQuery("DanceStyle");
             query.whereEqualTo("objectId", extras.getString("style_id"));
+
             try {
                 existingStyle = (DanceStyle) query.getFirst();
                 style = existingStyle.getStyle();
@@ -59,19 +63,21 @@ public class DanceStyleActivity extends Activity {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+            adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, DANCE_STYLES);
+        } else {
+            // This activity is creating a new style
+            List<String> stylesUserDoesntHave = new ArrayList<>();
+            for(String s: DANCE_STYLES){
+                if(ParseUser.getCurrentUser().get(s) == null){
+                    stylesUserDoesntHave.add(s);
+                }
+            }
+            adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, stylesUserDoesntHave);
         }
 
-        // TODO: Need to remove option of creating dancestyles that already exist!
-        List<String> stylesUserDoesntHave = new ArrayList<>();
-        for(String s: DANCE_STYLES){
-            if(ParseUser.getCurrentUser().get(s) == null){
-                stylesUserDoesntHave.add(s);
-            }
-        }
 
         mDanceStyle = (Spinner) findViewById(R.id.spinner_dance_style);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, stylesUserDoesntHave);
-        // = ArrayAdapter.createFromResource(this, R.array.dancestyles_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mDanceStyle.setAdapter(new NothingSelectedSpinnerAdapter(adapter, R.layout.contact_spinner_row_nothing_selected, this));
 
@@ -209,5 +215,4 @@ public class DanceStyleActivity extends Activity {
                 }
         }
     }
-
 }

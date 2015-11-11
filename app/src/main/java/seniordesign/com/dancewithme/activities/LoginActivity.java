@@ -1,4 +1,5 @@
 package seniordesign.com.dancewithme.activities;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -20,8 +21,6 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import com.parse.LogInCallback;
-//import com.parse.ParseAnalytics;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
@@ -30,14 +29,11 @@ import com.parse.SignUpCallback;
 
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.pojos.Matches;
@@ -84,13 +79,12 @@ public class LoginActivity extends Activity {
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);
         Intent i;
-        /*
+
         if(ParseUser.getCurrentUser() != null){
             startService(serviceIntent);
             startActivity(new Intent(this, HomeActivity.class));
-            //startActivity(new Intent(this, VenueFragment.class));   // temp for Nick
         }
-        */
+        // Initialize SDK before setContentView(Layout ID)
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);

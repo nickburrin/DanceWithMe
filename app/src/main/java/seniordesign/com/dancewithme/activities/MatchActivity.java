@@ -38,7 +38,6 @@ public class MatchActivity extends Activity {
 
     private Dancehall venue;
     private ParseUser matchUser;
-    private ArrayList<ParseUser> attendees;
     private LinkedList<ParseUser> namesQueue;
 
     private ImageButton profPic;
@@ -141,24 +140,6 @@ public class MatchActivity extends Activity {
     }
 
     private void setConversationsList() {
-        /*
-            This is good, but I think we can optimize it with a few things:
-                2) ****** DONE ******
-                    Once you have a list of all the users, you can immediately
-                    remove those users who you already matched to or dislike.
-                    This then would be the array you sort based on preferences.
-                     i.e.
-                        attendees = (ArrayList<ParseUser>) resultFromQuery;
-                        attendees.removeAll(user.get("Dislikes"));
-                        attendees.removeAll(user.get("Matches"));
-                3) Alaap was right, we can use a Queue, which allows us to
-                    pull and remove the next user (the head of queue) in the
-                    same method call Queue.poll(); The only thing we would
-                    have to do is sort the Users and add them to the Queue
-                    in correct order (which we would have to do with an
-                    ArrayList anyways
-         */
-
         // Remove this User, Dislikes, and Likes from this group
         ArrayList<ParseUser> attendees = new ArrayList<>(venue.getAttendees());
         attendees.remove(ParseUser.getCurrentUser());
@@ -262,10 +243,6 @@ public class MatchActivity extends Activity {
         } else{
             matchUser = null;
         }
-//        if(attendees.size() > 0){
-//            matchUser = attendees.get(0);
-//            attendees.remove(0);
-//        }
     }
 
     private boolean fillPage() {
@@ -307,33 +284,32 @@ public class MatchActivity extends Activity {
         ParseUser.getCurrentUser().addUnique("Likes", matchUser);
 
         if(matchUser.getList("Likes").contains(ParseUser.getCurrentUser())){
-            // There is a like situation (FYI both of these lines saveInBackground; no need to call it explicitly)
+            // There is a like situation (FYI both of these lines saveInBackground for Matches class; no need to call it explicitly)
             ((Matches) ParseUser.getCurrentUser().get("Matches")).addMatch(matchUser);
             ((Matches) matchUser.get("Matches")).addMatch(ParseUser.getCurrentUser());
 
             //send a match push notification to other user
-            JSONObject data = new JSONObject();
+            JSONObject otherData = new JSONObject();
             String matchMessage = "You just got matched with " + ParseUser.getCurrentUser().get("first_name");
             try {
-                data.put("alert", matchMessage);
-                data.put("title", "DanceWithMe");
-                data.put("from", ParseUser.getCurrentUser().getObjectId());
-                //json.put("data", data);
+                otherData.put("alert", matchMessage);
+                otherData.put("title", "DanceWithMe");
+                otherData.put("from", ParseUser.getCurrentUser().getObjectId());
             }catch (Exception e){
                 e.printStackTrace();
                 return;
             }
 
-            ParseQuery parseQuery = ParseInstallation.getQuery();
-            parseQuery.whereEqualTo("username", matchUser.getUsername());
+            ParseQuery otherQuery = ParseInstallation.getQuery();
+            otherQuery.whereEqualTo("username", matchUser.getUsername());
 
-            ParsePush parsePush = new ParsePush();
-            parsePush.setQuery(parseQuery);
-            parsePush.setData(data);
-            parsePush.sendInBackground(new SendCallback() {
+            ParsePush otherPush = new ParsePush();
+            otherPush.setQuery(otherQuery);
+            otherPush.setData(otherData);
+            otherPush.sendInBackground(new SendCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
-                        Log.d("push", "The push campaign has been created.");
+                        Log.d("push", "The push campaign to matched user has been created.");
                     } else {
                         Log.d("push", "Error sending push:" + e.getMessage());
                     }
@@ -341,38 +317,32 @@ public class MatchActivity extends Activity {
             });
 
             //send a match push notification to myself
-            JSONObject data1 = new JSONObject();
-            String matchMessage1 = "You just got matched with " + matchUser.get("first_name");
+            JSONObject meData = new JSONObject();
+            String meMessage = "You just got matched with " + matchUser.get("first_name");
             try {
-                data1.put("alert", matchMessage1);
-                data1.put("title", "DanceWithMe");
-                data1.put("from", matchUser.getObjectId());
-                //json.put("data", data);
-            }catch (Exception e){
+                meData.put("alert", meMessage);
+                meData.put("title", "DanceWithMe");
+                meData.put("from", matchUser.getObjectId());
+            } catch (Exception e){
                 e.printStackTrace();
                 return;
             }
 
-            ParseQuery parseQuery1 = ParseInstallation.getQuery();
-            parseQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
-
-            ParsePush parsePush1 = new ParsePush();
-            parsePush1.setQuery(parseQuery1);
-            parsePush1.setData(data1);
-            //parsePush.setMessage("Lets turn up tone");
-            parsePush1.sendInBackground(new SendCallback() {
+            ParseQuery meQuery = ParseInstallation.getQuery();
+            meQuery.whereEqualTo("username", ParseUser.getCurrentUser().getUsername());
+            ParsePush mePush = new ParsePush();
+            mePush.setQuery(meQuery);
+            mePush.setData(meData);
+            mePush.sendInBackground(new SendCallback() {
                 public void done(ParseException e) {
                     if (e == null) {
-                        Log.d("push", "The push campaign has been created.");
+                        Log.d("push", "The push campaign to self has been created.");
                     } else {
                         Log.d("push", "Error sending push:" + e.getMessage());
                     }
                 }
             });
-
         }
-
-        ParseUser.getCurrentUser().saveInBackground();
     }
 
     private void denyButton(){

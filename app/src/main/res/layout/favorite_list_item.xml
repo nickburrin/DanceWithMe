@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Thunder"
+            android:text="Nick"
             android:textColor="@color/dark_grey"
             android:textSize="24dp"/>
 

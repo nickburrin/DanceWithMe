@@ -74,6 +74,7 @@ public class VenueFragment extends Fragment implements LocationListener{
         currentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         initListView();
     }
+
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
@@ -84,6 +85,7 @@ public class VenueFragment extends Fragment implements LocationListener{
             }
         }
     }
+
     private void initListView() {
         // Find all Dancehalls of the User's dance styles
         ArrayList<Dancehall> temp = null;

@@ -138,8 +138,16 @@ public class MessageFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setConversationsList();
-        if(namesArrayAdapter != null){
-            namesArrayAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        //if (activityReady) {
+        if (getActivity() != null) {
+            if (visible) {
+                setConversationsList();
+            }
         }
     }
 

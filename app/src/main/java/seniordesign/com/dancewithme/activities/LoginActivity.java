@@ -69,13 +69,13 @@ public class LoginActivity extends Activity {
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);
         Intent i;
-        /*
+
         if(ParseUser.getCurrentUser() != null){
             startService(serviceIntent);
             startActivity(new Intent(this, HomeActivity.class));
             //startActivity(new Intent(this, VenueFragment.class));   // temp for Nick
         }
-        */
+
 
 
 //        Parse.enableLocalDatastore(this);

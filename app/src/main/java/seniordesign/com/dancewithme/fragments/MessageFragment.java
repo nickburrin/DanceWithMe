@@ -143,6 +143,7 @@ public class MessageFragment extends Fragment {
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
+  //      onResume();
         //if (activityReady) {
         if (getActivity() != null) {
             if (visible) {

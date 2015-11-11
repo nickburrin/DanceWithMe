@@ -286,7 +286,6 @@ public class MatchActivity extends Activity {
         if(matchUser.getList("Likes").contains(ParseUser.getCurrentUser())){
             // There is a like situation (FYI both of these lines saveInBackground for Matches class; no need to call it explicitly)
             ((Matches) ParseUser.getCurrentUser().get("Matches")).addMatch(matchUser);
-            ParseUser.getCurrentUser().saveInBackground();
             ((Matches) matchUser.get("Matches")).addMatch(ParseUser.getCurrentUser());
 
             //send a match push notification to other user

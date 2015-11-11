@@ -6,10 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -23,13 +21,13 @@ import com.facebook.login.widget.LoginButton;
 
 import com.parse.LogInCallback;
 //import com.parse.ParseAnalytics;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,8 +35,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,16 +45,17 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 
 import seniordesign.com.dancewithme.R;
-import seniordesign.com.dancewithme.fragments.MessageFragment;
 import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
@@ -66,8 +63,6 @@ import seniordesign.com.dancewithme.utils.Logger;
 public class LoginActivity extends Activity {
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private Button signUpButton;
-    private Button loginButton;
     private LoginButton facebookLoginButton;
     private Button forgotPasswordButton;
     private EditText emailField;
@@ -81,7 +76,7 @@ public class LoginActivity extends Activity {
     private String lastname;
     private String gender;
     private ParseFile profilePicture;
-    CallbackManager callbackManager;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +91,8 @@ public class LoginActivity extends Activity {
             //startActivity(new Intent(this, VenueFragment.class));   // temp for Nick
         }
         */
-
-
-//        Parse.enableLocalDatastore(this);
-        // Initialize SDK before setContentView(Layout ID)
         FacebookSdk.sdkInitialize(getApplicationContext());
-
+        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
 
         try {
@@ -117,13 +108,11 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
 
-        loginButton = (Button) findViewById(R.id.loginButton);
-        signUpButton = (Button) findViewById(R.id.signupButton);
         //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.loginButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = emailField.getText().toString();
@@ -147,7 +136,7 @@ public class LoginActivity extends Activity {
             }
         });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.signupButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String email = emailField.getText().toString();
@@ -158,24 +147,34 @@ public class LoginActivity extends Activity {
             }
 
         });
-        //View view = inflater.inflate(R.layout.splash, container, false);
 
-        facebookLoginButton = (LoginButton) findViewById(R.id.login_button);
+        facebookLoginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         //facebookLoginButton.setReadPermissions("user_friends");
-        // If using in a fragment
-        //facebookLoginButton.setFragment(this);
-        // Other app specific specialization
+        facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                String userId = loginResult.getAccessToken().getUserId();
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "FB Login was canceled");
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+                Log.d(TAG, "FB Login was canceled");
+                e.printStackTrace();
+            }
+        });
 
         // Callback registration
-
-
-
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // Call private method
-                onFblogin();
+                onFblogin(); // Ryan's code
+                // nickFBLogin();
             }
         });
 
@@ -186,6 +185,18 @@ public class LoginActivity extends Activity {
 //                startActivity(intent);
 //            }
 //        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data); // This is for just straight up facebook
+    }
+
+    @Override
+    public void onDestroy() {
+        stopService(new Intent(this, MessageService.class));
+        super.onDestroy();
     }
 
     // Private method to handle Facebook login and callback
@@ -201,14 +212,21 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         // App code
-                        Log.e("onSuccess", "--------" + loginResult.getAccessToken());
-                        Log.e("Token", "--------" + loginResult.getAccessToken().getToken());
-                        Log.e("Permision", "--------" + loginResult.getRecentlyGrantedPermissions());
                         Profile profile = Profile.getCurrentProfile();
                         firstname = profile.getFirstName();
                         lastname = profile.getLastName();
 
-                       // Log.e("Image URI", "--" + profile.getLinkUri());
+                        Bitmap bm = getFacebookProfilePicture(profile.getId());
+                        Bitmap out = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * 0.5), (int) (bm.getHeight() * 0.5), true);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        out.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+                        try {
+                            stream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        profilePicture = new ParseFile(byteArray);
 
                         Log.e("OnGraph", "------------------------");
                         GraphRequest request = GraphRequest.newMeRequest(
@@ -225,32 +243,14 @@ public class LoginActivity extends Activity {
                                             //firstname = object.getString("first_name");
                                             //lastname = object.getString("last_name");
                                             gender = object.getString("gender");
-                                            //String imageURL = "http://graph.facebook.com/"+id+"/picture?type=large";
-                                            URL img_value = null;
-                                            img_value = new URL("http://graph.facebook.com/"+id+"/picture");
-
-                                            Bitmap bm = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
-
-
-                                            Bitmap out = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()*0.5), (int)(bm.getHeight()*0.5), true);
-                                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                            out.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                            byte[] byteArray = stream.toByteArray();
-                                            stream.close();
-                                            profilePicture = new ParseFile(byteArray);
-
 
                                             attemptLogin();
-                                            if(newUser){
+                                            if (newUser) {
                                                 createAccount();
                                             }
 
 
                                         } catch (JSONException e) {
-                                                e.printStackTrace();
-                                        } catch (MalformedURLException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                     }
@@ -259,19 +259,33 @@ public class LoginActivity extends Activity {
                         parameters.putString("fields", "id,name,gender,email");
                         request.setParameters(parameters);
                         request.executeAsync();
-
                     }
 
                     @Override
                     public void onCancel() {
-                        Log.d(TAG,"On cancel");
+                        Log.d(TAG, "On cancel");
                     }
 
                     @Override
                     public void onError(FacebookException error) {
-                        Log.d(TAG,error.toString());
+                        Log.d(TAG, error.toString());
                     }
                 });
+    }
+
+    public static Bitmap getFacebookProfilePicture(String userID){
+        Bitmap bm = null;
+
+        try {
+            URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+            bm = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bm;
     }
 
     public void createAccount(){
@@ -372,7 +386,6 @@ public class LoginActivity extends Activity {
     }
 
     private void attemptLogin(){
-        //boolean newUser;
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.put("username", email);
         installation.saveInBackground();
@@ -383,21 +396,9 @@ public class LoginActivity extends Activity {
                     startActivity(intent);
                     startService(serviceIntent);
                 } else {
-                    newUser =  true;
+                    newUser = true;
                 }
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        stopService(new Intent(this, MessageService.class));
-        super.onDestroy();
     }
 }

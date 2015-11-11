@@ -27,6 +27,7 @@ public class MyApplication extends Application {
         ParseInstallation.getCurrentInstallation().saveInBackground();
         // Specify an Activity to handle all pushes by default.
         PushService.setDefaultPushCallback(this, PushActivity.class);
-        //FacebookSdk.sdkInitialize(getApplicationContext());
+
+        FacebookSdk.sdkInitialize(this);
     }
 }

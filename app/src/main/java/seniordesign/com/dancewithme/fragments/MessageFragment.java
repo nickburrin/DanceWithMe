@@ -69,21 +69,21 @@ public class MessageFragment extends Fragment {
     private void setConversationsList() {
         final ArrayList<ParseUser> userMatches = (ArrayList<ParseUser>) ((Matches) ParseUser.getCurrentUser().get("Matches")).getMatches();
         names = new ArrayList<String>();
-        final ArrayList<ParseUser> userFavorites = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Favorites");
-        favorites = new ArrayList<String>();
+//        final ArrayList<ParseUser> userFavorites = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Favorites");
+//        favorites = new ArrayList<String>();
 
 
 
 
-        //for favorites
-        for(ParseUser i: userFavorites) {
-            try {
-                i.fetchIfNeeded();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            favorites.add(i.getString("first_name"));
+//        //for favorites
+//        for(ParseUser i: userFavorites) {
+//            try {
+//                i.fetchIfNeeded();
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//
+//            favorites.add(i.getString("first_name"));
 
 //            ParseQuery<ParseUser> query = ParseUser.getQuery();
 //            query.whereEqualTo("username", myMatchesNames.get(i));
@@ -94,30 +94,30 @@ public class MessageFragment extends Fragment {
 //                            names.add(userList.get(i).getUsername().toString());
 //                        }
 
-        }
+//        }
 
-        favoritesArrayAdapter = new MessageUserListAdapter(getActivity().getApplicationContext(),
-                 userFavorites, application, true);
-        favoritesListView = (ListView) view.findViewById(R.id.lv_user_list);
-        favoritesListView.setAdapter(favoritesArrayAdapter);
-
-        favoritesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-                openConversation(i);
-            }
-        });
-        favoritesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l) {
-                userMatches.add(userFavorites.get(i));
-
-                userFavorites.remove(i);
-                ParseUser.getCurrentUser().saveInBackground();
-                setConversationsList();
-                return false;
-            }
-        });
+//        favoritesArrayAdapter = new MessageUserListAdapter(getActivity().getApplicationContext(),
+//                 userFavorites, application, true);
+//        favoritesListView = (ListView) view.findViewById(R.id.lv_user_list);
+//        favoritesListView.setAdapter(favoritesArrayAdapter);
+//
+//        favoritesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+//                openConversation(i);
+//            }
+//        });
+//        favoritesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l) {
+//                userMatches.add(userFavorites.get(i));
+//
+//                userFavorites.remove(i);
+//                ParseUser.getCurrentUser().saveInBackground();
+//                setConversationsList();
+//                return false;
+//            }
+//        });
 
 
         //User Matches
@@ -157,7 +157,7 @@ public class MessageFragment extends Fragment {
         usersListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l) {
-                userFavorites.add(userMatches.get(i));
+
 
                 userMatches.remove(i);
                 ParseUser.getCurrentUser().saveInBackground();

@@ -34,7 +34,6 @@ public class HomeActivity extends FragmentActivity {
         setContentView(R.layout.activity_home);
         activity = this;
         application = (MyApplication) activity.getApplication();
-        //user = DataStore.getInstance().getUser();
         user = ParseUser.getCurrentUser();
 
         // Get layout params
@@ -92,13 +91,7 @@ public class HomeActivity extends FragmentActivity {
                         getActionBar().setSelectedNavigationItem(position);
                     }
                 });
-/*
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            if(extras.getBoolean("first_time")) {
-            }
-        }
-*/
+
         mViewPager.setCurrentItem(1); // Set default view page to Venues
     }
 
@@ -127,7 +120,6 @@ public class HomeActivity extends FragmentActivity {
         public int getCount() {
             return 3;
         }
-
     }
 }
 

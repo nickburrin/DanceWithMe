@@ -1,10 +1,7 @@
 package seniordesign.com.dancewithme.activities;
 
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,6 +17,7 @@ import com.parse.ParseObject;
 import com.parse.RefreshCallback;
 import com.parse.SaveCallback;
 import seniordesign.com.dancewithme.R;
+
 
 public class PushActivity extends Activity {
 

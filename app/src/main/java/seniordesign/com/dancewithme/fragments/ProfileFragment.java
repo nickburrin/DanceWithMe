@@ -22,13 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -44,8 +39,6 @@ import seniordesign.com.dancewithme.activities.MessageService;
 import seniordesign.com.dancewithme.activities.MyApplication;
 import seniordesign.com.dancewithme.adapters.DanceStyleListAdapter;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
-import seniordesign.com.dancewithme.pojos.Dancehall;
-import seniordesign.com.dancewithme.pojos.Matches;
 
 
 public class ProfileFragment extends Fragment {
@@ -64,10 +57,9 @@ public class ProfileFragment extends Fragment {
 
     private HomeActivity activity;
 
-    private Intent intent;
-    private Intent serviceIntent;
     private View view;
     private Button logoutButton;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -162,7 +154,6 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
             }
         }else{
-            // TODO: should exit to the login screen, this shouldnt really happen
             Toast.makeText(this.activity.getApplicationContext(), "No user", Toast.LENGTH_LONG).show();
         }
     }
@@ -204,7 +195,7 @@ public class ProfileFragment extends Fragment {
                 }
             });
 
-            /*
+            /* TODO: remove dance styles
             stylesList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -272,6 +263,5 @@ public class ProfileFragment extends Fragment {
                     .show();
             e.printStackTrace();
         }
-
     }
 }

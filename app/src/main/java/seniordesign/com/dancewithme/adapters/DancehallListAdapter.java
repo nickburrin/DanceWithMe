@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,6 @@ public class DancehallListAdapter extends ArrayAdapter<java.lang.Object> {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
 
             // This will tell you how far away a dance hall is
             Location venueLoc = new Location(LocationManager.GPS_PROVIDER);

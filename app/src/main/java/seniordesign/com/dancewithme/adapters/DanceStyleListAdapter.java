@@ -22,7 +22,6 @@ public class DanceStyleListAdapter extends ArrayAdapter<Object> {
     private static final String TAG = DanceStyleListAdapter.class.getSimpleName();
 
     private ArrayList<Object> stylesList;
-    private MyApplication application;
 
     /**
      * A container for a specific deal in the ListView.
@@ -35,12 +34,6 @@ public class DanceStyleListAdapter extends ArrayAdapter<Object> {
     public DanceStyleListAdapter(Context context, ArrayList<Object> list, MyApplication app) {
         super(context, 0, list);
         this.stylesList = list;
-        this.application = app;
-
-//        Logger.d(TAG, "games size = " + stylesList.size());
-//        for(int i = 0; i < stylesList.size(); i++){
-//            Logger.d(TAG, stylesList.get(i).toString());
-//        }
     }
 
     @Override

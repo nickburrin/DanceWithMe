@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import com.facebook.AccessToken;
@@ -20,6 +23,7 @@ import com.facebook.login.widget.LoginButton;
 
 import com.parse.LogInCallback;
 //import com.parse.ParseAnalytics;
+import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -33,6 +37,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +46,12 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -69,6 +80,7 @@ public class LoginActivity extends Activity {
     private String firstname;
     private String lastname;
     private String gender;
+    private ParseFile profilePicture;
     CallbackManager callbackManager;
 
     @Override
@@ -213,6 +225,21 @@ public class LoginActivity extends Activity {
                                             //firstname = object.getString("first_name");
                                             //lastname = object.getString("last_name");
                                             gender = object.getString("gender");
+                                            //String imageURL = "http://graph.facebook.com/"+id+"/picture?type=large";
+                                            URL img_value = null;
+                                            img_value = new URL("http://graph.facebook.com/"+id+"/picture");
+
+                                            Bitmap bm = BitmapFactory.decodeStream(img_value.openConnection().getInputStream());
+
+
+                                            Bitmap out = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()*0.5), (int)(bm.getHeight()*0.5), true);
+                                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                            out.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                            byte[] byteArray = stream.toByteArray();
+                                            stream.close();
+                                            profilePicture = new ParseFile(byteArray);
+
+
                                             attemptLogin();
                                             if(newUser){
                                                 createAccount();
@@ -221,6 +248,10 @@ public class LoginActivity extends Activity {
 
                                         } catch (JSONException e) {
                                                 e.printStackTrace();
+                                        } catch (MalformedURLException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
                                         }
                                     }
                                 });
@@ -331,6 +362,7 @@ public class LoginActivity extends Activity {
                 newUser.put("gender", gender);
                 newUser.put("Likes", Arrays.asList());
                 newUser.put("Dislikes", Arrays.asList());
+                newUser.put("ProfilePicture", profilePicture);
             }
         } catch (com.parse.ParseException e) {
             e.printStackTrace();

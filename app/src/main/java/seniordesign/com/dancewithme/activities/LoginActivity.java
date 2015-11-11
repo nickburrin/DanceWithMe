@@ -149,11 +149,13 @@ public class LoginActivity extends Activity {
         });
 
         facebookLoginButton = (LoginButton) findViewById(R.id.facebook_login_button);
-        //facebookLoginButton.setReadPermissions("user_friends");
+        facebookLoginButton.setReadPermissions("email");    // Includes default permission "public_profile" and now "email"
         facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 String userId = loginResult.getAccessToken().getUserId();
+                //Profile.getCurrentProfile().
+                //Profile.getCurrentProfile().getProfilePictureUri();
             }
 
             @Override

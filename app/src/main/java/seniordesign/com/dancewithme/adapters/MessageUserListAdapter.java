@@ -1,15 +1,19 @@
 package seniordesign.com.dancewithme.adapters;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -33,7 +37,7 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
      * A container for a specific deal in the ListView.
      */
     static class ViewHolder {
-        ImageView userProfPic;
+        ImageButton userProfPic;
         TextView userName;
         ImageView yellowStar;
     }
@@ -63,7 +67,7 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
                 convertView = inflater.inflate(R.layout.user_list_item, parent, false);
 
                 // User message views
-                holder.userProfPic = (ImageView) convertView.findViewById(R.id.iv_user_prof_pic);
+                holder.userProfPic = (ImageButton) convertView.findViewById(R.id.iv_user_prof_pic);
                 holder.userName = (TextView) convertView.findViewById(R.id.tv_user_list_item);
                 holder.yellowStar = (ImageView) convertView.findViewById(R.id.yellow_star);
 
@@ -84,10 +88,24 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
 //            String gameId = game.getData_id();
 
             //put the team name
-            holder.userName.setText(user.getString("first_name"));
+            try {
+                holder.userName.setText(user.fetchIfNeeded().getString("first_name"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             //ImageUtil.displayHighResImage(holder.homeTeamLogoView, homeTeam.getLogoUrl());
             //ImageUtil.displayHighResImage(holder.awayTeamLogoView, awayTeam.getLogoUrl());
+            ParseFile profilePic = (ParseFile) user.get("ProfilePicture");
+            if(profilePic != null) {
+                try {
+                    holder.userProfPic.setImageBitmap(BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length));
+                } catch (com.parse.ParseException e) {
+                    e.printStackTrace();
+                }
+            } else{
+                Log.d(TAG, "something is jacked up in message adapter");
+            }
 
 
             if(favoriteStatus){

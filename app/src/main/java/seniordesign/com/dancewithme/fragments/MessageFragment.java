@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import seniordesign.com.dancewithme.pojos.Matches;
 
 
 public class MessageFragment extends Fragment {
+    private static final String TAG = MessageFragment.class.getSimpleName();
     private String currentUserId;
     private MessageUserListAdapter namesArrayAdapter;
     private MessageUserListAdapter favoritesArrayAdapter;
@@ -53,7 +55,7 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_message, container, false);
-        convertFavoriteView = inflater.inflate(R.layout.favorite_list_item, container, false);
+        //convertFavoriteView = inflater.inflate(R.layout.favorite_list_item, container, false);
         //showSpinner();
         return view;
     }
@@ -65,37 +67,37 @@ public class MessageFragment extends Fragment {
     }
 
     private void setConversationsList() {
-        ArrayList<ParseUser> userMatches = (ArrayList<ParseUser>) ((Matches) ParseUser.getCurrentUser().get("Matches")).getMatches();
+        final ArrayList<ParseUser> userMatches = (ArrayList<ParseUser>) ((Matches) ParseUser.getCurrentUser().get("Matches")).getMatches();
         names = new ArrayList<String>();
-        //ArrayList<ParseUser> userFavorites = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Favorites");
-        //favorites = new ArrayList<String>();
+        final ArrayList<ParseUser> userFavorites = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Favorites");
+        favorites = new ArrayList<String>();
 
 
 
 
         //for favorites
-//        for(ParseUser i: userFavorites) {
-//            try {
-//                i.fetchIfNeeded();
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//
-//            favorites.add(i.getString("first_name"));
-//
-////            ParseQuery<ParseUser> query = ParseUser.getQuery();
-////            query.whereEqualTo("username", myMatchesNames.get(i));
-////            query.findInBackground(new FindCallback<ParseUser>() {
-////                public void done(List<ParseUser> userList, com.parse.ParseException e) {
-////                    if (e == null) {
-////                        for (int i = 0; i < userList.size(); i++) {
-////                            names.add(userList.get(i).getUsername().toString());
-////                        }
-//
-//        }
+        for(ParseUser i: userFavorites) {
+            try {
+                i.fetchIfNeeded();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            favorites.add(i.getString("first_name"));
+
+//            ParseQuery<ParseUser> query = ParseUser.getQuery();
+//            query.whereEqualTo("username", myMatchesNames.get(i));
+//            query.findInBackground(new FindCallback<ParseUser>() {
+//                public void done(List<ParseUser> userList, com.parse.ParseException e) {
+//                    if (e == null) {
+//                        for (int i = 0; i < userList.size(); i++) {
+//                            names.add(userList.get(i).getUsername().toString());
+//                        }
+
+        }
 
         favoritesArrayAdapter = new MessageUserListAdapter(getActivity().getApplicationContext(),
-                 userMatches, application, true);
+                 userFavorites, application, true);
         favoritesListView = (ListView) view.findViewById(R.id.lv_user_list);
         favoritesListView.setAdapter(favoritesArrayAdapter);
 
@@ -105,40 +107,64 @@ public class MessageFragment extends Fragment {
                 openConversation(i);
             }
         });
+        favoritesListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l) {
+                userMatches.add(userFavorites.get(i));
+
+                userFavorites.remove(i);
+                ParseUser.getCurrentUser().saveInBackground();
+                setConversationsList();
+                return false;
+            }
+        });
 
 
-//        //User Matches
-//        for(ParseUser i: userMatches) {
-//            try {
-//                i.fetchIfNeeded();
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
+        //User Matches
+        for(ParseUser i: userMatches) {
+            try {
+                i.fetchIfNeeded();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            names.add(i.getString("first_name"));
+
+//            ParseQuery<ParseUser> query = ParseUser.getQuery();
+//            query.whereEqualTo("username", myMatchesNames.get(i));
+//            query.findInBackground(new FindCallback<ParseUser>() {
+//                public void done(List<ParseUser> userList, com.parse.ParseException e) {
+//                    if (e == null) {
+//                        for (int i = 0; i < userList.size(); i++) {
+//                            names.add(userList.get(i).getUsername().toString());
+//                        }
+
+        }
 //
-//            names.add(i.getString("first_name"));
-//
-////            ParseQuery<ParseUser> query = ParseUser.getQuery();
-////            query.whereEqualTo("username", myMatchesNames.get(i));
-////            query.findInBackground(new FindCallback<ParseUser>() {
-////                public void done(List<ParseUser> userList, com.parse.ParseException e) {
-////                    if (e == null) {
-////                        for (int i = 0; i < userList.size(); i++) {
-////                            names.add(userList.get(i).getUsername().toString());
-////                        }
-//
-//        }
-//
-//        namesArrayAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
-//                R.layout.user_list_item, names);
-//        usersListView = (ListView) view.findViewById(R.id.usersListView);
-//        usersListView.setAdapter(namesArrayAdapter);
-//
-//        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-//                openConversation(i);
-//            }
-//        });
+        namesArrayAdapter = new MessageUserListAdapter(getActivity().getApplicationContext(),
+                userMatches, application, false);
+        usersListView = (ListView) view.findViewById(R.id.lv_user_list);
+        usersListView.setAdapter(namesArrayAdapter);
+
+        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int i, long l) {
+               // Object item = gamesListAdapter.getItem(position);
+                openConversation(i);
+                Log.d(TAG, "you clicked the message");
+            }
+        });
+        usersListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l) {
+                userFavorites.add(userMatches.get(i));
+
+                userMatches.remove(i);
+                ParseUser.getCurrentUser().saveInBackground();
+                setConversationsList();
+                return false;
+            }
+        });
     }
 
     // Open a conversation with one person

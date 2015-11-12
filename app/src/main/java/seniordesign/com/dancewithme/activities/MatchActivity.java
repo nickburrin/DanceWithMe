@@ -281,12 +281,11 @@ public class MatchActivity extends Activity {
 
     private void acceptButton() {
         // Get this User and add it to my "Likes" array
-        ParseUser.getCurrentUser().addUnique("Likes", matchUser);
+        ParseUser.getCurrentUser().add("Likes", matchUser);
 
         if(matchUser.getList("Likes").contains(ParseUser.getCurrentUser())){
             // There is a like situation (FYI both of these lines saveInBackground for Matches class; no need to call it explicitly)
             ((Matches) ParseUser.getCurrentUser().get("Matches")).addMatch(matchUser);
-            ParseUser.getCurrentUser().saveInBackground();
             ((Matches) matchUser.get("Matches")).addMatch(ParseUser.getCurrentUser());
 
             //send a match push notification to other user
@@ -344,6 +343,7 @@ public class MatchActivity extends Activity {
                 }
             });
         }
+        ParseUser.getCurrentUser().saveInBackground();
     }
 
     private void denyButton(){

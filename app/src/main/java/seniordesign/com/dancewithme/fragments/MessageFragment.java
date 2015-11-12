@@ -122,7 +122,7 @@ public class MessageFragment extends Fragment {
         usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-               // Object item = gamesListAdapter.getItem(position);
+                // Object item = gamesListAdapter.getItem(position);
                 openConversation(i);
                 Log.d(TAG, "you clicked the message");
             }
@@ -140,10 +140,21 @@ public class MessageFragment extends Fragment {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                //userMatches.remove(i);
-
-                ParseUser.getCurrentUser().saveInBackground();
-                setConversationsList();
+                    //THe following part is currently not working
+//                ParseQuery<Matches> matchQuery2 = ParseQuery.getQuery("Matches");
+//                matchQuery.whereEqualTo("userId", namesArrayAdapter.getItem(i).getObjectId());
+//                Matches userMatches2 = null;
+//                try {
+//                    userMatches2 = matchQuery2.getFirst();
+//                    userMatches2.getMatches().remove(ParseUser.getCurrentUser());
+//                    userMatches2.saveInBackground();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                //userMatches.remove(i);
+//
+//                ParseUser.getCurrentUser().saveInBackground();
+//                setConversationsList();
                 return false;
             }
         });

@@ -16,6 +16,7 @@ import com.parse.ParseException;
 
 import seniordesign.com.dancewithme.R;
 
+
 public class ForgotYourPassword extends Activity {
     private EditText mEdit = null;
     private final int emailLength = 30;

@@ -1,13 +1,11 @@
 package seniordesign.com.dancewithme.pojos;
 
-import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

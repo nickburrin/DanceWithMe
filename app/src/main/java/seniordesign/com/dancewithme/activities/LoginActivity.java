@@ -1,4 +1,5 @@
 package seniordesign.com.dancewithme.activities;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -6,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -19,24 +19,18 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import com.parse.LogInCallback;
-//import com.parse.ParseAnalytics;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,9 +39,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-
 import seniordesign.com.dancewithme.R;
-import seniordesign.com.dancewithme.fragments.MessageFragment;
 import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
@@ -77,13 +69,13 @@ public class LoginActivity extends Activity {
         intent = new Intent(getApplicationContext(), HomeActivity.class);
         serviceIntent = new Intent(getApplicationContext(), MessageService.class);
         Intent i;
-        /*
-        if(ParseUser.getCurrentUser() != null){
-            startService(serviceIntent);
-            startActivity(new Intent(this, HomeActivity.class));
-            //startActivity(new Intent(this, VenueFragment.class));   // temp for Nick
-        }
-        */
+
+//        if(ParseUser.getCurrentUser() != null){
+//            startService(serviceIntent);
+//            startActivity(new Intent(this, HomeActivity.class));
+//            //startActivity(new Intent(this, VenueFragment.class));   // temp for Nick
+//        }
+
 
 
 //        Parse.enableLocalDatastore(this);

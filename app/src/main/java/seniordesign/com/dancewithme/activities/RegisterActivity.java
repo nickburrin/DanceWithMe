@@ -18,12 +18,10 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-
 import java.util.Arrays;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.adapters.CustomOnItemSelectedListener;
-import seniordesign.com.dancewithme.fragments.VenueFragment;
 import seniordesign.com.dancewithme.pojos.Matches;
 
 

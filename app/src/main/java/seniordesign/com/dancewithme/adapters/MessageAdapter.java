@@ -1,4 +1,5 @@
 package seniordesign.com.dancewithme.adapters;
+
 import android.app.Activity;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.sinch.android.rtc.messaging.WritableMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MessageAdapter extends BaseAdapter {
 

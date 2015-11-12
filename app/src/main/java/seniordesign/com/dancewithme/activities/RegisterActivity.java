@@ -123,6 +123,7 @@ public class RegisterActivity extends ActionBarActivity {
                             Intent i = new Intent(RegisterActivity.this, HomeActivity.class);
                             i.putExtra("first_time", true);
                             startActivity(i);
+                            startService(new Intent(getApplicationContext(), MessageService.class));
                         } else {
                             Toast.makeText(getApplicationContext(), "There was an error signing up.",
                                     Toast.LENGTH_LONG).show();

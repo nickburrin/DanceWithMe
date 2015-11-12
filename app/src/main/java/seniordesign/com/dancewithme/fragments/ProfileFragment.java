@@ -22,6 +22,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -38,6 +41,7 @@ import seniordesign.com.dancewithme.activities.LoginActivity;
 import seniordesign.com.dancewithme.activities.MessageService;
 import seniordesign.com.dancewithme.activities.MyApplication;
 import seniordesign.com.dancewithme.adapters.DanceStyleListAdapter;
+import seniordesign.com.dancewithme.asyncTasks.AsyncGetProfilePic;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
 
 
@@ -68,8 +72,7 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
@@ -115,6 +118,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
                 ParseUser.logOutInBackground();
+                LoginManager.getInstance().logOut();
                 Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }
@@ -126,6 +130,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        checkIfFacebookPictureUpdated();
         getUser();
         initFragment();
     }
@@ -136,9 +141,15 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-     public void onResume(){
+    public void onResume(){
         super.onResume();
         initFragment();
+    }
+
+    private void checkIfFacebookPictureUpdated() {
+        if( (AccessToken.getCurrentAccessToken() != null) && (Profile.getCurrentProfile() != null) ){
+            new AsyncGetProfilePic().execute(Profile.getCurrentProfile().getProfilePictureUri(220, 220).toString());
+        }
     }
 
     private void getUser() {

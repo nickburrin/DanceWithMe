@@ -2,6 +2,7 @@ package seniordesign.com.dancewithme.activities;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 
@@ -29,6 +30,6 @@ public class MyApplication extends Application {
         // Specify an Activity to handle all pushes by default.
         PushService.setDefaultPushCallback(this, PushActivity.class);
 
-        //FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(this);
     }
 }

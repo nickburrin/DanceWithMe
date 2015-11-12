@@ -16,14 +16,11 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -38,8 +35,6 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -62,15 +57,11 @@ public class LoginActivity extends Activity {
     private EditText passwordField;
     private CallbackManager callbackManager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-/*
-        if(ParseUser.getCurrentUser() != null){
-            startService(new Intent(LoginActivity.this, MessageService.class));
-            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-        }
-*/
+
         // Initialize SDK before setContentView(Layout ID)
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -89,9 +80,13 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
 
+        if(ParseUser.getCurrentUser() != null){
+            startService(new Intent(LoginActivity.this, MessageService.class));
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+        }
+
         if(AccessToken.getCurrentAccessToken() != null){
-            // TODO: Get current profile email and password and login to Parse
-            Log.d(TAG, "Facebook user is logged in" + Profile.getCurrentProfile().getName());
+            checkIfFacebookUserIsDanceWithMeUser(AccessToken.getCurrentAccessToken());
         }
 
         //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
@@ -139,56 +134,7 @@ public class LoginActivity extends Activity {
         facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                GraphRequest getProfInfo = GraphRequest.newMeRequest(loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
-                            @Override
-                            public void onCompleted(JSONObject object, GraphResponse response) {
-                                try {
-                                    String facebookId = object.getString("id");
-                                    String firstname = object.getString("first_name");
-                                    String lastname = object.getString("last_name");
-                                    String email = object.getString("email");
-
-                                    String gender;
-                                    if (object.getString("gender").equalsIgnoreCase("male")) {
-                                        gender = "Male";
-                                    } else {
-                                        gender = "Female";
-                                    }
-
-                                    /*
-                                    Bitmap bm = getFacebookProfilePicture(facebookId);
-                                    Bitmap out = Bitmap.createScaledBitmap(bm, 220, 220, true);
-                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                    out.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                    byte[] byteArray = stream.toByteArray();
-                                    try {
-                                        stream.close();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    ParseFile profilePicture = new ParseFile(byteArray);
-                                    */
-                                    ParseQuery<ParseUser> doesUserExist = ParseUser.getQuery();
-                                    doesUserExist.whereEqualTo("email", email);
-                                    try {
-                                        if (doesUserExist.count() == 0) {
-                                            createAccount(email, facebookId, firstname, lastname, gender);
-                                        } else {
-                                            attemptLogin(email, facebookId);
-                                        }
-                                    } catch (ParseException e) {
-                                        e.printStackTrace();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,first_name,last_name,gender,email");
-                getProfInfo.setParameters(parameters);
-                getProfInfo.executeAsync();
+                checkIfFacebookUserIsDanceWithMeUser(loginResult.getAccessToken());
             }
 
             @Override
@@ -220,6 +166,60 @@ public class LoginActivity extends Activity {
 //                startActivity(intent);
 //            }
 //        });
+    }
+
+    private void checkIfFacebookUserIsDanceWithMeUser(AccessToken token) {
+        GraphRequest getProfInfo = GraphRequest.newMeRequest(token,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            String facebookId = object.getString("id");
+                            String firstname = object.getString("first_name");
+                            String lastname = object.getString("last_name");
+                            String email = object.getString("email");
+
+                            String gender;
+                            if (object.getString("gender").equalsIgnoreCase("male")) {
+                                gender = "Male";
+                            } else {
+                                gender = "Female";
+                            }
+
+                                    /*
+                                    Bitmap bm = getFacebookProfilePicture(facebookId);
+                                    Bitmap out = Bitmap.createScaledBitmap(bm, 220, 220, true);
+                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                    out.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                    byte[] byteArray = stream.toByteArray();
+                                    try {
+                                        stream.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    ParseFile profilePicture = new ParseFile(byteArray);
+                                    */
+                            ParseQuery<ParseUser> doesUserExist = ParseUser.getQuery();
+                            doesUserExist.whereEqualTo("email", email);
+                            try {
+                                if (doesUserExist.count() == 0) {
+                                    createAccount(email, facebookId, firstname, lastname, gender);
+                                } else {
+                                    attemptLogin(email, facebookId);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,first_name,last_name,gender,email");
+        getProfInfo.setParameters(parameters);
+        getProfInfo.executeAsync();
     }
 
     @Override

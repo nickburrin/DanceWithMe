@@ -22,12 +22,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -129,6 +132,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        checkIfFacebookPictureUpdated();
         getUser();
         initFragment();
     }
@@ -139,9 +143,27 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-     public void onResume(){
+    public void onResume(){
         super.onResume();
         initFragment();
+    }
+
+    private void checkIfFacebookPictureUpdated() {
+        if( (AccessToken.getCurrentAccessToken() != null) && (Profile.getCurrentProfile() != null) ){
+            try {
+                Uri uri = Uri.parse(Profile.getCurrentProfile().getProfilePictureUri(220, 220).toString());
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uri);
+
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                stream.close();
+                ParseFile pf = new ParseFile(byteArray);
+                ParseUser.getCurrentUser().put("ProfilePicture", pf);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void getUser() {

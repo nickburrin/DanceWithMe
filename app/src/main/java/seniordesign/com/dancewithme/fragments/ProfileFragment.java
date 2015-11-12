@@ -160,6 +160,7 @@ public class ProfileFragment extends Fragment {
                 stream.close();
                 ParseFile pf = new ParseFile(byteArray);
                 ParseUser.getCurrentUser().put("ProfilePicture", pf);
+                ParseUser.getCurrentUser().saveInBackground();
             } catch (IOException e) {
                 e.printStackTrace();
             }

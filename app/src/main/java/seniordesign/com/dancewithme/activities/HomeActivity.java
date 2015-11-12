@@ -23,24 +23,22 @@ public class HomeActivity extends FragmentActivity {
     // Private class params
     private ActionBar.Tab profileTab, venueTab, messageTab;
 
-    ParseUser user;
     HomeActivity activity;
     MyApplication application;
     BroadcastReceiver receiver;
 
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         activity = this;
         application = (MyApplication) activity.getApplication();
-        user = ParseUser.getCurrentUser();
 
         // Get layout params
         ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
         ActionBar actionBar = getActionBar();
         // Init the action bar
-        if(actionBar!=null){
+        if(actionBar != null){
             actionBar.setDisplayShowHomeEnabled(false);  // hides action bar icon
             actionBar.setDisplayShowTitleEnabled(false); // hides action bar title
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -82,8 +80,7 @@ public class HomeActivity extends FragmentActivity {
                 new ViewPager.SimpleOnPageChangeListener() {
                     @Override
                     public void onPageSelected(int position) {
-                        // When swiping between pages, select the
-                        // corresponding tab.
+                        // When swiping between pages, select the corresponding tab.
                         profileTab.setIcon(R.drawable.tab_account_sel);
                         venueTab.setIcon(R.drawable.tab_match);
                         messageTab.setIcon(R.drawable.tab_message);

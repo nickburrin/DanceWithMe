@@ -22,6 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -115,6 +117,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 activity.stopService(new Intent(activity.getApplicationContext(), MessageService.class));
                 ParseUser.logOutInBackground();
+                LoginManager.getInstance().logOut();
                 Intent intent = new Intent(activity.getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
             }

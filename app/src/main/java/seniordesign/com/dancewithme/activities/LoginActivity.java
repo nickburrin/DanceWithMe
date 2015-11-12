@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -21,6 +22,7 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
 import com.parse.ParseQuery;
@@ -32,7 +34,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -45,10 +46,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.pojos.Matches;
@@ -62,28 +60,17 @@ public class LoginActivity extends Activity {
     private Button forgotPasswordButton;
     private EditText emailField;
     private EditText passwordField;
-    private Intent intent;
-    private Intent serviceIntent;
-    private boolean newUser;
-    private String email;
-    private String id;
-    private String firstname;
-    private String lastname;
-    private String gender;
-    private ParseFile profilePicture;
     private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        intent = new Intent(getApplicationContext(), HomeActivity.class);
-        serviceIntent = new Intent(getApplicationContext(), MessageService.class);
-        Intent i;
-
+/*
         if(ParseUser.getCurrentUser() != null){
-            startService(serviceIntent);
-            startActivity(new Intent(this, HomeActivity.class));
+            startService(new Intent(LoginActivity.this, MessageService.class));
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         }
+*/
         // Initialize SDK before setContentView(Layout ID)
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
@@ -102,6 +89,11 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
 
+        if(AccessToken.getCurrentAccessToken() != null){
+            // TODO: Get current profile email and password and login to Parse
+            Log.d(TAG, "Facebook user is logged in" + Profile.getCurrentProfile().getName());
+        }
+
         //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
@@ -118,8 +110,8 @@ public class LoginActivity extends Activity {
                 ParseUser.logInInBackground(email, password, new LogInCallback() {
                     public void done(ParseUser user, com.parse.ParseException e) {
                         if (user != null) {
-                            startActivity(intent);
-                            startService(serviceIntent);
+                            startService(new Intent(LoginActivity.this, MessageService.class));
+                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "Wrong username/password combo",
@@ -147,9 +139,56 @@ public class LoginActivity extends Activity {
         facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                String userId = loginResult.getAccessToken().getUserId();
-                //Profile.getCurrentProfile().
-                //Profile.getCurrentProfile().getProfilePictureUri();
+                GraphRequest getProfInfo = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                try {
+                                    String facebookId = object.getString("id");
+                                    String firstname = object.getString("first_name");
+                                    String lastname = object.getString("last_name");
+                                    String email = object.getString("email");
+
+                                    String gender;
+                                    if (object.getString("gender").equalsIgnoreCase("male")) {
+                                        gender = "Male";
+                                    } else {
+                                        gender = "Female";
+                                    }
+
+                                    /*
+                                    Bitmap bm = getFacebookProfilePicture(facebookId);
+                                    Bitmap out = Bitmap.createScaledBitmap(bm, 220, 220, true);
+                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                    out.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                    byte[] byteArray = stream.toByteArray();
+                                    try {
+                                        stream.close();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    ParseFile profilePicture = new ParseFile(byteArray);
+                                    */
+                                    ParseQuery<ParseUser> doesUserExist = ParseUser.getQuery();
+                                    doesUserExist.whereEqualTo("email", email);
+                                    try {
+                                        if (doesUserExist.count() == 0) {
+                                            createAccount(email, facebookId, firstname, lastname, gender);
+                                        } else {
+                                            attemptLogin(email, facebookId);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,first_name,last_name,gender,email");
+                getProfInfo.setParameters(parameters);
+                getProfInfo.executeAsync();
             }
 
             @Override
@@ -163,7 +202,7 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
         });
-
+/*
         // Callback registration
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,7 +212,7 @@ public class LoginActivity extends Activity {
                 // nickFBLogin();
             }
         });
-
+*/
 //        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -195,6 +234,22 @@ public class LoginActivity extends Activity {
         super.onDestroy();
     }
 
+    public static Bitmap getFacebookProfilePicture(String userID){
+        Bitmap bm = null;
+
+        try {
+            URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
+            bm = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bm;
+    }
+
+    /*
     // Private method to handle Facebook login and callback
     private void onFblogin()
     {
@@ -235,7 +290,7 @@ public class LoginActivity extends Activity {
                                         try {
 
                                             email = object.getString("email");
-                                            id = object.getString("id");
+                                            facebookId = object.getString("id");
                                             //firstname = object.getString("first_name");
                                             //lastname = object.getString("last_name");
                                             gender = object.getString("gender");
@@ -267,21 +322,6 @@ public class LoginActivity extends Activity {
                         Log.d(TAG, error.toString());
                     }
                 });
-    }
-
-    public static Bitmap getFacebookProfilePicture(String userID){
-        Bitmap bm = null;
-
-        try {
-            URL imageURL = new URL("https://graph.facebook.com/" + userID + "/picture?type=large");
-            bm = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return bm;
     }
 
     public void createAccount(){
@@ -331,7 +371,7 @@ public class LoginActivity extends Activity {
             incompleteFields = true;
         }
 
-        if (id.isEmpty()) {
+        if (facebookId.isEmpty()) {
             // Check if the user entered password
             incompleteFields = true;
         }
@@ -349,50 +389,57 @@ public class LoginActivity extends Activity {
 
         return !incompleteFields;
     }
-
-    private ParseUser extractParseUser() {
+*/
+    private ParseUser createAccount(String email, String password, String firstname, String lastname, String gender) {
         ParseUser newUser = null;
 
-        // See if there exists an existing user with the same email
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("email", email);
+        //Create the new account
+        newUser = new ParseUser();
+        newUser.setEmail(email);
+        newUser.setUsername(email);
+        newUser.setPassword(password);
+        newUser.put("first_name", firstname);
+        newUser.put("last_name", lastname);
+        newUser.put("gender", gender);
+        newUser.put("Likes", Arrays.asList());
+        newUser.put("Dislikes", Arrays.asList());
+        //newUser.put("ProfilePicture", profilePicture);
 
-        try {
-            if(query.count() > 0){
-                //There is already an account with this email
-                Toast.makeText(this, "An account with this email already exists", Toast.LENGTH_SHORT).show();
-            } else {
-                //Create the new account
-                newUser = new ParseUser();
-                newUser.setEmail(email);
-                newUser.setUsername(email);
-                newUser.setPassword(id);
-                newUser.put("first_name", firstname);
-                newUser.put("last_name", lastname);
-                newUser.put("gender", gender);
-                newUser.put("Likes", Arrays.asList());
-                newUser.put("Dislikes", Arrays.asList());
-                newUser.put("ProfilePicture", profilePicture);
+        newUser.signUpInBackground(new SignUpCallback() {
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    // In addition to sign-up, add a Matches object for this user
+                    Matches newMatcher = new Matches(ParseUser.getCurrentUser().getObjectId(), Arrays.asList());
+                    ParseUser.getCurrentUser().put("Matches", newMatcher);
+                    ParseUser.getCurrentUser().saveInBackground();
+
+                    // Redirect to ProfileFragment
+                    Intent i = new Intent(LoginActivity.this, HomeActivity.class);
+                    i.putExtra("first_time", true);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(getApplicationContext(), "There was an error signing up.",
+                            Toast.LENGTH_LONG).show();
+                }
             }
-        } catch (com.parse.ParseException e) {
-            e.printStackTrace();
-        }
+        });
 
         return newUser;
     }
 
-    private void attemptLogin(){
+    private void attemptLogin(String email, String password){
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.put("username", email);
         installation.saveInBackground();
+
         Logger.d(TAG, "User Logging in");
-        ParseUser.logInInBackground(email, id, new LogInCallback() {
+        ParseUser.logInInBackground(email, password, new LogInCallback() {
             public void done(ParseUser user, com.parse.ParseException e) {
                 if (user != null) {
-                    startActivity(intent);
-                    startService(serviceIntent);
+                    startService(new Intent(LoginActivity.this, MessageService.class));
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                 } else {
-                    newUser = true;
+                    Toast.makeText(getApplicationContext(), "There was an error logging in", Toast.LENGTH_LONG).show();
                 }
             }
         });

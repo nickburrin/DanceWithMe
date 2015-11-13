@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/userListItem"
-    android:textColor="@color/very_dark_gray"
-    android:padding="16dp"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:textSize="20sp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_games_list_detail"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@color/off_white"
+    android:orientation="horizontal"
+    android:weightSum="100"
+    android:descendantFocusability="blocksDescendants">
+
+
+    <ImageButton
+        android:id="@+id/iv_user_prof_pic"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:background="@color/transparent"
+        android:src="@drawable/blank_avatar_male"/>
+
+    <TextView
+        android:id="@+id/tv_user_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingStart="10dp"
+        android:text="Alexandria"
+        android:textColor="@color/dark_grey"
+        android:textSize="32dp"/>
+
+</LinearLayout>
+
+
+
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/userListItem"
+        android:textColor="@color/very_dark_gray"
+        android:padding="16dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:textSize="32sp" />
+        -->

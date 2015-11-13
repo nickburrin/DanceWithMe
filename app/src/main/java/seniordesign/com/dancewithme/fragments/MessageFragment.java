@@ -5,15 +5,14 @@ import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -23,18 +22,23 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.MessagingActivity;
+import seniordesign.com.dancewithme.activities.MyApplication;
+import seniordesign.com.dancewithme.adapters.MessageUserListAdapter;
 import seniordesign.com.dancewithme.pojos.Matches;
 
 
 public class MessageFragment extends Fragment {
     private static final String TAG = MessageFragment.class.getSimpleName();
+    private MessageUserListAdapter namesArrayAdapter;
 
-    private ArrayAdapter<String> namesArrayAdapter;
     private ArrayList<String> names;
+    private ArrayList<String> favorites;
     private ListView usersListView;
+    private ListView favoritesListView;
     private ProgressDialog progressDialog;
     private BroadcastReceiver receiver = null;
     private View view;
+    private MyApplication application;
 
 
     @Override
@@ -68,6 +72,7 @@ public class MessageFragment extends Fragment {
 
         names = new ArrayList<>();
 
+        //User Matches
         for(ParseUser i: userMatches) {
             try {
                 i.fetchIfNeeded();
@@ -78,34 +83,54 @@ public class MessageFragment extends Fragment {
             names.add(i.getString("first_name"));
         }
 
-        // TODO: fill the adapter with Users instead of Strings
-        namesArrayAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
-                R.layout.user_list_item, names);
-        usersListView = (ListView) view.findViewById(R.id.usersListView);
+        namesArrayAdapter = new MessageUserListAdapter(getActivity().getApplicationContext(),
+                (ArrayList<ParseUser>) userMatches, application, false);
+        usersListView = (ListView) view.findViewById(R.id.lv_user_list);
+
         usersListView.setAdapter(namesArrayAdapter);
 
         usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-                openConversation(i);
+                Object item = namesArrayAdapter.getItem(i);
+                if(item instanceof ParseUser){
+                    Intent intent = new Intent(getActivity().getApplicationContext(), MessagingActivity.class);
+                    intent.putExtra("RECIPIENT_ID", ((ParseUser) item).getObjectId());
+                    startActivity(intent);
+                }
+
+                Log.d(TAG, "you clicked the message");
             }
         });
-    }
-
-    // Open a conversation with one person
-    //  public void openConversation(ArrayList<String> names, int pos) {
-    public void openConversation(int pos) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("first_name", names.get(pos));
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> user, com.parse.ParseException e) {
-                if (e == null) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), MessagingActivity.class);
-                    intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
-                    startActivity(intent);
-                } else {
-                   Log.d(TAG, "Error finding that user");
+        usersListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l){
+                ParseQuery<Matches> matchQuery = ParseQuery.getQuery("Matches");
+                matchQuery.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+                Matches userMatches = null;
+                try {
+                    userMatches = matchQuery.getFirst();
+                    userMatches.getMatches().remove(namesArrayAdapter.getItem(i));
+                    userMatches.saveInBackground();
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+                    //THe following part is currently not working
+//                ParseQuery<Matches> matchQuery2 = ParseQuery.getQuery("Matches");
+//                matchQuery.whereEqualTo("userId", namesArrayAdapter.getItem(i).getObjectId());
+//                Matches userMatches2 = null;
+//                try {
+//                    userMatches2 = matchQuery2.getFirst();
+//                    userMatches2.getMatches().remove(ParseUser.getCurrentUser());
+//                    userMatches2.saveInBackground();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                //userMatches.remove(i);
+//
+//                ParseUser.getCurrentUser().saveInBackground();
+//                setConversationsList();
+                return false;
             }
         });
     }

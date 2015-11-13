@@ -2,6 +2,7 @@ package seniordesign.com.dancewithme.activities;
 
 import android.app.ActionBar;
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -92,7 +93,10 @@ public class HomeActivity extends FragmentActivity {
         mViewPager.setCurrentItem(1); // Set default view page to Venues
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     // Pager adapter that contains the different fragments necessary for navigating through the tabs
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {

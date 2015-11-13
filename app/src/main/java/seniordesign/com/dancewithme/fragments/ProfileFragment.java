@@ -47,7 +47,7 @@ import seniordesign.com.dancewithme.pojos.DanceStyle;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = ProfileFragment.class.getSimpleName();
-    private final List<String> STYLE_LIST = Arrays.asList("Country", "Salsa", "Tango");
+    private final List<String> STYLE_LIST = Arrays.asList("Country", "Salsa", "Tango", "Swing");
 
     private static int RESULT_LOAD_IMG = 1;
     String imgDecodableString;

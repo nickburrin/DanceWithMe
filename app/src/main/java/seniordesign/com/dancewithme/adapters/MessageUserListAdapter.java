@@ -42,11 +42,6 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
         this.usersList = usersList;
         this.application = app;
         this.favoriteStatus = favorites;
-
-        Log.d(TAG, "games size = " + usersList.size());
-        for(int i = 0; i < usersList.size(); i++){
-            Log.d(TAG, usersList.get(i).toString());
-        }
     }
 
     @Override
@@ -88,8 +83,6 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
                 e.printStackTrace();
             }
 
-            //ImageUtil.displayHighResImage(holder.homeTeamLogoView, homeTeam.getLogoUrl());
-            //ImageUtil.displayHighResImage(holder.awayTeamLogoView, awayTeam.getLogoUrl());
             ParseFile profilePic = (ParseFile) user.get("ProfilePicture");
             if(profilePic != null) {
                 try {

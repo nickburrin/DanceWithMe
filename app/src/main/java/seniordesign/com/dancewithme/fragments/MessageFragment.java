@@ -3,20 +3,16 @@ package seniordesign.com.dancewithme.fragments;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -26,18 +22,23 @@ import java.util.List;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.MessagingActivity;
+import seniordesign.com.dancewithme.activities.MyApplication;
+import seniordesign.com.dancewithme.adapters.MessageUserListAdapter;
 import seniordesign.com.dancewithme.pojos.Matches;
 
 
 public class MessageFragment extends Fragment {
-    private static final String TAG = ProfileFragment.class.getSimpleName();
+    private static final String TAG = MessageFragment.class.getSimpleName();
+    private MessageUserListAdapter namesArrayAdapter;
 
-    private ArrayAdapter<String> namesArrayAdapter;
     private ArrayList<String> names;
+    private ArrayList<String> favorites;
     private ListView usersListView;
+    private ListView favoritesListView;
     private ProgressDialog progressDialog;
     private BroadcastReceiver receiver = null;
     private View view;
+    private MyApplication application;
 
 
     @Override
@@ -48,6 +49,7 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_message, container, false);
+        setConversationsList();
         return view;
     }
 
@@ -58,9 +60,19 @@ public class MessageFragment extends Fragment {
     }
 
     private void setConversationsList() {
-        List<ParseUser> userMatches = ((Matches) ParseUser.getCurrentUser().get("Matches")).getMatches();
+        ParseQuery<Matches> matchQuery = ParseQuery.getQuery("Matches");
+        matchQuery.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+
+        List<ParseUser> userMatches = null;
+        try {
+            userMatches = matchQuery.getFirst().getMatches();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         names = new ArrayList<>();
 
+        //User Matches
         for(ParseUser i: userMatches) {
             try {
                 i.fetchIfNeeded();
@@ -69,77 +81,74 @@ public class MessageFragment extends Fragment {
             }
 
             names.add(i.getString("first_name"));
-
-//            ParseQuery<ParseUser> query = ParseUser.getQuery();
-//            query.whereEqualTo("username", myMatchesNames.get(i));
-//            query.findInBackground(new FindCallback<ParseUser>() {
-//                public void done(List<ParseUser> userList, com.parse.ParseException e) {
-//                    if (e == null) {
-//                        for (int i = 0; i < userList.size(); i++) {
-//                            names.add(userList.get(i).getUsername().toString());
-//                        }
-
         }
 
-        // TODO: fill the adapter with Users instead of Strings
-        namesArrayAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
-                R.layout.user_list_item, names);
-        usersListView = (ListView) view.findViewById(R.id.usersListView);
+        namesArrayAdapter = new MessageUserListAdapter(getActivity().getApplicationContext(),
+                (ArrayList<ParseUser>) userMatches, application, false);
+        usersListView = (ListView) view.findViewById(R.id.lv_user_list);
+
         usersListView.setAdapter(namesArrayAdapter);
 
         usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-                openConversation(i);
-            }
-        });
-    }
-
-    // Open a conversation with one person
-    //  public void openConversation(ArrayList<String> names, int pos) {
-    public void openConversation(int pos) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("first_name", names.get(pos));
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> user, com.parse.ParseException e) {
-                if (e == null) {
+                Object item = namesArrayAdapter.getItem(i);
+                if(item instanceof ParseUser){
                     Intent intent = new Intent(getActivity().getApplicationContext(), MessagingActivity.class);
-                    intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
+                    intent.putExtra("RECIPIENT_ID", ((ParseUser) item).getObjectId());
                     startActivity(intent);
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Error finding that user", Toast.LENGTH_SHORT).show();
                 }
+
+                Log.d(TAG, "you clicked the message");
             }
         });
-    }
-
-    //show a loading spinner while the sinch client starts
-    private void showSpinner() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Loading");
-        progressDialog.setMessage("Please wait...");
-        progressDialog.show();
-
-        receiver = new BroadcastReceiver() {
+        usersListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onReceive(Context context, Intent intent) {
-                Boolean success = intent.getBooleanExtra("success", false);
-                progressDialog.dismiss();
-                if (!success) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Messaging service failed to start", Toast.LENGTH_LONG).show();
+            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l){
+                ParseQuery<Matches> matchQuery = ParseQuery.getQuery("Matches");
+                matchQuery.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
+                Matches userMatches = null;
+                try {
+                    userMatches = matchQuery.getFirst();
+                    userMatches.getMatches().remove(namesArrayAdapter.getItem(i));
+                    userMatches.saveInBackground();
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
+                    //THe following part is currently not working
+//                ParseQuery<Matches> matchQuery2 = ParseQuery.getQuery("Matches");
+//                matchQuery.whereEqualTo("userId", namesArrayAdapter.getItem(i).getObjectId());
+//                Matches userMatches2 = null;
+//                try {
+//                    userMatches2 = matchQuery2.getFirst();
+//                    userMatches2.getMatches().remove(ParseUser.getCurrentUser());
+//                    userMatches2.saveInBackground();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                //userMatches.remove(i);
+//
+//                ParseUser.getCurrentUser().saveInBackground();
+//                setConversationsList();
+                return false;
             }
-        };
-
-        LocalBroadcastManager.getInstance(this.getActivity()).registerReceiver(receiver, new IntentFilter("seniordesign.com.dancewithme.activities.HomeActivity"));
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         setConversationsList();
-        if(namesArrayAdapter != null){
-            namesArrayAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+
+        if (getActivity() != null) {
+            if (visible) {
+                setConversationsList();
+            }
         }
     }
 
@@ -147,5 +156,4 @@ public class MessageFragment extends Fragment {
     public void onPause(){
         super.onPause();
     }
-
 }

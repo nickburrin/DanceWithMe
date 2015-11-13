@@ -123,6 +123,7 @@ public class RegisterActivity extends ActionBarActivity {
                             Intent i = new Intent(RegisterActivity.this, HomeActivity.class);
                             i.putExtra("first_time", true);
                             startActivity(i);
+                            startService(new Intent(getApplicationContext(), MessageService.class));
                         } else {
                             Toast.makeText(getApplicationContext(), "There was an error signing up.",
                                     Toast.LENGTH_LONG).show();
@@ -244,6 +245,7 @@ public class RegisterActivity extends ActionBarActivity {
                 newUser.put("gender", gender);
                 newUser.put("Likes", Arrays.asList());
                 newUser.put("Dislikes", Arrays.asList());
+                newUser.put("Favorites", Arrays.asList());
             }
         } catch (com.parse.ParseException e) {
             e.printStackTrace();

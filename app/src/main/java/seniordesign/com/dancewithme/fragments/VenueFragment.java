@@ -74,16 +74,18 @@ public class VenueFragment extends Fragment implements LocationListener{
         currentLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         initListView();
     }
+
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        //if (activityReady) {
+        ParseUser.getCurrentUser().saveInBackground();
         if (getActivity() != null) {
             if (visible) {
                 initListView();
             }
         }
     }
+
     private void initListView() {
         // Find all Dancehalls of the User's dance styles
         ArrayList<Dancehall> temp = null;
@@ -111,7 +113,7 @@ public class VenueFragment extends Fragment implements LocationListener{
         }
 
         if(venues.size() == 0){
-            Toast.makeText(getActivity().getApplicationContext(), "Specify your dance styles to start matching!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(), "Specify your dance styles to see dance venues!", Toast.LENGTH_LONG).show();
             return;
         }
 

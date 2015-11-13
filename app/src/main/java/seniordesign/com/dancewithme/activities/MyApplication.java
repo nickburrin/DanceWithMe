@@ -19,7 +19,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.enableLocalDatastore(this);
+        //Parse.enableLocalDatastore(this);
         ParseObject.registerSubclass(DanceStyle.class);
         ParseObject.registerSubclass(Dancehall.class);
         ParseObject.registerSubclass(Matches.class);

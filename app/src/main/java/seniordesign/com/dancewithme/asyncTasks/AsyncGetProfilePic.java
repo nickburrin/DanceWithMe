@@ -5,13 +5,11 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.facebook.Profile;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**

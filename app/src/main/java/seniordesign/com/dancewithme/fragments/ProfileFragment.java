@@ -182,7 +182,7 @@ public class ProfileFragment extends Fragment {
         }
 
         if(userStyles.isEmpty()){
-            Toast.makeText(activity.getApplicationContext(), "Welcome! Specify your dance styles and start matching!",
+            Toast.makeText(activity.getApplicationContext(), "Specify your dance styles and start matching!",
                     Toast.LENGTH_SHORT).show();
         } else{
             styleListAdapter = new DanceStyleListAdapter(activity.getApplicationContext(),

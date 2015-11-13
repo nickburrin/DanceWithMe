@@ -148,17 +148,7 @@ public class LoginActivity extends Activity {
                 e.printStackTrace();
             }
         });
-/*
-        // Callback registration
-        facebookLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Call private method
-                onFblogin(); // Ryan's code
-                // nickFBLogin();
-            }
-        });
-*/
+
 //        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {

@@ -78,7 +78,6 @@ public class VenueFragment extends Fragment implements LocationListener{
     @Override
     public void setMenuVisibility(final boolean visible) {
         super.setMenuVisibility(visible);
-        //if (activityReady) {
         ParseUser.getCurrentUser().saveInBackground();
         if (getActivity() != null) {
             if (visible) {
@@ -114,7 +113,7 @@ public class VenueFragment extends Fragment implements LocationListener{
         }
 
         if(venues.size() == 0){
-            Toast.makeText(getActivity().getApplicationContext(), "Specify your dance styles to start matching!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity().getApplicationContext(), "Specify your dance styles to see dance venues!", Toast.LENGTH_LONG).show();
             return;
         }
 

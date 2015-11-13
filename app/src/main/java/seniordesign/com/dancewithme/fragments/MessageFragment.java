@@ -3,23 +3,18 @@ package seniordesign.com.dancewithme.fragments;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -109,7 +104,7 @@ public class MessageFragment extends Fragment {
                     intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
                     startActivity(intent);
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Error finding that user", Toast.LENGTH_SHORT).show();
+                   Log.d(TAG, "Error finding that user");
                 }
             }
         });

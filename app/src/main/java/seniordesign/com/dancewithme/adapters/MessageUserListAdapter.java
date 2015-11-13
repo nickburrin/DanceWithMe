@@ -8,20 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.activities.MyApplication;
-import seniordesign.com.dancewithme.pojos.DanceStyle;
 
 /**
  * Created by ryantemplin on 11/10/15.
@@ -39,7 +35,6 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
     static class ViewHolder {
         ImageButton userProfPic;
         TextView userName;
-        ImageView yellowStar;
     }
 
     public MessageUserListAdapter(Context context, ArrayList<ParseUser> usersList, MyApplication app, boolean favorites) {
@@ -69,7 +64,6 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
                 // User message views
                 holder.userProfPic = (ImageButton) convertView.findViewById(R.id.iv_user_prof_pic);
                 holder.userName = (TextView) convertView.findViewById(R.id.tv_user_list_item);
-                holder.yellowStar = (ImageView) convertView.findViewById(R.id.yellow_star);
 
 
             }
@@ -105,13 +99,6 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
                 }
             } else{
                 Log.d(TAG, "something is jacked up in message adapter");
-            }
-
-
-            if(favoriteStatus){
-                holder.yellowStar.setVisibility(View.VISIBLE);
-            }else{
-                holder.yellowStar.setVisibility(View.GONE);
             }
         }
 

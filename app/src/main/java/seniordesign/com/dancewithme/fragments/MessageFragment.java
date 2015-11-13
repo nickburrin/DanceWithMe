@@ -3,24 +3,17 @@ package seniordesign.com.dancewithme.fragments;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -36,14 +29,8 @@ import seniordesign.com.dancewithme.pojos.Matches;
 
 public class MessageFragment extends Fragment {
     private static final String TAG = MessageFragment.class.getSimpleName();
-//<<<<<<< HEAD
-//    private String currentUserId;
-//    private MessageUserListAdapter namesArrayAdapter;
-//    private MessageUserListAdapter favoritesArrayAdapter;
-//=======
-    //List<ParseUser> userMatches;
     private MessageUserListAdapter namesArrayAdapter;
-//>>>>>>> master
+
     private ArrayList<String> names;
     private ArrayList<String> favorites;
     private ListView usersListView;
@@ -51,11 +38,8 @@ public class MessageFragment extends Fragment {
     private ProgressDialog progressDialog;
     private BroadcastReceiver receiver = null;
     private View view;
-//<<<<<<< HEAD
-//    private View convertFavoriteView;
-//    private View convertUserView;
     private MyApplication application;
-//=======
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,12 +49,7 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_message, container, false);
-//<<<<<<< HEAD
-//        //convertFavoriteView = inflater.inflate(R.layout.favorite_list_item, container, false);
-//        //showSpinner();
-//=======
         setConversationsList();
-//>>>>>>> master
         return view;
     }
 
@@ -81,12 +60,6 @@ public class MessageFragment extends Fragment {
     }
 
     private void setConversationsList() {
-//<<<<<<< HEAD
-//        final ArrayList<ParseUser> userMatches = (ArrayList<ParseUser>) ((Matches) ParseUser.getCurrentUser().get("Matches")).getMatches();
-//        names = new ArrayList<String>();
-//        final ArrayList<ParseUser> userFavorites = (ArrayList<ParseUser>) ParseUser.getCurrentUser().get("Favorites");
-//        favorites = new ArrayList<String>();
-//=========
         ParseQuery<Matches> matchQuery = ParseQuery.getQuery("Matches");
         matchQuery.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
 
@@ -98,9 +71,6 @@ public class MessageFragment extends Fragment {
         }
 
         names = new ArrayList<>();
-
-
-
 
         //User Matches
         for(ParseUser i: userMatches) {
@@ -122,14 +92,19 @@ public class MessageFragment extends Fragment {
         usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int i, long l) {
-                // Object item = gamesListAdapter.getItem(position);
-                openConversation(i);
+                Object item = namesArrayAdapter.getItem(i);
+                if(item instanceof ParseUser){
+                    Intent intent = new Intent(getActivity().getApplicationContext(), MessagingActivity.class);
+                    intent.putExtra("RECIPIENT_ID", ((ParseUser) item).getObjectId());
+                    startActivity(intent);
+                }
+
                 Log.d(TAG, "you clicked the message");
             }
         });
         usersListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l) {
+            public boolean onItemLongClick(AdapterView<?> a, View v, int i, long l){
                 ParseQuery<Matches> matchQuery = ParseQuery.getQuery("Matches");
                 matchQuery.whereEqualTo("userId", ParseUser.getCurrentUser().getObjectId());
                 Matches userMatches = null;
@@ -156,24 +131,6 @@ public class MessageFragment extends Fragment {
 //                ParseUser.getCurrentUser().saveInBackground();
 //                setConversationsList();
                 return false;
-            }
-        });
-    }
-
-    // Open a conversation with one person
-    //  public void openConversation(ArrayList<String> names, int pos) {
-    public void openConversation(int pos) {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("first_name", names.get(pos));
-        query.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> user, com.parse.ParseException e) {
-                if (e == null) {
-                    Intent intent = new Intent(getActivity().getApplicationContext(), MessagingActivity.class);
-                    intent.putExtra("RECIPIENT_ID", user.get(0).getObjectId());
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Error finding that user", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }

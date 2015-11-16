@@ -286,9 +286,10 @@ public class MatchActivity extends Activity {
 
     private void acceptButton() {
         // Get this User and add it to my "Likes" array
-        ParseUser.getCurrentUser().add("Likes", matchUser);
+        Likes l = (Likes) ParseUser.getCurrentUser().get("Likes");
+        l.addLike(matchUser);
 
-        if(matchUser.getList("Likes").contains(ParseUser.getCurrentUser())){
+        if(((Likes) matchUser.get("Likes")).getLikesArray().contains(ParseUser.getCurrentUser())){
             // There is a like situation (FYI both of these lines saveInBackground for Matches class; no need to call it explicitly)
             ((Matches) ParseUser.getCurrentUser().get("Matches")).addMatch(matchUser);
             ((Matches) matchUser.get("Matches")).addMatch(ParseUser.getCurrentUser());
@@ -353,7 +354,7 @@ public class MatchActivity extends Activity {
 
     private void denyButton(){
         // Grab the user you just denied and add it to Dislikes
-        ParseUser.getCurrentUser().addUnique("Dislikes", matchUser);
-        ParseUser.getCurrentUser().saveInBackground();
+        Dislikes d = (Dislikes) ParseUser.getCurrentUser().get("Dislikes");
+        d.addDislike(matchUser);
     }
 }

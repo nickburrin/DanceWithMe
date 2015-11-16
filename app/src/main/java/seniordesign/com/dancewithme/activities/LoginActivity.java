@@ -227,8 +227,6 @@ public class LoginActivity extends Activity {
         newUser.put("first_name", firstname);
         newUser.put("last_name", lastname);
         newUser.put("gender", gender);
-        newUser.put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
-        newUser.put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));
         //newUser.put("ProfilePicture", profilePicture);
 
         newUser.signUpInBackground(new SignUpCallback() {
@@ -236,6 +234,8 @@ public class LoginActivity extends Activity {
                 if (e == null) {
                     // In addition to sign-up, add a Matches object for this user
                     Matches newMatcher = new Matches(ParseUser.getCurrentUser().getObjectId(), Arrays.asList());
+                    ParseUser.getCurrentUser().put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
+                    ParseUser.getCurrentUser().put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));
                     ParseUser.getCurrentUser().put("Matches", newMatcher);
                     ParseUser.getCurrentUser().saveInBackground();
 

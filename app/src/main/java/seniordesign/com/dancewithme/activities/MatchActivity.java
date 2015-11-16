@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
 import seniordesign.com.dancewithme.pojos.Dancehall;
+import seniordesign.com.dancewithme.pojos.Dislikes;
+import seniordesign.com.dancewithme.pojos.Likes;
 import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
@@ -143,8 +145,11 @@ public class MatchActivity extends Activity {
         // Remove this User, Dislikes, and Likes from this group
         ArrayList<ParseUser> attendees = new ArrayList<>(venue.getAttendees());
         attendees.remove(ParseUser.getCurrentUser());
-        attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Dislikes"));
-        attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Likes"));
+
+        Dislikes d = (Dislikes) ParseUser.getCurrentUser().get("Dislikes");
+        attendees.removeAll(d.getDislikesArray());
+        Likes l = (Likes) ParseUser.getCurrentUser().get("Likes");
+        attendees.removeAll(l.getLikesArray());
 
         namesQueue = sortUsers(attendees);
     }

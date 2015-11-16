@@ -5,6 +5,18 @@ local.properties
 .DS_Store
 build
 
+# keystore
+*.jks
+
+# picture stuff
+*.png
+*.PNG
+*.jpg
+*.jpeg
+*.JPG
+*.JPEG
+pics/
+
 #built application files
 *.apk
 *.ap_

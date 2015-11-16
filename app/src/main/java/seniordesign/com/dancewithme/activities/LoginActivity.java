@@ -44,6 +44,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.pojos.Dislikes;
+import seniordesign.com.dancewithme.pojos.Likes;
 import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
@@ -81,15 +83,17 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
 
+        // This needs to go in onResume()
         if(ParseUser.getCurrentUser() != null){
             startService(new Intent(LoginActivity.this, MessageService.class));
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         }
 
-        if(AccessToken.getCurrentAccessToken() != null){
+        // This needs to go in onResume()
+ /*       if(AccessToken.getCurrentAccessToken() != null){
             checkIfFacebookUserIsDanceWithMeUser(AccessToken.getCurrentAccessToken());
         }
-
+*/
         //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
@@ -223,8 +227,8 @@ public class LoginActivity extends Activity {
         newUser.put("first_name", firstname);
         newUser.put("last_name", lastname);
         newUser.put("gender", gender);
-        newUser.put("Likes", Arrays.asList());
-        newUser.put("Dislikes", Arrays.asList());
+        newUser.put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
+        newUser.put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));
         //newUser.put("ProfilePicture", profilePicture);
 
         newUser.signUpInBackground(new SignUpCallback() {

@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import seniordesign.com.dancewithme.R;
+import seniordesign.com.dancewithme.activities.ChangePasswordActivity;
 import seniordesign.com.dancewithme.activities.DanceStyleActivity;
 import seniordesign.com.dancewithme.activities.EditUserActivity;
 import seniordesign.com.dancewithme.activities.HomeActivity;
@@ -63,12 +64,13 @@ public class ProfileFragment extends Fragment {
 
     private View view;
     private Button logoutButton;
+    private Button changePasswordButton;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.activity = (HomeActivity)this.getActivity();
+        this.activity = (HomeActivity) this.getActivity();
     }
 
     @Override
@@ -112,6 +114,16 @@ public class ProfileFragment extends Fragment {
 
         stylesList = (ListView) view.findViewById(R.id.lv_dance_styles);
 
+        changePasswordButton = (Button) view.findViewById(R.id.changePassword);
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(activity.getApplicationContext(), ChangePasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         logoutButton = (Button) view.findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,35 +148,35 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         initFragment();
     }
 
     private void checkIfFacebookPictureUpdated() {
-        if( (AccessToken.getCurrentAccessToken() != null) && (Profile.getCurrentProfile() != null) ){
+        if ((AccessToken.getCurrentAccessToken() != null) && (Profile.getCurrentProfile() != null)) {
             new AsyncGetProfilePic().execute(Profile.getCurrentProfile().getProfilePictureUri(220, 220).toString());
         }
     }
 
     private void getUser() {
-        if(ParseUser.getCurrentUser() != null) {
+        if (ParseUser.getCurrentUser() != null) {
             ParseFile profilePic = (ParseFile) ParseUser.getCurrentUser().get("ProfilePicture");
-            if(profilePic != null) {
+            if (profilePic != null) {
                 try {
                     profPic.setImageBitmap(BitmapFactory.decodeByteArray(profilePic.getData(), 0, profilePic.getData().length));
                 } catch (com.parse.ParseException e) {
                     e.printStackTrace();
                 }
-            } else{
+            } else {
                 Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
             }
-        }else{
+        } else {
             Toast.makeText(this.activity.getApplicationContext(), "No user", Toast.LENGTH_LONG).show();
         }
     }
@@ -175,18 +187,18 @@ public class ProfileFragment extends Fragment {
         usernameView.setText(ParseUser.getCurrentUser().getString("first_name") + " " + ParseUser.getCurrentUser().getString("last_name"));
 
         Object ds = null;
-        for(String style: STYLE_LIST){
-            if((ds = ParseUser.getCurrentUser().getParseObject(style)) != null){
+        for (String style : STYLE_LIST) {
+            if ((ds = ParseUser.getCurrentUser().getParseObject(style)) != null) {
                 userStyles.add(ds);
             }
         }
 
-        if(userStyles.isEmpty()){
+        if (userStyles.isEmpty()) {
             Toast.makeText(activity.getApplicationContext(), "Specify your dance styles and start matching!",
                     Toast.LENGTH_SHORT).show();
-        } else{
+        } else {
             styleListAdapter = new DanceStyleListAdapter(activity.getApplicationContext(),
-                    userStyles, (MyApplication)activity.getApplication());
+                    userStyles, (MyApplication) activity.getApplication());
 
             stylesList.setAdapter(styleListAdapter);
             stylesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -237,7 +249,7 @@ public class ProfileFragment extends Fragment {
                 // Get the Image from data
 
                 Uri selectedImage = data.getData();
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                 // Get the cursor
                 Cursor cursor = this.activity.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
@@ -252,11 +264,11 @@ public class ProfileFragment extends Fragment {
                 ImageView imgView = (ImageView) this.activity.findViewById(R.id.ib_profPic);
 
                 Bitmap bm = BitmapFactory.decodeFile(imgDecodableString);
-                ((BitmapDrawable)imgView.getDrawable()).getBitmap().recycle();
+                ((BitmapDrawable) imgView.getDrawable()).getBitmap().recycle();
                 imgView.setImageBitmap(bm);
 
 
-                Bitmap out = Bitmap.createScaledBitmap(bm, (int)(bm.getWidth()*0.5), (int)(bm.getHeight()*0.5), true);
+                Bitmap out = Bitmap.createScaledBitmap(bm, (int) (bm.getWidth() * 0.5), (int) (bm.getHeight() * 0.5), true);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 out.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();

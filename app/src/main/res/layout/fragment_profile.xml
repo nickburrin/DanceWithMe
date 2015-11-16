@@ -102,6 +102,26 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
+            <Button
+                style="@style/ButtonTransparent"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/changePassword"
+                android:id="@+id/changePassword"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/transparent"
+                android:textSize="14sp"
+                android:paddingBottom="0dp"
+                android:layout_marginBottom="2dp"
+                android:textColor="@color/dwm_blue" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
                 <Button
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

@@ -83,6 +83,7 @@
     <string name="title_activity_list_users">ListUsersActivity</string>
     <string name="message_elipses">Message...</string>
     <string name="logout">Logout</string>
+    <string name="changePassword">Change Password</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -111,5 +112,14 @@
     <string name="title_activity_dancestyle">DanceStyleActivity</string>
     <string name="facebook_app_id">443550519189137</string>
     <string name="title_activity_match">MatchActivity</string>
+    <string name="title_activity_change_password">ChangePassword</string>
+
+    <!-- Change Your Page Strings -->
+    <string name="title_activity_change_your_password">Change your Password</string>
+    <string name="change_your_password_instruct">Please fill out the following fields:</string>
+    <string name="old_password">Old Password:</string>
+    <string name="new_password">New Password:</string>
+    <string name="confirm_new_password">Confirm New Password:</string>
+    <string name="action_forgot_password">Forgot Your Password?</string>
 </resources>
 

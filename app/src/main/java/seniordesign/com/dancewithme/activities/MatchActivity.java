@@ -147,8 +147,20 @@ public class MatchActivity extends Activity {
         attendees.remove(ParseUser.getCurrentUser());
 
         Dislikes d = (Dislikes) ParseUser.getCurrentUser().get("Dislikes");
-        attendees.removeAll(d.getDislikesArray());
+        ParseQuery<Dislikes> dislikesParseQuery = ParseQuery.getQuery("Dislikes");
+        dislikesParseQuery.whereEqualTo("objectId", d.getObjectId());
         Likes l = (Likes) ParseUser.getCurrentUser().get("Likes");
+        ParseQuery<Likes> likesParseQuery = ParseQuery.getQuery("Likes");
+        likesParseQuery.whereEqualTo("objectId", l.getObjectId());
+
+        try{
+            d = dislikesParseQuery.getFirst();
+            l = likesParseQuery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        attendees.removeAll(d.getDislikesArray());
         attendees.removeAll(l.getLikesArray());
 
         namesQueue = sortUsers(attendees);
@@ -253,6 +265,15 @@ public class MatchActivity extends Activity {
     private void acceptButton() {
         // Get this User and add it to my "Likes" array
         Likes l = (Likes) ParseUser.getCurrentUser().get("Likes");
+        ParseQuery<Likes> likesParseQuery = ParseQuery.getQuery("Likes");
+        likesParseQuery.whereEqualTo("objectId", l.getObjectId());
+
+        try{
+            l = likesParseQuery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         l.addLike(matchUser);
 
         if(((Likes) matchUser.get("Likes")).getLikesArray().contains(ParseUser.getCurrentUser())){
@@ -319,9 +340,18 @@ public class MatchActivity extends Activity {
         }
     }
 
-    private void denyButton(){
+    private void denyButton() {
         // Grab the user you just denied and add it to Dislikes
         Dislikes d = (Dislikes) ParseUser.getCurrentUser().get("Dislikes");
+        ParseQuery<Dislikes> dislikesParseQuery = ParseQuery.getQuery("Dislikes");
+        dislikesParseQuery.whereEqualTo("objectId", d.getObjectId());
+
+        try {
+            d = dislikesParseQuery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         d.addDislike(matchUser);
     }
 }

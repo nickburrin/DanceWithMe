@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment {
     private View view;
     private Button logoutButton;
     private Button changePasswordButton;
+    private boolean showPictureToastOnce;
 
 
     @Override
@@ -173,8 +174,9 @@ public class ProfileFragment extends Fragment {
                 } catch (com.parse.ParseException e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if(showPictureToastOnce == false){
                 Toast.makeText(this.activity.getApplicationContext(), "No profile pic", Toast.LENGTH_LONG).show();
+                showPictureToastOnce = true;
             }
         } else {
             Toast.makeText(this.activity.getApplicationContext(), "No user", Toast.LENGTH_LONG).show();

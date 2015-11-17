@@ -89,6 +89,12 @@
                 android:background="@color/dwm_blue"/>
         </LinearLayout>
 
+        <!--Divider Line-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/grey_input_border"/>
+
         <ListView
             android:id="@+id/lv_dance_styles"
             android:layout_width="match_parent"
@@ -97,6 +103,12 @@
             android:background="@color/white"
             android:divider="@color/grey_input_border"
             android:dividerHeight="2dp" />
+
+        <!--Divider Line-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/grey_input_border"/>
 
         <LinearLayout
             android:layout_width="match_parent"

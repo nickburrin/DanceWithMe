@@ -121,5 +121,8 @@
     <string name="new_password">New Password:</string>
     <string name="confirm_new_password">Confirm New Password:</string>
     <string name="action_forgot_password">Forgot Your Password?</string>
+    <string name="lead_or_follow">Lead or Follow</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
 

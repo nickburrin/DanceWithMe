@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    android:layout_marginTop="50dp"
-    android:layout_marginBottom="50dp"
+    android:layout_marginTop="30dp"
+    android:layout_marginBottom="30dp"
     android:paddingTop="10dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
@@ -38,9 +38,48 @@
                 android:id="@+id/spinner_dance_style"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="30dp"
+                android:paddingBottom="10dp"
                 android:spinnerMode="dialog"
                 android:prompt="@string/select_style"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lead_or_follow"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <!--Divider Line-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/grey_input_border"/>
+
+            <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/radiogroup_lead_or_follow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="10dp"
+                android:layout_weight="100">
+
+                <RadioButton
+                    android:id="@+id/radio_lead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
+                    android:layout_marginLeft="60dp"
+                    android:text="Lead"
+                    android:onClick="onLeadFollowRadioClicked"/>
+
+                <RadioButton
+                    android:id="@+id/radio_follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
+                    android:text="Follow"
+                    android:onClick="onLeadFollowRadioClicked"/>
+            </RadioGroup>
 
             <TextView
                 android:layout_width="match_parent"
@@ -60,28 +99,33 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="30dp">
+                android:paddingBottom="10dp"
+                android:layout_weight="90">
 
                 <RadioButton
                     android:id="@+id/radio_beginner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="30"
+                    android:layout_marginLeft="10dp"
                     android:text="@string/beginner_skill"
-                    android:onClick="onRadioButtonClicked"/>
+                    android:onClick="onSkillRadioClicked"/>
 
                 <RadioButton
                     android:id="@+id/radio_intermediate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="30"
                     android:text="@string/intermediate_skill"
-                    android:onClick="onRadioButtonClicked"/>
+                    android:onClick="onSkillRadioClicked"/>
 
                 <RadioButton
                     android:id="@+id/radio_expert"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="30"
                     android:text="@string/expert_skill"
-                    android:onClick="onRadioButtonClicked"/>
+                    android:onClick="onSkillRadioClicked"/>
 
             </RadioGroup>
 
@@ -119,7 +163,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="30dp"
+                android:paddingTop="10dp"
                 android:gravity="center" >
 
                 <Button

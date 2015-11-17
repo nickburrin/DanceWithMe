@@ -43,8 +43,9 @@ public class VenueFragment extends Fragment implements LocationListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mLocationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50000, 0, this); // Update location every 50 seconds
     }
 
     @Override

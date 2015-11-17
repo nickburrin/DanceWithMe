@@ -261,6 +261,8 @@ public class LoginActivity extends Activity {
                 if (e == null) {
                     // In addition to sign-up, add a Matches object for this user
                     Matches newMatcher = new Matches(ParseUser.getCurrentUser().getObjectId(), Arrays.asList());
+                    ParseUser.getCurrentUser().put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
+                    ParseUser.getCurrentUser().put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));
                     ParseUser.getCurrentUser().put("Matches", newMatcher);
                     ParseUser.getCurrentUser().put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
                     ParseUser.getCurrentUser().put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));

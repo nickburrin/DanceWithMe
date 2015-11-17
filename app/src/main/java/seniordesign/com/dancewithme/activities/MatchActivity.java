@@ -167,48 +167,50 @@ public class MatchActivity extends Activity {
     }
 
     private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
-        LinkedList<ParseUser> temp = new LinkedList<>();
-
         if (attendees.size() > 0) {
             DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(venue.getStyle());
             String myGender = ParseUser.getCurrentUser().getString("gender");
             String venueStyle = venue.getStyle();
+            boolean leadStatus = style.isLead();
+            String mapping[] = null;
 
             if (style.getPreferences().isEmpty()) {
                 // Current User has no preferences, sort according to predefined requirements
                 if (style.getSkill().equals("Beginner")) {
                     // Current user is a Beginner, sort based on following order: Beg, Int, Exp
-                    return sort(attendees, myGender, venueStyle, BEGINNER_MAPPING);
+                    mapping = BEGINNER_MAPPING;
                 } else if (style.getSkill().equals("Intermediate")) {
                     // Current user is a Intermediate, sort based on following order: Int, Exp, Beg
-                    return sort(attendees, myGender, venueStyle, INTERMEDIATE_MAPPING);
+                    mapping = INTERMEDIATE_MAPPING;
                 } else {
                     // Current user is an Expert, sort based on following order: Exp, Int, Beg
-                    return sort(attendees, myGender, venueStyle, EXPERT_MAPPING);
+                    mapping = EXPERT_MAPPING;
                 }
             } else {
                 // Current User has preferences, sort according to their preferences
-                String[] prefs = new String[style.getPreferences().size()];
+                mapping = new String[style.getPreferences().size()];
                 for(int i = 0; i < style.getPreferences().size(); i++){
-                    prefs[i] = style.getPreferences().get(i);
+                    mapping[i] = style.getPreferences().get(i);
                 }
-
-                return sort(attendees, myGender, venueStyle, prefs);
             }
+
+            return sort(attendees, leadStatus, venueStyle, mapping);
         }
 
-        return temp;
+        return new LinkedList<>();
     }
 
-    private LinkedList<ParseUser> sort(ArrayList<ParseUser> attendees, String myGender, String venueStyle, String[] mapping) {
+    private LinkedList<ParseUser> sort(ArrayList<ParseUser> attendees, boolean myLeadStatus, String venueStyle, String[] mapping) {
         LinkedList<ParseUser> temp = new LinkedList<>();
 
+        DanceStyle tempStyle = null;
         for (String skill : mapping) {
             for (ParseUser user : attendees) {
                 try{
                     user.fetchIfNeeded();
-                    // Only add this User if their skill matches and they're of the opposite gender
-                    if (((DanceStyle) user.get(venueStyle)).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
+                    tempStyle = (DanceStyle) user.get(venueStyle);
+                    // Only add this User if their skill matches and they're of the opposite lead status
+                    if (tempStyle.getSkill().equals(skill) && tempStyle.isLead() != myLeadStatus) {
                         temp.add(user);
                     }
                 } catch (ParseException e) {
@@ -335,8 +337,6 @@ public class MatchActivity extends Activity {
                     }
                 }
             });
-
-            //ParseUser.getCurrentUser().saveInBackground();
         }
     }
 

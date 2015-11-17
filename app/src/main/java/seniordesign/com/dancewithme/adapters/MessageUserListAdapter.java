@@ -91,6 +91,11 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
                     e.printStackTrace();
                 }
             } else{
+                if(user.getString("gender").equals("Male")){
+                    holder.userProfPic.setImageResource(R.drawable.blank_avatar_male);
+                } else{
+                    holder.userProfPic.setImageResource(R.drawable.blank_avatar_female);
+                }
                 Log.d(TAG, "This person's profile picture is null");
             }
         }

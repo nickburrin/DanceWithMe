@@ -336,7 +336,7 @@ public class MatchActivity extends Activity {
                 }
             });
 
-            ParseUser.getCurrentUser().saveInBackground();
+            //ParseUser.getCurrentUser().saveInBackground();
         }
     }
 

@@ -89,11 +89,6 @@ public class LoginActivity extends Activity {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         }
 
-        // This needs to go in onResume()
- /*       if(AccessToken.getCurrentAccessToken() != null){
-            checkIfFacebookUserIsDanceWithMeUser(AccessToken.getCurrentAccessToken());
-        }
-*/
         //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);

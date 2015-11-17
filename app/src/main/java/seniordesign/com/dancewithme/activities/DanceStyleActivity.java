@@ -140,9 +140,15 @@ public class DanceStyleActivity extends Activity {
     }
 
     private boolean submitDanceStyle() {
-        style = mDanceStyle.getSelectedItem().toString();
+        try {
+            style = mDanceStyle.getSelectedItem().toString();
+        }catch(NullPointerException e){
+            Toast.makeText(this.getApplicationContext(), "Complete all fields",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        if(skillLevel == null || style == null || isLead == null){
+        if(skillLevel == null || isLead == null){
             Toast.makeText(this.getApplicationContext(), "Complete all fields",
                     Toast.LENGTH_SHORT).show();
             return false;

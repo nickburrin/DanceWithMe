@@ -180,8 +180,8 @@ public class MatchActivity extends Activity {
                 for(int i = 0; i < style.getPreferences().size(); i++){
                     prefs[i] = style.getPreferences().get(i);
                 }
-                
-                return sort(attendees, myGender, venueStyle, (String[]) style.getPreferences().toArray());
+
+                return sort(attendees, myGender, venueStyle, prefs);
             }
         }
 

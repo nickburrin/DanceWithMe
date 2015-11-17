@@ -17,7 +17,7 @@ import com.parse.ParseException;
 import seniordesign.com.dancewithme.R;
 
 
-public class ForgotYourPassword extends Activity {
+public class ForgotPasswordActivity extends Activity {
     private EditText mEdit = null;
     private final int emailLength = 30;
 
@@ -91,12 +91,13 @@ public class ForgotYourPassword extends Activity {
 
             this.resetPassword(mEdit.getText().toString());
 
-            Toast.makeText(ForgotYourPassword.this, "Your password has been emailed to you.", Toast.LENGTH_SHORT).show();
-            this.displayLoginPage(view);
+            Toast.makeText(ForgotPasswordActivity.this, "Your password has been emailed to you.", Toast.LENGTH_SHORT).show();
+            //this.displayLoginPage(view);
+            finish();
         }
         catch(Exception e)
         {
-            Toast.makeText(ForgotYourPassword.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ForgotPasswordActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }

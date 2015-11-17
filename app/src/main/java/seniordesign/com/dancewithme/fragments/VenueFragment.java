@@ -29,7 +29,7 @@ import seniordesign.com.dancewithme.pojos.Dancehall;
 import seniordesign.com.dancewithme.utils.Logger;
 
 
-public class VenueFragment extends Fragment implements LocationListener{
+public class VenueFragment extends Fragment implements LocationListener {
     private static final String TAG = VenueFragment.class.getSimpleName();
     private String[] DANCE_STYLES = new String[]{"Country", "Salsa", "Tango", "Swing"};
 
@@ -43,8 +43,9 @@ public class VenueFragment extends Fragment implements LocationListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mLocationManager = (LocationManager) getActivity().getSystemService(getActivity().LOCATION_SERVICE);
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 50000, 0, this); // Update location every 50 seconds
     }
 
     @Override
@@ -64,7 +65,7 @@ public class VenueFragment extends Fragment implements LocationListener{
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
     }
 
@@ -92,7 +93,7 @@ public class VenueFragment extends Fragment implements LocationListener{
 
         ParseQuery<Dancehall> query = ParseQuery.getQuery("Dancehall");
 
-        if(currentLocation != null) {
+        if (currentLocation != null) {
             query.whereWithinMiles("latlong", new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude()), 50.0);
         } else {
             query.whereNotEqualTo("objectId", null);
@@ -106,13 +107,13 @@ public class VenueFragment extends Fragment implements LocationListener{
         }
 
         venues = new ArrayList<>();
-        for(Dancehall v: temp){
-            if(ParseUser.getCurrentUser().get(v.getStyle()) != null){
+        for (Dancehall v : temp) {
+            if (ParseUser.getCurrentUser().get(v.getStyle()) != null) {
                 venues.add(v);
             }
         }
 
-        if(venues.size() == 0){
+        if (venues.size() == 0) {
             Toast.makeText(getActivity().getApplicationContext(), "Specify your dance styles to see dance venues!", Toast.LENGTH_LONG).show();
             return;
         }
@@ -154,6 +155,6 @@ public class VenueFragment extends Fragment implements LocationListener{
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        Logger.d("Latitude","status");
+        Logger.d("Latitude", "status");
     }
 }

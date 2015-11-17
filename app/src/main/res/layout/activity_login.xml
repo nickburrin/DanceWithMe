@@ -78,13 +78,21 @@
                 style="@style/ButtonTransparent"
                 android:text="@string/action_register"
                 android:textColor="@color/white"
-                android:padding="20dp"/>
+                android:paddingTop="20dp"/>
+            <Button android:id="@+id/forgotPasswordButton"
+                style="@style/ButtonTransparent"
+                android:text="@string/action_forgot_password"
+                android:textColor="@color/bg_light_grey"
+                android:paddingTop="10dp"
+                android:paddingBottom="15dp"
+                android:layout_margin="0dp"/>
 
             <Button android:id="@+id/loginButton"
                 style="@style/button_confirm"
                 android:text="@string/action_sign_in"
                 android:textSize="20sp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="0dp"
+                />
 
 
             <com.facebook.login.widget.LoginButton

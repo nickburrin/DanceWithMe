@@ -13,10 +13,11 @@ import java.util.ArrayList;
 public class DanceStyle extends ParseObject{
     public DanceStyle() {}
 
-    public DanceStyle(String id, String style, String skill, ArrayList<String> prefs){
+    public DanceStyle(String id, String style, boolean isLead, String skill, ArrayList<String> prefs){
         this();
         setUserId(id);
         setStyle(style);
+        setLead(isLead);
         setSkill(skill);
         setPreferences(prefs);
     }
@@ -60,6 +61,21 @@ public class DanceStyle extends ParseObject{
     public void setStyle(String style) {
         put("style", style);
         saveInBackground();
+    }
+
+    public void setLead(boolean b){
+        put("isLead", b);
+        saveInBackground();
+    }
+
+    public boolean isLead(){
+        try {
+            this.fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return getBoolean("isLead");
     }
 
     public String getSkill() {

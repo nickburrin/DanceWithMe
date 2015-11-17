@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import seniordesign.com.dancewithme.R;
 import seniordesign.com.dancewithme.pojos.DanceStyle;
 import seniordesign.com.dancewithme.pojos.Dancehall;
+import seniordesign.com.dancewithme.pojos.Dislikes;
+import seniordesign.com.dancewithme.pojos.Likes;
 import seniordesign.com.dancewithme.pojos.Matches;
 import seniordesign.com.dancewithme.utils.Logger;
 
@@ -143,8 +145,23 @@ public class MatchActivity extends Activity {
         // Remove this User, Dislikes, and Likes from this group
         ArrayList<ParseUser> attendees = new ArrayList<>(venue.getAttendees());
         attendees.remove(ParseUser.getCurrentUser());
-        attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Dislikes"));
-        attendees.removeAll(ParseUser.getCurrentUser().<ParseUser>getList("Likes"));
+
+        Dislikes d = (Dislikes) ParseUser.getCurrentUser().get("Dislikes");
+        ParseQuery<Dislikes> dislikesParseQuery = ParseQuery.getQuery("Dislikes");
+        dislikesParseQuery.whereEqualTo("objectId", d.getObjectId());
+        Likes l = (Likes) ParseUser.getCurrentUser().get("Likes");
+        ParseQuery<Likes> likesParseQuery = ParseQuery.getQuery("Likes");
+        likesParseQuery.whereEqualTo("objectId", l.getObjectId());
+
+        try{
+            d = dislikesParseQuery.getFirst();
+            l = likesParseQuery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        attendees.removeAll(d.getDislikesArray());
+        attendees.removeAll(l.getLikesArray());
 
         namesQueue = sortUsers(attendees);
     }
@@ -152,84 +169,50 @@ public class MatchActivity extends Activity {
     private LinkedList<ParseUser> sortUsers(ArrayList<ParseUser> attendees) {
         LinkedList<ParseUser> temp = new LinkedList<>();
 
-        if(attendees.size() > 0) {
+        if (attendees.size() > 0) {
             DanceStyle style = (DanceStyle) ParseUser.getCurrentUser().get(venue.getStyle());
             String myGender = ParseUser.getCurrentUser().getString("gender");
+            String venueStyle = venue.getStyle();
 
             if (style.getPreferences().isEmpty()) {
                 // Current User has no preferences, sort according to predefined requirements
                 if (style.getSkill().equals("Beginner")) {
                     // Current user is a Beginner, sort based on following order: Beg, Int, Exp
-                    for (String skill : BEGINNER_MAPPING) {
-                        for (ParseUser user : attendees) {
-                            try{
-                                user.fetchIfNeeded();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            // Only add this User if their skill matches and their of the opposite gender
-                            try {
-                                if (((DanceStyle) user.fetchIfNeeded().get(venue.getStyle())).getSkill().equals(skill) && !user.fetchIfNeeded().getString("gender").equals(myGender)) {
-                                    temp.add(user);
-                                }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+                    return sort(attendees, myGender, venueStyle, BEGINNER_MAPPING);
                 } else if (style.getSkill().equals("Intermediate")) {
                     // Current user is a Intermediate, sort based on following order: Int, Exp, Beg
-                    for (String skill : INTERMEDIATE_MAPPING) {
-                        for (ParseUser user : attendees) {
-                            try{
-                                user.fetchIfNeeded();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            // Only add this User if their skill matches and their of the opposite gender
-                            if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
-                                temp.add(user);
-                            }
-                        }
-                    }
+                    return sort(attendees, myGender, venueStyle, INTERMEDIATE_MAPPING);
                 } else {
                     // Current user is an Expert, sort based on following order: Exp, Int, Beg
-                    for (String skill : EXPERT_MAPPING) {
-                        for (ParseUser user : attendees) {
-                            try{
-                                user.fetchIfNeeded();
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-
-                            // Only add this User if their skill matches and their of the opposite gender
-                            if (((DanceStyle) user.get(venue.getStyle())).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
-                                temp.add(user);
-                            }
-                        }
-                    }
+                    return sort(attendees, myGender, venueStyle, EXPERT_MAPPING);
                 }
             } else {
                 // Current User has preferences, sort according to their preferences
-                ArrayList<String> prefs = style.getPreferences();
+                String[] prefs = new String[style.getPreferences().size()];
+                for(int i = 0; i < style.getPreferences().size(); i++){
+                    prefs[i] = style.getPreferences().get(i);
+                }
 
-                for (String skill : prefs) {
-                    for (ParseUser user : attendees) {
-                        // Only add this User if their skill matches and their of the opposite gender
-                        try{
-                            user.fetchIfNeeded();
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+                return sort(attendees, myGender, venueStyle, prefs);
+            }
+        }
 
-                        try {
-                            if (((DanceStyle) user.fetchIfNeeded().get(venue.getStyle())).getSkill().equals(skill) && !user.fetchIfNeeded().getString("gender").equals(myGender)) {
-                                temp.add(user);
-                            }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
+        return temp;
+    }
+
+    private LinkedList<ParseUser> sort(ArrayList<ParseUser> attendees, String myGender, String venueStyle, String[] mapping) {
+        LinkedList<ParseUser> temp = new LinkedList<>();
+
+        for (String skill : mapping) {
+            for (ParseUser user : attendees) {
+                try{
+                    user.fetchIfNeeded();
+                    // Only add this User if their skill matches and they're of the opposite gender
+                    if (((DanceStyle) user.get(venueStyle)).getSkill().equals(skill) && !user.getString("gender").equals(myGender)) {
+                        temp.add(user);
                     }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -281,9 +264,19 @@ public class MatchActivity extends Activity {
 
     private void acceptButton() {
         // Get this User and add it to my "Likes" array
-        ParseUser.getCurrentUser().add("Likes", matchUser);
+        Likes l = (Likes) ParseUser.getCurrentUser().get("Likes");
+        ParseQuery<Likes> likesParseQuery = ParseQuery.getQuery("Likes");
+        likesParseQuery.whereEqualTo("objectId", l.getObjectId());
 
-        if(matchUser.getList("Likes").contains(ParseUser.getCurrentUser())){
+        try{
+            l = likesParseQuery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        l.addLike(matchUser);
+
+        if(((Likes) matchUser.get("Likes")).getLikesArray().contains(ParseUser.getCurrentUser())){
             // There is a like situation (FYI both of these lines saveInBackground for Matches class; no need to call it explicitly)
             ((Matches) ParseUser.getCurrentUser().get("Matches")).addMatch(matchUser);
             ((Matches) matchUser.get("Matches")).addMatch(ParseUser.getCurrentUser());
@@ -342,13 +335,23 @@ public class MatchActivity extends Activity {
                     }
                 }
             });
+
+            //ParseUser.getCurrentUser().saveInBackground();
         }
-        ParseUser.getCurrentUser().saveInBackground();
     }
 
-    private void denyButton(){
+    private void denyButton() {
         // Grab the user you just denied and add it to Dislikes
-        ParseUser.getCurrentUser().addUnique("Dislikes", matchUser);
-        ParseUser.getCurrentUser().saveInBackground();
+        Dislikes d = (Dislikes) ParseUser.getCurrentUser().get("Dislikes");
+        ParseQuery<Dislikes> dislikesParseQuery = ParseQuery.getQuery("Dislikes");
+        dislikesParseQuery.whereEqualTo("objectId", d.getObjectId());
+
+        try {
+            d = dislikesParseQuery.getFirst();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        d.addDislike(matchUser);
     }
 }

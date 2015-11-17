@@ -32,11 +32,13 @@ public class DanceStyleActivity extends Activity {
     ArrayList<String> DANCE_STYLES = new ArrayList(Arrays.asList("Country", "Salsa", "Tango", "Swing"));
 
     Spinner mDanceStyle;
+    RadioGroup mLead;
     RadioGroup mSkill;
     Button mCancel;
     Button mSubmit;
 
     DanceStyle existingStyle;
+    Boolean isLead;
     String style;
     String skillLevel;
     ArrayList<String> prefs = new ArrayList<String>();
@@ -58,6 +60,7 @@ public class DanceStyleActivity extends Activity {
             try {
                 existingStyle = (DanceStyle) query.getFirst();
                 style = existingStyle.getStyle();
+                isLead = existingStyle.isLead();
                 skillLevel = existingStyle.getSkill();
                 prefs = existingStyle.getPreferences();
             } catch (ParseException e) {
@@ -81,11 +84,18 @@ public class DanceStyleActivity extends Activity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mDanceStyle.setAdapter(new NothingSelectedSpinnerAdapter(adapter, R.layout.contact_spinner_row_nothing_selected, this));
 
+        mLead = (RadioGroup) findViewById(R.id.radiogroup_lead_or_follow);
         mSkill = (RadioGroup) findViewById(R.id.radiogroup_skill_level);
 
         if(existingStyle != null){
             mDanceStyle.setSelection(adapter.getPosition(existingStyle.getStyle()) + 1);
             mDanceStyle.setEnabled(false);
+
+            if(existingStyle.isLead()){
+                mLead.check(R.id.radio_lead);
+            } else {
+                mLead.check(R.id.radio_follow);
+            }
 
             if(existingStyle.getSkill().equals("Beginner")){
                 mSkill.check(R.id.radio_beginner);
@@ -130,21 +140,28 @@ public class DanceStyleActivity extends Activity {
     }
 
     private boolean submitDanceStyle() {
-        style = mDanceStyle.getSelectedItem().toString();
+        try {
+            style = mDanceStyle.getSelectedItem().toString();
+        }catch(NullPointerException e){
+            Toast.makeText(this.getApplicationContext(), "Complete all fields",
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        if(skillLevel == null || style == null){
+        if(skillLevel == null || isLead == null){
             Toast.makeText(this.getApplicationContext(), "Complete all fields",
                     Toast.LENGTH_SHORT).show();
             return false;
         } else {
             if(existingStyle == null){
                 DanceStyle newStyle = new DanceStyle(ParseUser.getCurrentUser().getObjectId(),
-                        style, skillLevel, prefs);
+                        style, isLead, skillLevel, prefs);
 
                 ParseUser.getCurrentUser().put(style, newStyle);
                 ParseUser.getCurrentUser().saveInBackground();
             }
             else{
+                existingStyle.setLead(isLead);
                 existingStyle.setSkill(skillLevel);
                 existingStyle.setPreferences(prefs);
                 existingStyle.saveInBackground();
@@ -154,7 +171,26 @@ public class DanceStyleActivity extends Activity {
         }
     }
 
-    public void onRadioButtonClicked(View view) {
+    public void onLeadFollowRadioClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_lead:
+                if (checked) {
+                    isLead = true;
+                }
+                break;
+            case R.id.radio_follow:
+                if (checked) {
+                    isLead = false;
+                }
+                break;
+        }
+    }
+
+    public void onSkillRadioClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
 

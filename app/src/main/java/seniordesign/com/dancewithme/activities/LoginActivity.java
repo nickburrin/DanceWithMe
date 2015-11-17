@@ -84,16 +84,11 @@ public class LoginActivity extends Activity {
         }
 
         // This needs to go in onResume()
-        if(ParseUser.getCurrentUser() != null){
+        if (ParseUser.getCurrentUser() != null) {
             startService(new Intent(LoginActivity.this, MessageService.class));
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
         }
 
-        // This needs to go in onResume()
- /*       if(AccessToken.getCurrentAccessToken() != null){
-            checkIfFacebookUserIsDanceWithMeUser(AccessToken.getCurrentAccessToken());
-        }
-*/
         //       forgotPasswordButton = (Button) findViewById(R.id.forgotyourpasswordButton);
         emailField = (EditText) findViewById(R.id.loginUsername);
         passwordField = (EditText) findViewById(R.id.loginPassword);
@@ -119,6 +114,32 @@ public class LoginActivity extends Activity {
                         }
                     }
                 });
+            }
+        });
+
+        findViewById(R.id.forgotPasswordButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                String email = emailField.getText().toString();
+//                String password = passwordField.getText().toString();
+//                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//                installation.put("username", email);
+//                installation.saveInBackground();
+//                Logger.d(TAG, "User Logging in");
+//                ParseUser.logInInBackground(email, password, new LogInCallback() {
+//                    public void done(ParseUser user, com.parse.ParseException e) {
+//                        if (user != null) {
+//                            startService(new Intent(LoginActivity.this, MessageService.class));
+//                            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+//                        } else {
+//                            Toast.makeText(getApplicationContext(),
+//                                    "Wrong username/password combo",
+//                                    Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
+                Intent i = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(i);
             }
         });
 
@@ -227,8 +248,7 @@ public class LoginActivity extends Activity {
         newUser.put("first_name", firstname);
         newUser.put("last_name", lastname);
         newUser.put("gender", gender);
-        newUser.put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
-        newUser.put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));
+
         //newUser.put("ProfilePicture", profilePicture);
 
         newUser.signUpInBackground(new SignUpCallback() {
@@ -236,7 +256,11 @@ public class LoginActivity extends Activity {
                 if (e == null) {
                     // In addition to sign-up, add a Matches object for this user
                     Matches newMatcher = new Matches(ParseUser.getCurrentUser().getObjectId(), Arrays.asList());
+                    ParseUser.getCurrentUser().put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
+                    ParseUser.getCurrentUser().put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));
                     ParseUser.getCurrentUser().put("Matches", newMatcher);
+                    ParseUser.getCurrentUser().put("Likes", new Likes(ParseUser.getCurrentUser().getObjectId()));
+                    ParseUser.getCurrentUser().put("Dislikes", new Dislikes(ParseUser.getCurrentUser().getObjectId()));
                     ParseUser.getCurrentUser().saveInBackground();
 
                     // Redirect to ProfileFragment
@@ -253,7 +277,7 @@ public class LoginActivity extends Activity {
         return newUser;
     }
 
-    private void attemptLogin(String email, String password){
+    private void attemptLogin(String email, String password) {
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         installation.put("username", email);
         installation.saveInBackground();

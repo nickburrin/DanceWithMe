@@ -81,7 +81,7 @@ public class MessagingActivity extends Activity {
                 if (e == null) {
                     for (int i = 0; i < messageList.size(); i++) {
                         WritableMessage message = new WritableMessage(messageList.get(i).get("recipientId").toString(), messageList.get(i).get("messageText").toString());
-                        if (messageList.get(i).get("senderId").toString().equals(currentUserId)) {
+                        if (messageList.get(i).getString("senderId").equals(currentUserId)) {
                             messageAdapter.addMessage(message, MessageAdapter.DIRECTION_OUTGOING);
                         } else {
                             messageAdapter.addMessage(message, MessageAdapter.DIRECTION_INCOMING);

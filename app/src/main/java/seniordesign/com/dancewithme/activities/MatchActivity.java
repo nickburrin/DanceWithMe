@@ -176,6 +176,11 @@ public class MatchActivity extends Activity {
                 }
             } else {
                 // Current User has preferences, sort according to their preferences
+                String[] prefs = new String[style.getPreferences().size()];
+                for(int i = 0; i < style.getPreferences().size(); i++){
+                    prefs[i] = style.getPreferences().get(i);
+                }
+                
                 return sort(attendees, myGender, venueStyle, (String[]) style.getPreferences().toArray());
             }
         }

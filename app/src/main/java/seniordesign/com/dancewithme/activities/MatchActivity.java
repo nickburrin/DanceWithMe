@@ -314,8 +314,9 @@ public class MatchActivity extends Activity {
                     }
                 }
             });
+
+            ParseUser.getCurrentUser().saveInBackground();
         }
-        ParseUser.getCurrentUser().saveInBackground();
     }
 
     private void denyButton(){

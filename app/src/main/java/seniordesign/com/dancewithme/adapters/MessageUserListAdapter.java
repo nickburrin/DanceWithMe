@@ -91,7 +91,7 @@ public class MessageUserListAdapter extends ArrayAdapter<ParseUser>{
                     e.printStackTrace();
                 }
             } else{
-                Log.d(TAG, "something is jacked up in message adapter");
+                Log.d(TAG, "This person's profile picture is null");
             }
         }
 

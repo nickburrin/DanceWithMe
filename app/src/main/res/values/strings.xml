@@ -20,7 +20,7 @@
 
     <!-- Login Module -->
     <!-- Sign In Page String -->
-    <string name="app_name">Welcome to the DanceWithMe App!</string>
+    <string name="app_name">DanceWithMe</string>
     <string name="hello">Please login or sign up.</string>
 
     <string name="username">Email </string>

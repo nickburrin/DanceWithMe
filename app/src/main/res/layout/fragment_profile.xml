@@ -100,7 +100,7 @@
             android:id="@+id/lv_dance_styles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="12dp"
+            android:paddingBottom="0dp"
             android:background="@color/white"
             android:divider="@color/grey_input_border"
             android:dividerHeight="2dp" />

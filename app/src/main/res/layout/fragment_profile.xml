@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="12dp"
-            android:paddingBottom="12dp">
+            android:paddingBottom="0dp">
 
             <TextView
                 android:id="@+id/label_dance_styles"
@@ -74,8 +74,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="90"
                 android:text="Dance Styles"
-                android:textSize="30sp"
-                android:textColor="@color/black"/>
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:paddingLeft="8dp"/>
 
             <Button
                 android:id="@+id/button_add_dancestyles"
@@ -126,7 +127,7 @@
                 android:background="@color/transparent"
                 android:textSize="14sp"
                 android:paddingBottom="0dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="0dp"
                 android:textColor="@color/dwm_blue" />
 
         </LinearLayout>
@@ -136,6 +137,8 @@
             android:orientation="horizontal" >
 
                 <Button
+                    android:paddingTop="0dp"
+                    android:layout_marginTop="0dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/logout"
@@ -143,7 +146,7 @@
                     android:gravity="center_vertical|center_horizontal"
                     android:layout_gravity="center_horizontal"
                     android:background="@color/dwm_blue"
-                    android:textSize="24sp"
+                    android:textSize="22sp"
                     android:textColor="@color/white" />
 
         </LinearLayout>
